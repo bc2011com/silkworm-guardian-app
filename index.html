@@ -672,24 +672,43 @@
                 <div class="page-title">📊 บันทึกข้อมูลการเลี้ยง</div>
             </div>
             <div style="padding: 20px;">
-                <div class="form-section">
-                    <div class="section-title">บันทึกข้อมูลวันนี้</div>
-                    <div style="margin: 15px 0;">
-                        <label>น้ำหนักหนอนไหม (กก.):</label>
-                        <input type="number" class="input-field" placeholder="0.0" step="0.1">
-                    </div>
-                    <div style="margin: 15px 0;">
-                        <label>ปริมาณอาหาร (กก.):</label>
-                        <input type="number" class="input-field" placeholder="0.0" step="0.1">
-                    </div>
-                    <div style="margin: 15px 0;">
-                        <label>หมายเหตุ:</label>
-                        <textarea class="input-field" rows="3" placeholder="บันทึกสิ่งที่สังเกตเห็น..."></textarea>
-                    </div>
-                    <button class="action-btn" onclick="saveRecord()" style="width: 100%;">
-                        💾 บันทึกข้อมูล
-                    </button>
-                </div>
+<div class="form-section">
+    <div class="section-title">บันทึกข้อมูลวันนี้</div>
+
+    <div style="margin: 15px 0;">
+        <label>น้ำหนักหนอนไหม (กก.):</label>
+        <input
+            id="log-worm-weight"
+            type="number"
+            class="input-field"
+            placeholder="0.0"
+            step="0.1">
+    </div>
+
+    <div style="margin: 15px 0;">
+        <label>ปริมาณอาหาร (กก.):</label>
+        <input
+            id="log-food-weight"
+            type="number"
+            class="input-field"
+            placeholder="0.0"
+            step="0.1">
+    </div>
+
+    <div style="margin: 15px 0;">
+        <label>หมายเหตุ:</label>
+        <textarea
+            id="log-note"
+            class="input-field"
+            rows="3"
+            placeholder="บันทึกสิ่งที่สังเกตเห็น..."></textarea>
+    </div>
+
+    <button class="action-btn" onclick="saveRecord()" style="width: 100%;">
+        💾 บันทึกข้อมูล
+    </button>
+</div>
+
             </div>
         </div>
 
