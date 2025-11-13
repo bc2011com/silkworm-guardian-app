@@ -917,7 +917,163 @@
   </script>
 <!-- กล่องรายงานผลผลิตหลัก -->
 <div class="report-main-card">
+<style>
+  /* กล่องรายงานหลัก */
+.report-main-card {
+    max-width: 960px;
+    margin: 12px auto 110px; /* ด้านล่างเผื่อพื้นที่ให้แถบเมนู */
+    padding: 18px 20px 22px;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    font-size: 16px;
+}
 
+/* หัวข้อใหญ่ */
+.report-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.report-subtitle {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 12px;
+}
+
+/* บล็อกย่อยแต่ละส่วนในรายงาน */
+.report-block {
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.report-block h3 {
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+
+.report-block ul {
+    padding-left: 18px;
+    margin: 0;
+}
+
+.report-block li {
+    margin-bottom: 2px;
+}
+
+/* วางสองคอลัมน์บนหน้าจอกว้าง */
+.report-grid-2 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.report-grid-2 > div {
+    flex: 1 1 220px;
+}
+
+/* header ของตาราง + filter */
+.report-table-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.report-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.report-filters select {
+    padding: 4px 6px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 13px;
+}
+
+/* ปุ่ม Export */
+.btn-outline,
+.btn-filled {
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    border: 1px solid #43a047;
+    cursor: pointer;
+}
+
+.btn-outline {
+    background: #ffffff;
+    color: #388e3c;
+}
+
+.btn-filled {
+    background: #43a047;
+    color: #ffffff;
+}
+
+/* ตารางรายงาน */
+.report-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.report-table th,
+.report-table td {
+    padding: 6px 8px;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: left;
+}
+
+.report-table thead th {
+    background: #f5f5f5;
+    font-weight: 600;
+}
+
+/* พื้นที่กราฟ */
+.chart-placeholder {
+    margin-top: 8px;
+    padding: 18px;
+    border-radius: 14px;
+    border: 1px dashed #90caf9;
+    background: #e3f2fd;
+    text-align: center;
+    font-size: 14px;
+    color: #1976d2;
+}
+
+.report-note {
+    font-size: 13px;
+    color: #666;
+}
+
+/* รองรับหน้าจอมือถือ */
+@media (max-width: 600px) {
+    .report-main-card {
+        margin: 8px 8px 110px;
+        padding: 14px 12px 18px;
+        font-size: 15px;
+    }
+
+    .report-title {
+        font-size: 20px;
+    }
+
+    .report-table {
+        font-size: 13px;
+    }
+}
     <h2 class="report-title">📊 ระบบรายงานผลผลิต &amp; สถิติ</h2>
     <p class="report-subtitle">
         ดูภาพรวมผลผลิตไหม เปรียบเทียบผลผลิตในแต่ละรอบ พร้อมกราฟประกอบการตัดสินใจ
@@ -1045,7 +1201,7 @@
     </div>
 
 </div>
-
+</style>
 </section>
 </body>
 </html>
