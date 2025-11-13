@@ -1,805 +1,918 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>อารักขารังไหมเลี้ยงอัจฉริยะ</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>อารักขารังไหมเลี้ยงอัจฉริยะ</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: 'Sarabun', Arial, sans-serif;
-            background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);
-            min-height: 100vh;
-            font-size: 22px;
-            line-height: 1.6;
-        }
+    body {
+      font-family: 'Sarabun', Arial, sans-serif;
+      background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);
+      min-height: 100vh;
+      font-size: 22px;
+      line-height: 1.6;
+    }
 
-        .container {
-            max-width: 450px;
-            margin: 0 auto;
-            background: white;
-            min-height: 100vh;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        }
+    .container {
+      max-width: 450px;
+      margin: 0 auto;
+      background: white;
+      min-height: 100vh;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      position: relative;
+      padding-bottom: 90px; /* กันไม่ให้ bottom nav บังเนื้อหา */
+    }
 
-        .header {
-            background: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%);
-            color: white;
-            padding: 25px 20px;
-            text-align: center;
-            position: relative;
-        }
+    .header {
+      background: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%);
+      color: white;
+      padding: 25px 20px;
+      text-align: center;
+      position: relative;
+    }
 
-        .header h1 {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-        }
+    .header h1 {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
 
-        .voice-btn {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: #ff6b35;
-            border: none;
-            border-radius: 50%;
-            width: 70px;
-            height: 70px;
-            color: white;
-            font-size: 30px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255,107,53,0.3);
-            transition: all 0.3s ease;
-            animation: pulse 2s infinite;
-        }
+    .voice-btn {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #ff6b35;
+      border: none;
+      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+      transition: all 0.3s ease;
+      animation: pulse 2s infinite;
+    }
 
-        @keyframes pulse {
-            0% { transform: translateY(-50%) scale(1); }
-            50% { transform: translateY(-50%) scale(1.05); }
-            100% { transform: translateY(-50%) scale(1); }
-        }
+    @keyframes pulse {
+      0% {
+        transform: translateY(-50%) scale(1);
+      }
+      50% {
+        transform: translateY(-50%) scale(1.05);
+      }
+      100% {
+        transform: translateY(-50%) scale(1);
+      }
+    }
 
-        .voice-btn:hover {
-            background: #e55a2b;
-            transform: translateY(-50%) scale(1.1);
-        }
+    .voice-btn:hover {
+      background: #e55a2b;
+      transform: translateY(-50%) scale(1.1);
+    }
 
-        .status-bar {
-            background: #fff3e0;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #ffcc02;
-        }
+    .status-bar {
+      background: #fff3e0;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #ffcc02;
+    }
 
-        .current-stage {
-            font-size: 20px;
-            font-weight: bold;
-            color: #e65100;
-        }
+    .current-stage {
+      font-size: 20px;
+      font-weight: bold;
+      color: #e65100;
+    }
 
-        .weather-info {
-            font-size: 18px;
-            color: #666;
-        }
+    .weather-info {
+      font-size: 18px;
+      color: #666;
+    }
 
-        .main-content {
-            padding: 25px 20px;
-        }
+    .main-content {
+      padding: 25px 20px;
+    }
 
-        .alert-section {
-            background: #ffebee;
-            border-left: 6px solid #f44336;
-            padding: 20px;
-            margin-bottom: 25px;
-            border-radius: 8px;
-            display: none;
-        }
+    .alert-section {
+      background: #ffebee;
+      border-left: 6px solid #f44336;
+      padding: 20px;
+      margin-bottom: 25px;
+      border-radius: 8px;
+      display: none;
+    }
 
-        .alert-section.show {
-            display: block;
-        }
+    .alert-section.show {
+      display: block;
+    }
 
-        .alert-title {
-            font-size: 22px;
-            font-weight: bold;
-            color: #c62828;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
+    .alert-title {
+      font-size: 22px;
+      font-weight: bold;
+      color: #c62828;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
 
-        .alert-icon {
-            font-size: 30px;
-            margin-right: 10px;
-        }
+    .alert-icon {
+      font-size: 30px;
+      margin-right: 10px;
+    }
 
-        .alert-message {
-            font-size: 20px;
-            color: #666;
-            line-height: 1.5;
-        }
+    .alert-message {
+      font-size: 20px;
+      color: #666;
+      line-height: 1.5;
+    }
 
-        .function-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 25px;
-        }
+    .function-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 25px;
+    }
 
-        .function-card {
-            background: white;
-            border: 3px solid #e0e0e0;
-            border-radius: 15px;
-            padding: 25px 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            min-height: 140px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+    .function-card {
+      background: white;
+      border: 3px solid #e0e0e0;
+      border-radius: 15px;
+      padding: 25px 15px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-        .function-card:hover {
-            border-color: #4caf50;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(76,175,80,0.2);
-        }
+    .function-card:hover {
+      border-color: #4caf50;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(76, 175, 80, 0.2);
+    }
 
-        .function-card.priority-high {
-            border-color: #f44336;
-            background: #ffebee;
-        }
+    .function-card.priority-high {
+      border-color: #f44336;
+      background: #ffebee;
+    }
 
-        .function-card.priority-medium {
-            border-color: #ff9800;
-            background: #fff3e0;
-        }
+    .function-card.priority-medium {
+      border-color: #ff9800;
+      background: #fff3e0;
+    }
 
-        .function-icon {
-            font-size: 40px;
-            margin-bottom: 10px;
-            display: block;
-        }
+    .function-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+      display: block;
+    }
 
-        .function-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-            line-height: 1.3;
-        }
+    .function-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      line-height: 1.3;
+    }
 
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 450px;
-            background: white;
-            border-top: 3px solid #4caf50;
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 0;
-            box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
-        }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 450px;
+      background: white;
+      border-top: 3px solid #4caf50;
+      display: flex;
+      justify-content: space-around;
+      padding: 15px 0;
+      box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
+      z-index: 100;
+    }
 
-        .nav-item {
-            text-align: center;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            flex: 1;
-        }
+    .nav-item {
+      text-align: center;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      flex: 1;
+    }
 
-        .nav-item:hover {
-            background: #e8f5e8;
-        }
+    .nav-item:hover {
+      background: #e8f5e8;
+    }
 
-        .nav-item.active {
-            background: #4caf50;
-            color: white;
-        }
+    .nav-item.active {
+      background: #4caf50;
+      color: white;
+    }
 
-        .nav-icon {
-            font-size: 30px;
-            display: block;
-            margin-bottom: 5px;
-        }
+    .nav-icon {
+      font-size: 30px;
+      display: block;
+      margin-bottom: 5px;
+    }
 
-        .nav-text {
-            font-size: 16px;
-            font-weight: bold;
-        }
+    .nav-text {
+      font-size: 16px;
+      font-weight: bold;
+    }
 
-        .emergency-btn {
-            position: fixed;
-            bottom: 120px;
-            right: 20px;
-            background: #d32f2f;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 80px;
-            height: 80px;
-            font-size: 35px;
-            cursor: pointer;
-            box-shadow: 0 6px 20px rgba(211,47,47,0.4);
-            z-index: 1000;
-            animation: emergency-pulse 3s infinite;
-        }
+    .emergency-btn {
+      position: fixed;
+      bottom: 120px;
+      right: 20px;
+      background: #d32f2f;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      font-size: 35px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(211, 47, 47, 0.4);
+      z-index: 101;
+      animation: emergency-pulse 3s infinite;
+    }
 
-        @keyframes emergency-pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
+    @keyframes emergency-pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
 
-        .quick-actions {
-            display: flex;
-            gap: 15px;
-            margin: 25px 0;
-        }
+    .quick-actions {
+      display: flex;
+      gap: 15px;
+      margin: 25px 0;
+    }
 
-        .quick-btn {
-            flex: 1;
-            background: #4caf50;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 20px 10px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+    .quick-btn {
+      flex: 1;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 20px 10px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
 
-        .quick-btn:hover {
-            background: #388e3c;
-            transform: translateY(-2px);
-        }
+    .quick-btn:hover {
+      background: #388e3c;
+      transform: translateY(-2px);
+    }
 
-        .quick-btn.camera {
-            background: #2196f3;
-        }
+    .quick-btn.camera {
+      background: #2196f3;
+    }
 
-        .quick-btn.camera:hover {
-            background: #1976d2;
-        }
+    .quick-btn.camera:hover {
+      background: #1976d2;
+    }
 
-        .voice-commands {
-            background: #e3f2fd;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-            border-left: 4px solid #2196f3;
-        }
+    .voice-commands {
+      background: #e3f2fd;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+      border-left: 4px solid #2196f3;
+    }
 
-        .voice-commands h3 {
-            font-size: 20px;
-            color: #1565c0;
-            margin-bottom: 15px;
-        }
+    .voice-commands h3 {
+      font-size: 20px;
+      color: #1565c0;
+      margin-bottom: 15px;
+    }
 
-        .voice-commands ul {
-            list-style: none;
-            font-size: 16px;
-            color: #666;
-        }
+    .voice-commands ul {
+      list-style: none;
+      font-size: 16px;
+      color: #666;
+    }
 
-        .voice-commands li {
-            margin-bottom: 8px;
-            padding-left: 20px;
-            position: relative;
-        }
+    .voice-commands li {
+      margin-bottom: 8px;
+      padding-left: 20px;
+      position: relative;
+    }
 
-        .voice-commands li::before {
-            content: "🎤";
-            position: absolute;
-            left: 0;
-        }
+    .voice-commands li::before {
+      content: "🎤";
+      position: absolute;
+      left: 0;
+    }
 
-        /* Page Styles */
-        .page {
-            display: none;
-        }
+    /* Page Styles */
+    .page {
+      display: none;
+    }
 
-        .page.active {
-            display: block;
-        }
+    .page.active {
+      display: block;
+    }
 
-        /* Sub page styles would be included here */
-        .sub-header {
-            background: #2196f3;
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+    .sub-header {
+      background: #2196f3;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
 
-        .back-btn {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-        }
+    .back-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
 
-        .page-title {
-            font-size: 22px;
-            font-weight: bold;
-        }
+    .page-title {
+      font-size: 22px;
+      font-weight: bold;
+    }
 
-        .form-section {
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
+    .form-section {
+      background: white;
+      border: 2px solid #e0e0e0;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
 
-        .section-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #333;
-        }
+    .section-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #333;
+    }
 
-        .input-field {
-            width: 100%;
-            padding: 12px 15px;
-            font-size: 18px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
+    .input-field {
+      width: 100%;
+      padding: 12px 15px;
+      font-size: 18px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
 
-        .action-btn {
-            background: #4caf50;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 15px 25px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+    .action-btn {
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 15px 25px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
 
-        .action-btn:hover {
-            background: #388e3c;
-            transform: translateY(-2px);
-        }
+    .action-btn:hover {
+      background: #388e3c;
+      transform: translateY(-2px);
+    }
 
-        @media (max-width: 480px) {
-            .container {
-                max-width: 100%;
-            }
-            
-            .function-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    @media (max-width: 480px) {
+      .container {
+        max-width: 100%;
+      }
+
+      .function-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <!-- หน้าหลัก -->
-        <div class="page active" id="homePage">
-            <!-- Header -->
-            <div class="header">
-                <h1>🐛 อารักขารังไหมเลี้ยงอัจฉริยะ</h1>
-                <div style="font-size: 18px;">ช่วยเหลือเกษตรกรไทย</div>
-                <button class="voice-btn" onclick="startVoiceCommand()" title="กดพูดสั่งงาน">
-                    🎤
-                </button>
-            </div>
+  <div class="container">
+    <!-- หน้าหลัก -->
+    <div class="page active" id="homePage">
+      <div class="header">
+        <h1>🐛 อารักขารังไหมเลี้ยงอัจฉริยะ</h1>
+        <div style="font-size: 18px;">ช่วยเหลือเกษตรกรไทย</div>
+        <button class="voice-btn" onclick="startVoiceCommand()" title="กดพูดสั่งงาน">
+          🎤
+        </button>
+      </div>
 
-            <!-- Status Bar -->
-            <div class="status-bar">
-                <div class="current-stage">
-                    📅 วันที่ 15 ช่วงวัยที่ 3
-                </div>
-                <div class="weather-info">
-                    🌡️ 28°C 💧 75%
-                </div>
-            </div>
+      <div class="status-bar">
+        <div class="current-stage">📅 วันที่ 15 ช่วงวัยที่ 3</div>
+        <div class="weather-info">🌡️ 28°C 💧 75%</div>
+      </div>
 
-            <!-- Alert Section -->
-            <div class="alert-section" id="alertSection">
-                <div class="alert-title">
-                    <span class="alert-icon">⚠️</span>
-                    แจ้งเตือนสำคัญ!
-                </div>
-                <div class="alert-message" id="alertMessage">
-                    🕐 เวลา 14:00 น. - ถึงเวลาให้อาหารหนอนไหมวัยที่ 3<br>
-                    🌡️ อุณหภูมิสูง ควรเปิดพัดลมลดความร้อน
-                </div>
-            </div>
+      <div class="alert-section" id="alertSection">
+        <div class="alert-title">
+          <span class="alert-icon">⚠️</span>
+          แจ้งเตือนสำคัญ!
+        </div>
+        <div class="alert-message" id="alertMessage">
+          🕐 เวลา 14:00 น. - ถึงเวลาให้อาหารหนอนไหมวัยที่ 3<br />
+          🌡️ อุณหภูมิสูง ควรเปิดพัดลมลดความร้อน
+        </div>
+      </div>
 
-            <!-- Quick Actions -->
-            <div class="quick-actions">
-                <button class="quick-btn camera" onclick="takePhoto()">
-                    📷 ถ่ายภาพ
-                </button>
-                <button class="quick-btn" onclick="callFamily()">
-                    📞 โทรลูกหลาน
-                </button>
-            </div>
+      <div class="quick-actions">
+        <button class="quick-btn camera" onclick="takePhoto()">📷 ถ่ายภาพ</button>
+        <button class="quick-btn" onclick="callFamily()">📞 โทรลูกหลาน</button>
+      </div>
 
-            <!-- Main Content -->
-            <div class="main-content">
-                <div class="function-grid">
-                    <div class="function-card priority-high" onclick="showPage('feeding')">
-                        <span class="function-icon">🍃</span>
-                        <div class="function-title">การให้อาหาร<br>แจ้งเตือน</div>
-                    </div>
+      <div class="main-content">
+        <div class="function-grid">
+          <div class="function-card priority-high" onclick="showPage('feeding')">
+            <span class="function-icon">🍃</span>
+            <div class="function-title">การให้อาหาร<br />แจ้งเตือน</div>
+          </div>
 
-                    <div class="function-card priority-medium" onclick="showPage('temperature')">
-                        <span class="function-icon">🌡️</span>
-                        <div class="function-title">อุณหภูมิ<br>ความชื้น</div>
-                    </div>
+          <div class="function-card priority-medium" onclick="showPage('temperature')">
+            <span class="function-icon">🌡️</span>
+            <div class="function-title">อุณหภูมิ<br />ความชื้น</div>
+          </div>
 
-                    <div class="function-card" onclick="showPage('cleaning')">
-                        <span class="function-icon">🧹</span>
-                        <div class="function-title">ทำความสะอาด<br>โรงเลี้ยง</div>
-                    </div>
+          <div class="function-card" onclick="showPage('cleaning')">
+            <span class="function-icon">🧹</span>
+            <div class="function-title">ทำความสะอาด<br />โรงเลี้ยง</div>
+          </div>
 
-                    <div class="function-card" onclick="showPage('waste')">
-                        <span class="function-icon">🗑️</span>
-                        <div class="function-title">ถ่ายมูล<br>ขยายพื้นที่</div>
-                    </div>
+          <div class="function-card" onclick="showPage('waste')">
+            <span class="function-icon">🗑️</span>
+            <div class="function-title">ถ่ายมูล<br />ขยายพื้นที่</div>
+          </div>
 
-                    <div class="function-card" onclick="showPage('disease')">
-                        <span class="function-icon">🦠</span>
-                        <div class="function-title">เฝ้าระวัง<br>โรคหนอนไหม</div>
-                    </div>
+          <div class="function-card" onclick="showPage('disease')">
+            <span class="function-icon">🦠</span>
+            <div class="function-title">เฝ้าระวัง<br />โรคหนอนไหม</div>
+          </div>
 
-                    <div class="function-card" onclick="showPage('planning')">
-                        <span class="function-icon">📋</span>
-                        <div class="function-title">วางแผน<br>การเลี้ยง</div>
-                    </div>
+          <div class="function-card" onclick="showPage('planning')">
+            <span class="function-icon">📋</span>
+            <div class="function-title">วางแผน<br />การเลี้ยง</div>
+          </div>
 
-                    <div class="function-card" onclick="showPage('recording')">
-                        <span class="function-icon">📊</span>
-                        <div class="function-title">บันทึก<br>ข้อมูล</div>
-                    </div>
+          <div class="function-card" onclick="showPage('recording')">
+            <span class="function-icon">📊</span>
+            <div class="function-title">บันทึก<br />ข้อมูล</div>
+          </div>
 
-                    <div class="function-card" onclick="showPage('report')">
-                        <span class="function-icon">📋</span>
-                        <div class="function-title">รายงาน<br>โรค</div>
-                    </div>
-                </div>
-
-                <!-- Voice Commands Help -->
-                <div class="voice-commands">
-                    <h3>🎤 คำสั่งเสียงที่ใช้ได้</h3>
-                    <ul>
-                        <li>"ให้อาหารหนอนไหม" - เปิดเมนูการให้อาหาร</li>
-                        <li>"ตรวจอุณหภูมิ" - ดูอุณหภูมิและความชื้น</li>
-                        <li>"ถ่ายภาพ" - เปิดกล้องถ่ายรูป</li>
-                        <li>"โทรลูกหลาน" - โทรขอความช่วยเหลือ</li>
-                        <li>"บันทึกข้อมูล" - เปิดหน้าบันทึก</li>
-                        <li>"สถิติ" - ดูสถิติการเลี้ยง</li>
-                        <li>"ตั้งค่า" - เปิดการตั้งค่า</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Emergency Button -->
-            <button class="emergency-btn" onclick="emergency()" title="ฉุกเฉิน - โทรขอความช่วยเหลือ">
-                🚨
-            </button>
-
-            <!-- Bottom Navigation -->
-            <div class="bottom-nav">
-                <div class="nav-item active" onclick="showPage('home')">
-                    <span class="nav-icon">🏠</span>
-                    <div class="nav-text">หน้าหลัก</div>
-                </div>
-                <div class="nav-item" onclick="showPage('statistics')">
-                    <span class="nav-icon">📈</span>
-                    <div class="nav-text">สถิติ</div>
-                </div>
-                <div class="nav-item" onclick="showPage('settings')">
-                    <span class="nav-icon">⚙️</span>
-                    <div class="nav-text">ตั้งค่า</div>
-                </div>
-            </div>
+          <div class="function-card" onclick="showPage('report')">
+            <span class="function-icon">📋</span>
+            <div class="function-title">รายงาน<br />โรค</div>
+          </div>
         </div>
 
-        <!-- หน้าการให้อาหาร -->
-        <div class="page" id="feedingPage">
-            <div class="sub-header">
-                <button class="back-btn" onclick="showPage('home')">◀</button>
-                <div class="page-title">🍃 การให้อาหารหนอนไหม</div>
-            </div>
-            <div style="padding: 20px;">
-                <div class="form-section">
-                    <div class="section-title">⏰ เวลา 14:00 น. - ถึงเวลาให้อาหาร!</div>
-                    <p>วัยที่ 3 ต้องการใบหม่อนสด 1.5 กิโลกรัม</p>
-                    <button class="action-btn" onclick="markFeedingDone()" style="width: 100%; margin-top: 15px;">
-                        ✅ ให้อาหารแล้ว
-                    </button>
-                </div>
-            </div>
+        <div class="voice-commands">
+          <h3>🎤 คำสั่งเสียงที่ใช้ได้</h3>
+          <ul>
+            <li>"ให้อาหารหนอนไหม" - เปิดเมนูการให้อาหาร</li>
+            <li>"ตรวจอุณหภูมิ" - ดูอุณหภูมิและความชื้น</li>
+            <li>"ถ่ายภาพ" - เปิดกล้องถ่ายรูป</li>
+            <li>"โทรลูกหลาน" - โทรขอความช่วยเหลือ</li>
+            <li>"บันทึกข้อมูล" - เปิดหน้าบันทึก</li>
+            <li>"สถิติ" - ดูสถิติการเลี้ยง</li>
+            <li>"ตั้งค่า" - เปิดการตั้งค่า</li>
+          </ul>
         </div>
-
-        <!-- หน้าอุณหภูมิความชื้น -->
-        <div class="page" id="temperaturePage">
-            <div class="sub-header">
-                <button class="back-btn" onclick="showPage('home')">◀</button>
-                <div class="page-title">🌡️ อุณหภูมิและความชื้น</div>
-            </div>
-            <div style="padding: 20px;">
-                <div class="form-section">
-                    <div class="section-title">สภาพปัจจุบัน</div>
-                    <div style="text-align: center; margin: 20px 0;">
-                        <div style="font-size: 36px; color: #f57c00;">🌡️ 28°C</div>
-                        <div style="color: #f57c00;">สูงเกินไป</div>
-                        <div style="font-size: 36px; color: #4caf50; margin-top: 15px;">💧 75%</div>
-                        <div style="color: #4caf50;">เหมาะสม</div>
-                    </div>
-                    <button class="action-btn" onclick="controlTemperature()" style="width: 100%;">
-                        💨 เปิดพัดลมลดความร้อน
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- หน้าทำความสะอาด -->
-        <div class="page" id="cleaningPage">
-            <div class="sub-header">
-                <button class="back-btn" onclick="showPage('home')">◀</button>
-                <div class="page-title">🧹 ทำความสะอาดโรงเลี้ยง</div>
-            </div>
-            <div style="padding: 20px;">
-                <div class="form-section">
-                    <div class="section-title">รายการทำความสะอาด</div>
-                    <div style="margin: 15px 0;">
-                        <label style="display: flex; align-items: center; padding: 10px; background: #f5f5f5; border-radius: 8px;">
-                            <input type="checkbox" style="margin-right: 10px; transform: scale(1.5);">
-                            1. เก็บมูลหนอนไหม
-                        </label>
-                    </div>
-                    <div style="margin: 15px 0;">
-                        <label style="display: flex; align-items: center; padding: 10px; background: #f5f5f5; border-radius: 8px;">
-                            <input type="checkbox" style="margin-right: 10px; transform: scale(1.5);">
-                            2. เปลี่ยนแผ่นรองอาหาร
-                        </label>
-                    </div>
-                    <button class="action-btn" onclick="completeCleaning()" style="width: 100%; margin-top: 15px;">
-                        ✅ ทำความสะอาดเสร็จ
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- หน้าถ่ายมูลขยายพื้นที่ -->
-        <div class="page" id="wastePage">
-            <div class="sub-header">
-                <button class="back-btn" onclick="showPage('home')">◀</button>
-                <div class="page-title">🗑️ ถ่ายมูลและขยายพื้นที่</div>
-            </div>
-            <div style="padding: 20px;">
-                <div class="form-section">
-                    <div class="section-title">⚠️ สำคัญมาก!</div>
-                    <p>วัยที่ 3 ต้องถ่ายมูลและขยายพื้นที่วันนี้</p>
-                    <div style="margin: 15px 0;">
-                        <strong>งานที่ต้องทำ:</strong><br>
-                        • ถ่ายมูลออกจากใต้แผ่นเลี้ยง<br>
-                        • เพิ่มแผ่นเลี้ยงใหม่ 5 แผ่น<br>
-                        • แบ่งหนอนไหมให้เท่า ๆ กัน
-                    </div>
-                    <button class="action-btn" onclick="completeWasteManagement()" style="width: 100%;">
-                        ✅ ทำเสร็จแล้ว
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- หน้าเฝ้าระวังโรค -->
-        <div class="page" id="diseasePage">
-            <div class="sub-header">
-                <button class="back-btn" onclick="showPage('home')">◀</button>
-                <div class="page-title">🦠 เฝ้าระวังโรคหนอนไหม</div>
-            </div>
-            <div style="padding: 20px;">
-                <div class="form-section">
-                    <div class="section-title">สุขภาพหนอนไหม</div>
-                    <div style="text-align: center; margin: 20px 0;">
-                        <div style="font-size: 48px;">😊</div>
-                        <div style="font-size: 24px; color: #4caf50; font-weight: bold;">สุขภาพดี</div>
-                        <div>ไม่พบอาการผิดปกติ</div>
-                    </div>
-                    <button class="action-btn" onclick="startHealthCheck()" style="width: 100%; margin-bottom: 10px;">
-                        👁️ ตรวจสุขภาพ
-                    </button>
-                    <button class="action-btn" onclick="showPage('report')" style="width: 100%; background: #f44336;">
-                        📋 รายงานโรค
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- หน้าวางแผน -->
-        <div class="page" id="planningPage">
-            <div class="sub-header">
-                <button class="back-btn" onclick="showPage('home')">◀</button>
-                <div class="page-title">📋 วางแผนการเลี้ยงไหม</div>
-            </div>
-            <div style="padding: 20px;">
-                <div class="form-section">
-                    <div class="section-title">สร้างแผนใหม่ - รุ่นที่ 14</div>
-                    <div style="margin: 15px 0;">
-                        <label>วันเริ่มต้น:</label>
-                        <input type="date" class="input-field" value="2025-03-01">
-                    </div>
-                    <div style="margin: 15px 0;">
-                        <label>จำนวนไข่ไหม:</label>
-                        <select class="input-field">
-                            <option value="1">1 กล่อง</option>
-                            <option value="2">2 กล่อง</option>
-                            <option value="3">3 กล่อง</option>
-                        </select>
-                    </div>
-                    <button class="action-btn" onclick="createNewPlan()" style="width: 100%;">
-                        ✨ สร้างแผน
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- หน้าบันทึกข้อมูล -->
-        <div class="page" id="recordingPage">
-            <div class="sub-header">
-                <button class="back-btn" onclick="showPage('home')">◀</button>
-                <div class="page-title">📊 บันทึกข้อมูลการเลี้ยง</div>
-            </div>
-            <div style="padding: 20px;">
-<div class="form-section">
-    <div class="section-title">บันทึกข้อมูลวันนี้</div>
-
-    <div style="margin: 15px 0;">
-        <label>น้ำหนักหนอนไหม (กก.):</label>
-        <input
-            id="log-worm-weight"
-            type="number"
-            class="input-field"
-            placeholder="0.0"
-            step="0.1">
+      </div>
     </div>
 
-    <div style="margin: 15px 0;">
-        <label>ปริมาณอาหาร (กก.):</label>
-        <input
-            id="log-food-weight"
-            type="number"
-            class="input-field"
-            placeholder="0.0"
-            step="0.1">
-    </div>
-
-    <div style="margin: 15px 0;">
-        <label>หมายเหตุ:</label>
-        <textarea
-            id="log-note"
-            class="input-field"
-            rows="3"
-            placeholder="บันทึกสิ่งที่สังเกตเห็น..."></textarea>
-    </div>
-
-    <button class="action-btn" onclick="saveRecord()" style="width: 100%;">
-        💾 บันทึกข้อมูล
-    </button>
-</div>
-
-            </div>
+    <!-- หน้าการให้อาหาร -->
+    <div class="page" id="feedingPage">
+      <div class="sub-header">
+        <button class="back-btn" onclick="showPage('home')">◀</button>
+        <div class="page-title">🍃 การให้อาหารหนอนไหม</div>
+      </div>
+      <div style="padding: 20px;">
+        <div class="form-section">
+          <div class="section-title">⏰ เวลา 14:00 น. - ถึงเวลาให้อาหาร!</div>
+          <p>วัยที่ 3 ต้องการใบหม่อนสด 1.5 กิโลกรัม</p>
+          <button class="action-btn" onclick="markFeedingDone()" style="width: 100%; margin-top: 15px;">
+            ✅ ให้อาหารแล้ว
+          </button>
         </div>
+      </div>
+    </div>
 
-        <!-- หน้ารายงานโรค -->
-        <div class="page" id="reportPage">
-            <div class="sub-header">
-                <button class="back-btn" onclick="showPage('home')">◀</button>
-                <div class="page-title">📋 รายงานโรคหนอนไหม</div>
-            </div>
-            <div style="padding: 20px;">
-                <div class="form-section">
-                    <div class="section-title">🚨 แจ้งการพบโรคด่วน</div>
-                    <div style="margin: 15px 0;">
-                        <label>ชนิดโรค:</label>
-                        <select class="input-field">
-                            <option value="">เลือกโรค</option>
-                            <option value="pebrine">โรคปลิง (Pebrine)</option>
-                            <option value="muscardine">โรคเชื้อรา (Muscardine)</option>
-                            <option value="flacherie">โรคท้องเสีย (Flacherie)</option>
-                        </select>
-                    </div>
-                    <div style="margin: 15px 0;">
-                        <label>ความรุนแรง:</label>
-                        <select class="input-field">
-                            <option value="">เลือกระดับ</option>
-                            <option value="low">เล็กน้อย</option>
-                            <option value="medium">ปานกลาง</option>
-                            <option value="high">รุนแรง</option>
-                            <option value="critical">วิกฤต</option>
-                        </select>
-                        <script>
-  // -----------------------------
-  // 1) ใส่ค่า Supabase ของอาจารย์ตรงนี้
-  // -----------------------------
-  const SUPABASE_URL = "https://dpgnqrxanxyxhibkfspx.supabase.co";   // << ใส่ของจริง
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwZ25xcnhhbnh5eGhpYmtmc3B4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMwMjU5NjksImV4cCI6MjA3ODYwMTk2OX0.CTWYu4ZxS_gW6G4r0zGNNj6gVkNE6jSWmcGoXc6GaxI";                    // << ใส่ของจริง
+    <!-- หน้าอุณหภูมิความชื้น -->
+    <div class="page" id="temperaturePage">
+      <div class="sub-header">
+        <button class="back-btn" onclick="showPage('home')">◀</button>
+        <div class="page-title">🌡️ อุณหภูมิและความชื้น</div>
+      </div>
+      <div style="padding: 20px;">
+        <div class="form-section">
+          <div class="section-title">สภาพปัจจุบัน</div>
+          <div style="text-align: center; margin: 20px 0;">
+            <div style="font-size: 36px; color: #f57c00;">🌡️ 28°C</div>
+            <div style="color: #f57c00;">สูงเกินไป</div>
+            <div style="font-size: 36px; color: #4caf50; margin-top: 15px;">💧 75%</div>
+            <div style="color: #4caf50;">เหมาะสม</div>
+          </div>
+          <button class="action-btn" onclick="controlTemperature()" style="width: 100%;">
+            💨 เปิดพัดลมลดความร้อน
+          </button>
+        </div>
+      </div>
+    </div>
 
-  // -----------------------------
-  // 2) ฟังก์ชันบันทึกข้อมูลลงฐาน Supabase
-  // -----------------------------
-  async function saveRecord() {
+    <!-- หน้าทำความสะอาด -->
+    <div class="page" id="cleaningPage">
+      <div class="sub-header">
+        <button class="back-btn" onclick="showPage('home')">◀</button>
+        <div class="page-title">🧹 ทำความสะอาดโรงเลี้ยง</div>
+      </div>
+      <div style="padding: 20px;">
+        <div class="form-section">
+          <div class="section-title">รายการทำความสะอาด</div>
+          <div style="margin: 15px 0;">
+            <label style="display: flex; align-items: center; padding: 10px; background: #f5f5f5; border-radius: 8px;">
+              <input type="checkbox" style="margin-right: 10px; transform: scale(1.5);" />
+              1. เก็บมูลหนอนไหม
+            </label>
+          </div>
+          <div style="margin: 15px 0;">
+            <label style="display: flex; align-items: center; padding: 10px; background: #f5f5f5; border-radius: 8px;">
+              <input type="checkbox" style="margin-right: 10px; transform: scale(1.5);" />
+              2. เปลี่ยนแผ่นรองอาหาร
+            </label>
+          </div>
+          <button class="action-btn" onclick="completeCleaning()" style="width: 100%; margin-top: 15px;">
+            ✅ ทำความสะอาดเสร็จ
+          </button>
+        </div>
+      </div>
+    </div>
 
-      const wormWeight = parseFloat(document.getElementById('log-worm-weight').value || 0);
-      const foodWeight = parseFloat(document.getElementById('log-food-weight').value || 0);
-      const note = document.getElementById('log-note').value || "";
+    <!-- หน้าถ่ายมูลขยายพื้นที่ -->
+    <div class="page" id="wastePage">
+      <div class="sub-header">
+        <button class="back-btn" onclick="showPage('home')">◀</button>
+        <div class="page-title">🗑️ ถ่ายมูลและขยายพื้นที่</div>
+      </div>
+      <div style="padding: 20px;">
+        <div class="form-section">
+          <div class="section-title">⚠️ สำคัญมาก!</div>
+          <p>วัยที่ 3 ต้องถ่ายมูลและขยายพื้นที่วันนี้</p>
+          <div style="margin: 15px 0;">
+            <strong>งานที่ต้องทำ:</strong><br />
+            • ถ่ายมูลออกจากใต้แผ่นเลี้ยง<br />
+            • เพิ่มแผ่นเลี้ยงใหม่ 5 แผ่น<br />
+            • แบ่งหนอนไหมให้เท่า ๆ กัน
+          </div>
+          <button class="action-btn" onclick="completeWasteManagement()" style="width: 100%;">
+            ✅ ทำเสร็จแล้ว
+          </button>
+        </div>
+      </div>
+    </div>
 
-      const currentBatchId = null;  
+    <!-- หน้าเฝ้าระวังโรค -->
+    <div class="page" id="diseasePage">
+      <div class="sub-header">
+        <button class="back-btn" onclick="showPage('home')">◀</button>
+        <div class="page-title">🦠 เฝ้าระวังโรคหนอนไหม</div>
+      </div>
+      <div style="padding: 20px;">
+        <div class="form-section">
+          <div class="section-title">สุขภาพหนอนไหม</div>
+          <div style="text-align: center; margin: 20px 0;">
+            <div style="font-size: 48px;">😊</div>
+            <div style="font-size: 24px; color: #4caf50; font-weight: bold;">สุขภาพดี</div>
+            <div>ไม่พบอาการผิดปกติ</div>
+          </div>
+          <button class="action-btn" onclick="startHealthCheck()" style="width: 100%; margin-bottom: 10px;">
+            👁️ ตรวจสุขภาพ
+          </button>
+          <button class="action-btn" onclick="showPage('report')" style="width: 100%; background: #f44336;">
+            📋 รายงานโรค
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- หน้าวางแผน -->
+    <div class="page" id="planningPage">
+      <div class="sub-header">
+        <button class="back-btn" onclick="showPage('home')">◀</button>
+        <div class="page-title">📋 วางแผนการเลี้ยงไหม</div>
+      </div>
+      <div style="padding: 20px;">
+        <div class="form-section">
+          <div class="section-title">สร้างแผนใหม่ - รุ่นที่ 14</div>
+          <div style="margin: 15px 0;">
+            <label>วันเริ่มต้น:</label>
+            <input type="date" class="input-field" />
+          </div>
+          <div style="margin: 15px 0;">
+            <label>จำนวนไข่ไหม:</label>
+            <select class="input-field">
+              <option value="1">1 กล่อง</option>
+              <option value="2">2 กล่อง</option>
+              <option value="3">3 กล่อง</option>
+            </select>
+          </div>
+          <button class="action-btn" onclick="createNewPlan()" style="width: 100%;">
+            ✨ สร้างแผน
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- หน้าบันทึกข้อมูล -->
+    <div class="page" id="recordingPage">
+      <div class="sub-header">
+        <button class="back-btn" onclick="showPage('home')">◀</button>
+        <div class="page-title">📊 บันทึกข้อมูลการเลี้ยง</div>
+      </div>
+      <div style="padding: 20px;">
+        <div class="form-section">
+          <div class="section-title">บันทึกข้อมูลวันนี้</div>
+
+          <div style="margin: 15px 0;">
+            <label>น้ำหนักหนอนไหม (กก.):</label>
+            <input
+              id="log-worm-weight"
+              type="number"
+              class="input-field"
+              placeholder="0.0"
+              step="0.1" />
+          </div>
+
+          <div style="margin: 15px 0;">
+            <label>ปริมาณอาหาร (กก.):</label>
+            <input
+              id="log-food-weight"
+              type="number"
+              class="input-field"
+              placeholder="0.0"
+              step="0.1" />
+          </div>
+
+          <div style="margin: 15px 0;">
+            <label>หมายเหตุ:</label>
+            <textarea
+              id="log-note"
+              class="input-field"
+              rows="3"
+              placeholder="บันทึกสิ่งที่สังเกตเห็น..."></textarea>
+          </div>
+
+          <button class="action-btn" onclick="saveRecord()" style="width: 100%;">
+            💾 บันทึกข้อมูล
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- หน้ารายงานโรค -->
+    <div class="page" id="reportPage">
+      <div class="sub-header">
+        <button class="back-btn" onclick="showPage('home')">◀</button>
+        <div class="page-title">📋 รายงานโรคหนอนไหม</div>
+      </div>
+      <div style="padding: 20px;">
+        <div class="form-section">
+          <div class="section-title">🚨 แจ้งการพบโรคด่วน</div>
+          <div style="margin: 15px 0;">
+            <label>ชนิดโรค:</label>
+            <select class="input-field">
+              <option value="">เลือกโรค</option>
+              <option value="pebrine">โรคปลิง (Pebrine)</option>
+              <option value="muscardine">โรคเชื้อรา (Muscardine)</option>
+              <option value="flacherie">โรคท้องเสีย (Flacherie)</option>
+            </select>
+          </div>
+          <div style="margin: 15px 0;">
+            <label>ความรุนแรง:</label>
+            <select class="input-field">
+              <option value="">เลือกระดับ</option>
+              <option value="low">เล็กน้อย</option>
+              <option value="medium">ปานกลาง</option>
+              <option value="high">รุนแรง</option>
+              <option value="critical">วิกฤต</option>
+            </select>
+          </div>
+          <button class="action-btn" style="width: 100%; background: #f44336;">
+            📤 ส่งรายงาน (mock-up)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- หน้าสถิติ (placeholder) -->
+    <div class="page" id="statisticsPage">
+      <div class="sub-header">
+        <button class="back-btn" onclick="showPage('home')">◀</button>
+        <div class="page-title">📈 สถิติการเลี้ยงไหม</div>
+      </div>
+      <div style="padding: 20px;">
+        <div class="form-section">
+          <div class="section-title">อยู่ระหว่างพัฒนา</div>
+          <p>จะใช้ข้อมูลจาก Supabase มาทำกราฟในขั้นต่อไปค่ะ</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- หน้าตั้งค่า (placeholder) -->
+    <div class="page" id="settingsPage">
+      <div class="sub-header">
+        <button class="back-btn" onclick="showPage('home')">◀</button>
+        <div class="page-title">⚙️ ตั้งค่าแอป</div>
+      </div>
+      <div style="padding: 20px;">
+        <div class="form-section">
+          <div class="section-title">การตั้งค่าทั่วไป</div>
+          <p>ฟีเจอร์สำหรับปรับภาษา, หน่วยวัด, แจ้งเตือน ฯลฯ จะถูกเพิ่มในอนาคต</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ปุ่มฉุกเฉินด้านล่าง -->
+  <button class="emergency-btn" onclick="emergency()" title="ฉุกเฉิน - โทรขอความช่วยเหลือ">
+    🚨
+  </button>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <div class="nav-item active" data-page="home" onclick="showPage('home')">
+      <span class="nav-icon">🏠</span>
+      <div class="nav-text">หน้าหลัก</div>
+    </div>
+    <div class="nav-item" data-page="statistics" onclick="showPage('statistics')">
+      <span class="nav-icon">📈</span>
+      <div class="nav-text">สถิติ</div>
+    </div>
+    <div class="nav-item" data-page="settings" onclick="showPage('settings')">
+      <span class="nav-icon">⚙️</span>
+      <div class="nav-text">ตั้งค่า</div>
+    </div>
+  </div>
+
+  <script>
+    /* --------------------------
+       ระบบสลับหน้าแอป
+    --------------------------- */
+    function showPage(pageName) {
+      // ซ่อนทุกหน้า
+      const pages = document.querySelectorAll(".page");
+      pages.forEach((p) => p.classList.remove("active"));
+
+      // แสดงหน้าเป้าหมาย
+      const target = document.getElementById(pageName + "Page");
+      if (target) {
+        target.classList.add("active");
+      } else {
+        console.error("ไม่พบหน้า:", pageName + "Page");
+      }
+
+      // bottom nav highlight
+      const navItems = document.querySelectorAll(".nav-item");
+      navItems.forEach((item) => {
+        item.classList.toggle("active", item.dataset.page === pageName);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      showPage("home");
+    });
+
+    /* --------------------------
+       ปุ่มฉุกเฉิน & คำสั่งอื่น ๆ
+    --------------------------- */
+    function emergency() {
+      alert("📞 ระบบจะโทรหาลูกหลานหรือผู้ช่วยเหลือ (จำลอง)");
+    }
+
+    function startVoiceCommand() {
+      alert("🎤 ระบบสั่งงานด้วยเสียงกำลังอยู่ระหว่างการพัฒนา");
+    }
+
+    function takePhoto() {
+      alert("📷 เปิดกล้องถ่ายภาพ (จำลอง)");
+    }
+
+    function callFamily() {
+      alert("📞 โทรหาลูกหลาน (จำลอง)");
+    }
+
+    function completeCleaning() {
+      alert("🧹 บันทึกการทำความสะอาดแล้ว");
+    }
+
+    function completeWasteManagement() {
+      alert("🗑️ บันทึกการถ่ายมูลและขยายพื้นที่แล้ว");
+    }
+
+    function startHealthCheck() {
+      alert("🔍 เริ่มตรวจสุขภาพหนอนไหม (จำลอง)");
+    }
+
+    function markFeedingDone() {
+      alert("🍃 บันทึกว่าทำการให้อาหารแล้ว");
+    }
+
+    function createNewPlan() {
+      alert("✨ สร้างแผนการเลี้ยงไหมแล้ว (จำลอง)");
+    }
+
+    function controlTemperature() {
+      alert("💨 เปิดพัดลมลดความร้อน (จำลอง)");
+    }
+
+    /* --------------------------
+       Supabase Config
+       (แก้ 2 บรรทัดนี้ถ้ามีโปรเจกต์ใหม่)
+    --------------------------- */
+    const SUPABASE_URL = "https://dpgnqrxanxyxhibkfspx.supabase.co";
+    const SUPABASE_ANON_KEY =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwZ25xcnhhbnh5eGhpYmtmc3B4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMwMjU5NjksImV4cCI6MjA3ODYwMTk2OX0.CTWYu4ZxS_gW6G4r0zGNNj6gVkNE6jSWmcGoXc6GaxI";
+
+    /* --------------------------
+       บันทึกข้อมูลไป Supabase
+    --------------------------- */
+    async function saveRecord() {
+      const wormWeight = parseFloat(
+        document.getElementById("log-worm-weight").value || 0
+      );
+      const foodWeight = parseFloat(
+        document.getElementById("log-food-weight").value || 0
+      );
+      const note = document.getElementById("log-note").value || "";
+
+      const currentBatchId = null;
 
       if (!wormWeight && !foodWeight && !note.trim()) {
-          alert("กรุณากรอกข้อมูลอย่างน้อย 1 ช่องก่อนบันทึกค่ะ");
-          return;
+        alert("กรุณากรอกข้อมูลอย่างน้อย 1 ช่องก่อนบันทึกค่ะ");
+        return;
       }
 
       try {
-          const response = await fetch(`${SUPABASE_URL}/rest/v1/feeding_logs`, {
-              method: "POST",
-              headers: {
-                  "Content-Type": "application/json",
-                  "apikey": SUPABASE_ANON_KEY,
-                  "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-                  "Prefer": "return=representation"
-              },
-              body: JSON.stringify({
-                  batch_id: currentBatchId,
-                  day_in_cycle: 1,
-                  age_stage: 3,
-                  worm_weight_kg: wormWeight,
-                  mulberry_weight_kg: foodWeight,
-                  note: note
-              })
-          });
-
-          if (!response.ok) {
-              const errText = await response.text();
-              console.error(errText);
-              alert("❌ บันทึกข้อมูลไม่สำเร็จ");
-              return;
+        const response = await fetch(
+          `${SUPABASE_URL}/rest/v1/feeding_logs`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              apikey: SUPABASE_ANON_KEY,
+              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+              Prefer: "return=representation",
+            },
+            body: JSON.stringify({
+              batch_id: currentBatchId,
+              day_in_cycle: 1,
+              age_stage: 3,
+              worm_weight_kg: wormWeight,
+              mulberry_weight_kg: foodWeight,
+              note: note,
+            }),
           }
+        );
 
-          alert("✅ บันทึกข้อมูลสำเร็จแล้วค่ะ!");
+        if (!response.ok) {
+          const errText = await response.text();
+          console.error(errText);
+          alert("❌ บันทึกข้อมูลไม่สำเร็จ");
+          return;
+        }
 
-          document.getElementById('log-worm-weight').value = "";
-          document.getElementById('log-food-weight').value = "";
-          document.getElementById('log-note').value = "";
+        alert("✅ บันทึกข้อมูลสำเร็จแล้วค่ะ!");
 
+        document.getElementById("log-worm-weight").value = "";
+        document.getElementById("log-food-weight").value = "";
+        document.getElementById("log-note").value = "";
       } catch (error) {
-          console.error(error);
-          alert("เกิดข้อผิดพลาดในการเชื่อมต่อ");
+        console.error(error);
+        alert("เกิดข้อผิดพลาดในการเชื่อมต่อ");
       }
-  }
-</script>
+    }
+  </script>
 </body>
-</html>                      
-           
+</html>
+
