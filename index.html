@@ -720,4 +720,65 @@
                             <option value="high">รุนแรง</option>
                             <option value="critical">วิกฤต</option>
                         </select>
-                
+     <script>
+  // -----------------------------
+  // 1) ใส่ค่า Supabase ของอาจารย์ตรงนี้
+  // -----------------------------
+  const SUPABASE_URL = "https://dpgnqrxanxyxhibkfspx.supabase.co";   // << ใส่ของจริง
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwZ25xcnhhbnh5eGhpYmtmc3B4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMwMjU5NjksImV4cCI6MjA3ODYwMTk2OX0.CTWYu4ZxS_gW6G4r0zGNNj6gVkNE6jSWmcGoXc6GaxI";                    // << ใส่ของจริง
+
+  // -----------------------------
+  // 2) ฟังก์ชันบันทึกข้อมูลลงฐาน Supabase
+  // -----------------------------
+  async function saveRecord() {
+
+      const wormWeight = parseFloat(document.getElementById('log-worm-weight').value || 0);
+      const foodWeight = parseFloat(document.getElementById('log-food-weight').value || 0);
+      const note = document.getElementById('log-note').value || "";
+
+      const currentBatchId = null;  
+
+      if (!wormWeight && !foodWeight && !note.trim()) {
+          alert("กรุณากรอกข้อมูลอย่างน้อย 1 ช่องก่อนบันทึกค่ะ");
+          return;
+      }
+
+      try {
+          const response = await fetch(`${SUPABASE_URL}/rest/v1/feeding_logs`, {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+                  "apikey": SUPABASE_ANON_KEY,
+                  "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+                  "Prefer": "return=representation"
+              },
+              body: JSON.stringify({
+                  batch_id: currentBatchId,
+                  day_in_cycle: 1,
+                  age_stage: 3,
+                  worm_weight_kg: wormWeight,
+                  mulberry_weight_kg: foodWeight,
+                  note: note
+              })
+          });
+
+          if (!response.ok) {
+              const errText = await response.text();
+              console.error(errText);
+              alert("❌ บันทึกข้อมูลไม่สำเร็จ");
+              return;
+          }
+
+          alert("✅ บันทึกข้อมูลสำเร็จแล้วค่ะ!");
+
+          document.getElementById('log-worm-weight').value = "";
+          document.getElementById('log-food-weight').value = "";
+          document.getElementById('log-note').value = "";
+
+      } catch (error) {
+          console.error(error);
+          alert("เกิดข้อผิดพลาดในการเชื่อมต่อ");
+      }
+  }
+</script>
+           
