@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>อารักขารังไหมเลี้ยงอัจฉริยะ</title>
+
   <style>
     * {
       margin: 0;
@@ -409,8 +410,158 @@
         grid-template-columns: 1fr;
       }
     }
+
+    /* ==== สไตล์หน้า รายงานผลผลิต & สถิติ ==== */
+    .report-main-card {
+      max-width: 960px;
+      margin: 12px auto 110px; /* ด้านล่างเผื่อพื้นที่ให้แถบเมนู */
+      padding: 18px 20px 22px;
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      font-size: 16px;
+    }
+
+    .report-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .report-subtitle {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 12px;
+    }
+
+    .report-block {
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px solid #e5e5e5;
+    }
+
+    .report-block h3 {
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    .report-block ul {
+      padding-left: 18px;
+      margin: 0;
+    }
+
+    .report-block li {
+      margin-bottom: 2px;
+    }
+
+    .report-grid-2 {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .report-grid-2 > div {
+      flex: 1 1 220px;
+    }
+
+    .report-table-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .report-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .report-filters select {
+      padding: 4px 6px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 13px;
+    }
+
+    .btn-outline,
+    .btn-filled {
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      border: 1px solid #43a047;
+      cursor: pointer;
+    }
+
+    .btn-outline {
+      background: #ffffff;
+      color: #388e3c;
+    }
+
+    .btn-filled {
+      background: #43a047;
+      color: #ffffff;
+    }
+
+    .report-table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .report-table th,
+    .report-table td {
+      padding: 6px 8px;
+      border-bottom: 1px solid #e0e0e0;
+      text-align: left;
+    }
+
+    .report-table thead th {
+      background: #f5f5f5;
+      font-weight: 600;
+    }
+
+    .chart-placeholder {
+      margin-top: 8px;
+      padding: 18px;
+      border-radius: 14px;
+      border: 1px dashed #90caf9;
+      background: #e3f2fd;
+      text-align: center;
+      font-size: 14px;
+      color: #1976d2;
+    }
+
+    .report-note {
+      font-size: 13px;
+      color: #666;
+    }
+
+    @media (max-width: 600px) {
+      .report-main-card {
+        margin: 8px 8px 110px;
+        padding: 14px 12px 18px;
+        font-size: 15px;
+      }
+
+      .report-title {
+        font-size: 20px;
+      }
+
+      .report-table {
+        font-size: 13px;
+      }
+    }
   </style>
 </head>
+
 <body>
   <div class="container">
     <!-- หน้าหลัก -->
@@ -632,11 +783,11 @@
           <div style="margin: 15px 0;">
             <label>จำนวนไข่ไหม:</label>
             <select class="input-field">
-              <option value="1">1 แผ่น </option>
-              <option value="2">2 แผ่น </option>
-              <option value="3">3 แผ่น </option>
-              <option value="4">4 แผ่น </option>
-              <option value="5">5 แผ่น </option>
+              <option value="1">1 แผ่น</option>
+              <option value="2">2 แผ่น</option>
+              <option value="3">3 แผ่น</option>
+              <option value="4">4 แผ่น</option>
+              <option value="5">5 แผ่น</option>
             </select>
           </div>
           <button class="action-btn" onclick="createNewPlan()" style="width: 100%;">
@@ -727,21 +878,146 @@
       </div>
     </div>
 
-    <!-- หน้าสถิติ (placeholder) -->
+    <!-- หน้าสถิติ -->
     <div class="page" id="statisticsPage">
       <div class="sub-header">
         <button class="back-btn" onclick="showPage('home')">◀</button>
         <div class="page-title">📈 สถิติการเลี้ยงไหม</div>
       </div>
       <div style="padding: 20px;">
-        <div class="form-section">
-          <div class="section-title">อยู่ระหว่างพัฒนา</div>
-          <p>จะใช้ข้อมูลจาก Supabase มาทำกราฟในขั้นต่อไปค่ะ</p>
+        <div class="report-main-card">
+
+          <h2 class="report-title">📊 ระบบรายงานผลผลิต &amp; สถิติ</h2>
+          <p class="report-subtitle">
+            ดูภาพรวมผลผลิตไหม เปรียบเทียบผลผลิตในแต่ละรอบ พร้อมกราฟประกอบการตัดสินใจ
+          </p>
+
+          <!-- สรุปผลผลิตรอบล่าสุด -->
+          <div class="report-block">
+            <h3>ผลผลิตรอบล่าสุด</h3>
+            <ul>
+              <li><strong>รุ่นเลี้ยง:</strong> ตัวอย่าง รอบที่ 5</li>
+              <li><strong>เส้นไหมรวม:</strong> 12.5 กก.</li>
+              <li><strong>อัตรารอด:</strong> 89%</li>
+              <li><strong>เทียบกับรอบก่อนหน้า:</strong> ดีขึ้น +8%</li>
+            </ul>
+          </div>
+
+          <!-- ภาพรวมทั้งปี -->
+          <div class="report-block report-grid-2">
+            <div>
+              <h3>ภาพรวมทั้งปี</h3>
+              <ul>
+                <li><strong>จำนวนรอบเลี้ยง:</strong> 4 รอบ</li>
+                <li><strong>เส้นไหมรวม:</strong> 45.8 กก.</li>
+                <li><strong>ค่าเฉลี่ยต่อรอบ:</strong> 11.45 กก.</li>
+              </ul>
+            </div>
+            <div>
+              <h3>ตัวชี้วัดสำคัญ</h3>
+              <ul>
+                <li>❖ รอบผลผลิตดีที่สุด: รอบที่ 3</li>
+                <li>❖ ความชื้นเฉลี่ยเหมาะสม: 75–80%</li>
+                <li>❖ อุณหภูมิเฉลี่ย: 26–28 °C</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- ตัวกรอง + ตารางผลผลิต -->
+          <div class="report-block">
+            <div class="report-table-header">
+              <h3>ตารางรายงานผลผลิตไหม</h3>
+              <div class="report-filters">
+                <select>
+                  <option>ปีทั้งหมด</option>
+                  <option>2567</option>
+                  <option>2568</option>
+                </select>
+                <select>
+                  <option>พันธุ์ไหมทั้งหมด</option>
+                  <option>พันธุ์ไทยพื้นบ้าน</option>
+                  <option>ลูกผสม</option>
+                </select>
+                <button class="btn-outline">Export CSV</button>
+                <button class="btn-filled">Export PDF</button>
+              </div>
+            </div>
+
+            <div class="report-table-wrapper">
+              <table class="report-table">
+                <thead>
+                  <tr>
+                    <th>รอบเลี้ยง</th>
+                    <th>พันธุ์ไหม</th>
+                    <th>แผ่นไข่ (แผ่น)</th>
+                    <th>เส้นไหม (กก.)</th>
+                    <th>รังไหม (กก.)</th>
+                    <th>อัตรารอด (%)</th>
+                    <th>หมายเหตุ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>รอบที่ 5</td>
+                    <td>พันธุ์ไทยพื้นบ้าน</td>
+                    <td>3</td>
+                    <td>12.5</td>
+                    <td>38.0</td>
+                    <td>89%</td>
+                    <td>สภาพอากาศเหมาะสม</td>
+                  </tr>
+                  <tr>
+                    <td>รอบที่ 4</td>
+                    <td>พันธุ์ลูกผสม</td>
+                    <td>3</td>
+                    <td>11.2</td>
+                    <td>35.4</td>
+                    <td>82%</td>
+                    <td>ความชื้นค่อนข้างสูง</td>
+                  </tr>
+                  <tr>
+                    <td>รอบที่ 3</td>
+                    <td>พันธุ์ไทยพื้นบ้าน</td>
+                    <td>2</td>
+                    <td>12.8</td>
+                    <td>37.2</td>
+                    <td>92%</td>
+                    <td>ผลผลิตดีที่สุดของปี</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- พื้นที่กราฟ -->
+          <div class="report-block">
+            <h3>กราฟแนวโน้มผลผลิต</h3>
+            <p class="report-note">
+              ส่วนนี้สามารถเชื่อมต่อกับกราฟด้วย JavaScript (เช่น Chart.js) ในขั้นตอนถัดไป
+            </p>
+            <div class="chart-placeholder">
+              แผนภาพแสดงผลผลิต (กก.) เปรียบเทียบแต่ละรอบการเลี้ยง
+            </div>
+          </div>
+
+          <!-- สรุปข้อเสนอแนะ -->
+          <div class="report-block">
+            <h3>สรุปข้อเสนอแนะอัตโนมัติ</h3>
+            <p>
+              รอบล่าสุดมีผลผลิตดีขึ้นจากรอบก่อนหน้า 1.3 กก. ปัจจัยที่สอดคล้องกันคือความชื้นเฉลี่ยอยู่ที่ 78%
+              ซึ่งอยู่ในช่วงเหมาะสม และมีการทำความสะอาดโรงเรือนสม่ำเสมอ
+            </p>
+            <p>
+              แนะนำให้ใช้วิธีการจัดการสภาพแวดล้อมแบบเดียวกับรอบที่ 3 และ 5 เป็นมาตรฐาน
+              และจดบันทึกขั้นตอนอย่างละเอียดในระบบบันทึกข้อมูลรายวัน
+            </p>
+          </div>
+
         </div>
       </div>
     </div>
 
-    <!-- หน้าตั้งค่า (placeholder) -->
+    <!-- หน้าตั้งค่า -->
     <div class="page" id="settingsPage">
       <div class="sub-header">
         <button class="back-btn" onclick="showPage('home')">◀</button>
@@ -782,11 +1058,9 @@
        ระบบสลับหน้าแอป
     --------------------------- */
     function showPage(pageName) {
-      // ซ่อนทุกหน้า
       const pages = document.querySelectorAll(".page");
       pages.forEach((p) => p.classList.remove("active"));
 
-      // แสดงหน้าเป้าหมาย
       const target = document.getElementById(pageName + "Page");
       if (target) {
         target.classList.add("active");
@@ -794,7 +1068,6 @@
         console.error("ไม่พบหน้า:", pageName + "Page");
       }
 
-      // bottom nav highlight
       const navItems = document.querySelectorAll(".nav-item");
       navItems.forEach((item) => {
         item.classList.toggle("active", item.dataset.page === pageName);
@@ -850,7 +1123,6 @@
 
     /* --------------------------
        Supabase Config
-       (แก้ 2 บรรทัดนี้ถ้ามีโปรเจกต์ใหม่)
     --------------------------- */
     const SUPABASE_URL = "https://dpgnqrxanxyxhibkfspx.supabase.co";
     const SUPABASE_ANON_KEY =
@@ -915,294 +1187,6 @@
       }
     }
   </script>
-<!-- กล่องรายงานผลผลิตหลัก -->
-<div class="report-main-card">
-<style>
-  /* กล่องรายงานหลัก */
-.report-main-card {
-    max-width: 960px;
-    margin: 12px auto 110px; /* ด้านล่างเผื่อพื้นที่ให้แถบเมนู */
-    padding: 18px 20px 22px;
-    background: #ffffff;
-    border-radius: 18px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    font-size: 16px;
-}
-
-/* หัวข้อใหญ่ */
-.report-title {
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 4px;
-}
-
-.report-subtitle {
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 12px;
-}
-
-/* บล็อกย่อยแต่ละส่วนในรายงาน */
-.report-block {
-    margin-top: 14px;
-    padding-top: 10px;
-    border-top: 1px solid #e5e5e5;
-}
-
-.report-block h3 {
-    font-size: 18px;
-    margin-bottom: 6px;
-}
-
-.report-block ul {
-    padding-left: 18px;
-    margin: 0;
-}
-
-.report-block li {
-    margin-bottom: 2px;
-}
-
-/* วางสองคอลัมน์บนหน้าจอกว้าง */
-.report-grid-2 {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-
-.report-grid-2 > div {
-    flex: 1 1 220px;
-}
-
-/* header ของตาราง + filter */
-.report-table-header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
-    justify-content: space-between;
-    margin-bottom: 8px;
-}
-
-.report-filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-}
-
-.report-filters select {
-    padding: 4px 6px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 13px;
-}
-
-/* ปุ่ม Export */
-.btn-outline,
-.btn-filled {
-    padding: 5px 10px;
-    border-radius: 999px;
-    font-size: 13px;
-    border: 1px solid #43a047;
-    cursor: pointer;
-}
-
-.btn-outline {
-    background: #ffffff;
-    color: #388e3c;
-}
-
-.btn-filled {
-    background: #43a047;
-    color: #ffffff;
-}
-
-/* ตารางรายงาน */
-.report-table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-}
-
-.report-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-}
-
-.report-table th,
-.report-table td {
-    padding: 6px 8px;
-    border-bottom: 1px solid #e0e0e0;
-    text-align: left;
-}
-
-.report-table thead th {
-    background: #f5f5f5;
-    font-weight: 600;
-}
-
-/* พื้นที่กราฟ */
-.chart-placeholder {
-    margin-top: 8px;
-    padding: 18px;
-    border-radius: 14px;
-    border: 1px dashed #90caf9;
-    background: #e3f2fd;
-    text-align: center;
-    font-size: 14px;
-    color: #1976d2;
-}
-
-.report-note {
-    font-size: 13px;
-    color: #666;
-}
-
-/* รองรับหน้าจอมือถือ */
-@media (max-width: 600px) {
-    .report-main-card {
-        margin: 8px 8px 110px;
-        padding: 14px 12px 18px;
-        font-size: 15px;
-    }
-
-    .report-title {
-        font-size: 20px;
-    }
-
-    .report-table {
-        font-size: 13px;
-    }
-}
-    <h2 class="report-title">📊 ระบบรายงานผลผลิต &amp; สถิติ</h2>
-    <p class="report-subtitle">
-        ดูภาพรวมผลผลิตไหม เปรียบเทียบผลผลิตในแต่ละรอบ พร้อมกราฟประกอบการตัดสินใจ
-    </p>
-
-    <!-- สรุปผลผลิตรอบล่าสุด -->
-    <div class="report-block">
-        <h3>ผลผลิตรอบล่าสุด</h3>
-        <ul>
-            <li><strong>รุ่นเลี้ยง:</strong> ตัวอย่าง รอบที่ 5</li>
-            <li><strong>เส้นไหมรวม:</strong> 12.5 กก.</li>
-            <li><strong>อัตรารอด:</strong> 89%</li>
-            <li><strong>เทียบกับรอบก่อนหน้า:</strong> ดีขึ้น +8%</li>
-        </ul>
-    </div>
-
-    <!-- ภาพรวมทั้งปี -->
-    <div class="report-block report-grid-2">
-        <div>
-            <h3>ภาพรวมทั้งปี</h3>
-            <ul>
-                <li><strong>จำนวนรอบเลี้ยง:</strong> 4 รอบ</li>
-                <li><strong>เส้นไหมรวม:</strong> 45.8 กก.</li>
-                <li><strong>ค่าเฉลี่ยต่อรอบ:</strong> 11.45 กก.</li>
-            </ul>
-        </div>
-        <div>
-            <h3>ตัวชี้วัดสำคัญ</h3>
-            <ul>
-                <li>❖ รอบผลผลิตดีที่สุด: รอบที่ 3</li>
-                <li>❖ ความชื้นเฉลี่ยเหมาะสม: 75–80%</li>
-                <li>❖ อุณหภูมิเฉลี่ย: 26–28 °C</li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- ตัวกรอง + ตารางผลผลิต -->
-    <div class="report-block">
-        <div class="report-table-header">
-            <h3>ตารางรายงานผลผลิตไหม</h3>
-            <div class="report-filters">
-                <select>
-                    <option>ปีทั้งหมด</option>
-                    <option>2567</option>
-                    <option>2568</option>
-                </select>
-                <select>
-                    <option>พันธุ์ไหมทั้งหมด</option>
-                    <option>พันธุ์ไทยพื้นบ้าน</option>
-                    <option>ลูกผสม</option>
-                </select>
-                <button class="btn-outline">Export CSV</button>
-                <button class="btn-filled">Export PDF</button>
-            </div>
-        </div>
-
-        <div class="report-table-wrapper">
-            <table class="report-table">
-                <thead>
-                    <tr>
-                        <th>รอบเลี้ยง</th>
-                        <th>พันธุ์ไหม</th>
-                        <th>แผ่นไข่ (แผ่น)</th>
-                        <th>เส้นไหม (กก.)</th>
-                        <th>รังไหม (กก.)</th>
-                        <th>อัตรารอด (%)</th>
-                        <th>หมายเหตุ</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>รอบที่ 5</td>
-                        <td>พันธุ์ไทยพื้นบ้าน</td>
-                        <td>3</td>
-                        <td>12.5</td>
-                        <td>38.0</td>
-                        <td>89%</td>
-                        <td>สภาพอากาศเหมาะสม</td>
-                    </tr>
-                    <tr>
-                        <td>รอบที่ 4</td>
-                        <td>พันธุ์ลูกผสม</td>
-                        <td>3</td>
-                        <td>11.2</td>
-                        <td>35.4</td>
-                        <td>82%</td>
-                        <td>ความชื้นค่อนข้างสูง</td>
-                    </tr>
-                    <tr>
-                        <td>รอบที่ 3</td>
-                        <td>พันธุ์ไทยพื้นบ้าน</td>
-                        <td>2</td>
-                        <td>12.8</td>
-                        <td>37.2</td>
-                        <td>92%</td>
-                        <td>ผลผลิตดีที่สุดของปี</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- พื้นที่กราฟ -->
-    <div class="report-block">
-        <h3>กราฟแนวโน้มผลผลิต</h3>
-        <p class="report-note">
-            ส่วนนี้สามารถเชื่อมต่อกับกราฟด้วย JavaScript (เช่น Chart.js) ในขั้นตอนถัดไป
-        </p>
-        <div class="chart-placeholder">
-            แผนภาพแสดงผลผลิต (กก.) เปรียบเทียบแต่ละรอบการเลี้ยง
-        </div>
-    </div>
-
-    <!-- สรุปข้อเสนอแนะ -->
-    <div class="report-block">
-        <h3>สรุปข้อเสนอแนะอัตโนมัติ</h3>
-        <p>
-            รอบล่าสุดมีผลผลิตดีขึ้นจากรอบก่อนหน้า 1.3 กก. ปัจจัยที่สอดคล้องกันคือความชื้นเฉลี่ยอยู่ที่ 78%
-            ซึ่งอยู่ในช่วงเหมาะสม และมีการทำความสะอาดโรงเรือนสม่ำเสมอ
-        </p>
-        <p>
-            แนะนำให้ใช้วิธีการจัดการสภาพแวดล้อมแบบเดียวกับรอบที่ 3 และ 5 เป็นมาตรฐาน 
-            และจดบันทึกขั้นตอนอย่างละเอียดในระบบบันทึกข้อมูลรายวัน
-        </p>
-    </div>
-
-</div>
-</style>
-</section>
 </body>
 </html>
 
