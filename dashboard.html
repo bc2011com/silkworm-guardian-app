@@ -1273,6 +1273,36 @@
       updateFeedingPage();
       showPage("home");
     }
+// --------------------------
+// พูดแจ้งเตือนแผนให้อาหาร (Text-to-Speech)
+// --------------------------
+function speakFeedingPlan(dayNo, plan) {
+  try {
+    // ถ้า browser ไม่รองรับ หรือผู้ใช้ปิดแจ้งเตือน ไม่นำมาใช้
+    if (!('speechSynthesis' in window)) return;
+
+    const alertEnabled = localStorage.getItem('silkAlertEnabled') === '1';
+    if (!alertEnabled) return;
+
+    // ยกเลิกเสียงเดิมก่อน
+    window.speechSynthesis.cancel();
+
+    // ประโยคที่ให้ระบบอ่านออกเสียง
+    const text =
+      `วันนี้เป็นวันเลี้ยงที่ ${dayNo} ` +
+      `ต้องให้อาหารหนอนไหมเวลา ${plan.times.join(' นาฬิกา, ')} นาฬิกา ` +
+      `วัยที่ ${plan.stage} ${plan.detail}`;
+
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'th-TH';   // ภาษาไทย
+    utter.rate = 0.9;       // ความเร็ว
+    utter.pitch = 1.0;      // โทนเสียง
+
+    window.speechSynthesis.speak(utter);
+  } catch (err) {
+    console.error('speakFeedingPlan error:', err);
+  }
+}
 
     /* -------------------------
        สถานะแจ้งเตือน
