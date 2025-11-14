@@ -1540,6 +1540,71 @@ async function logPlannedFeedingToSupabase() {
         }
 
         alert("✅ บันทึกข้อมูลสำเร็จแล้วค่ะ!");
+/* --------------------------
+   โหลดสถิติจาก Supabase (feeding_logs)
+--------------------------- */
+async function loadFeedingStats() {
+  const table = document.querySelector("#feedingLogsTable tbody");
+  if (!table) return;
+
+  try {
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/feeding_logs?select=day_in_cycle,age_stage,worm_weight_kg,mulberry_weight_kg,note,created_at&order=created_at.asc`,
+      {
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      console.error("โหลดสถิติไม่สำเร็จ:", await response.text());
+      return;
+    }
+
+    const rows = await response.json();
+    renderFeedingLogsTable(rows);
+  } catch (err) {
+    console.error("loadFeedingStats error:", err);
+  }
+}
+
+function renderFeedingLogsTable(rows) {
+  const tbody = document.querySelector("#feedingLogsTable tbody");
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
+
+  if (!rows || rows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5">ยังไม่มีข้อมูล</td></tr>`;
+    return;
+  }
+
+  // เอาเฉพาะ 10 รายการล่าสุด และเรียงจากใหม่ → เก่า
+  const latest = rows.slice(-10).reverse();
+
+  for (const row of latest) {
+    const tr = document.createElement("tr");
+
+    const day = row.day_in_cycle ?? "-";
+    const stage = row.age_stage ?? "-";
+    const worm = row.worm_weight_kg != null ? row.worm_weight_kg.toFixed(2) : "-";
+    const food =
+      row.mulberry_weight_kg != null ? row.mulberry_weight_kg.toFixed(2) : "-";
+    const note = row.note || "";
+
+    tr.innerHTML = `
+      <td>${day}</td>
+      <td>${stage}</td>
+      <td>${worm}</td>
+      <td>${food}</td>
+      <td>${note}</td>
+    `;
+
+    tbody.appendChild(tr);
+  }
+}
 
         document.getElementById("log-worm-weight").value = "";
         document.getElementById("log-food-weight").value = "";
