@@ -46,23 +46,23 @@
     }
 
     .voice-btn {
-      top: 60%;
-      position: absolute;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: #ff6b35;
-      border: none;
-      border-radius: 50%;
-      width: 70px;
-      height: 70px;
-      color: white;
-      font-size: 30px;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
-      transition: all 0.3s ease;
-      animation: pulse 2s infinite;
-    }
+  position: absolute;
+  right: 20px;
+  top: 70px;           /* เดิม top: 50%  → เปลี่ยนเป็นตำแหน่งใต้ข้อความ */
+  background: #ff6b35;
+  border: none;
+  border-radius: 50%;
+  width: 65px;         /* ลดลงเล็กน้อยเพื่อให้พอดีกับพื้นที่ */
+  height: 65px;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+  transition: all 0.3s ease;
+  animation: pulse 2s infinite;
+  z-index: 20;         /* อยู่ใต้ปุ่ม logout แต่ยังคลิกได้ */
+}
+
 .logout-header-btn {
   position: absolute;
   top: 10px;
