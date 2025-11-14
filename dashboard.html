@@ -1354,6 +1354,7 @@ function speakFeedingPlan(dayNo, plan) {
           "บันทึกการให้อาหารแล้วค่ะ ระบบจะเตือนรอบถัดไปให้อัตโนมัติค่ะ"
         );
         alert("🍃 บันทึกแล้ว ระบบจะเตือนรอบถัดไปให้อัตโนมัติ");
+        await logPlannedFeedingToSupabase();
       } else {
         alert("🍃 บันทึกแล้ว (ระบบไม่ส่งแจ้งเตือน เพราะคุณปิดไว้)");
       }
@@ -1401,6 +1402,74 @@ function speakFeedingPlan(dayNo, plan) {
     const SUPABASE_URL = "https://dpgnqrxanxyxhibkfspx.supabase.co";
     const SUPABASE_ANON_KEY =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwZ25xcnhhbnh5eGhpYmtmc3B4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMwMjU5NjksImV4cCI6MjA3ODYwMTk2OX0.CTWYu4ZxS_gW6G4r0zGNNj6gVkNE6jSWmcGoXc6GaxI";
+    /* --------------------------
+   บันทึกการให้อาหารตามแผน (กดปุ่ม "ให้อาหารแล้ว")
+--------------------------- */
+async function logPlannedFeedingToSupabase() {
+  // ถ้าไม่มีวันเริ่มเลี้ยง ให้หยุด
+  const stored = localStorage.getItem("silkStartDate");
+  if (!stored) {
+    console.warn("ยังไม่ได้ตั้งวันเริ่มเลี้ยง จึงไม่บันทึก Supabase");
+    return;
+  }
+
+  const startDate = new Date(stored);
+  const now = new Date();
+
+  // ใช้ฟังก์ชันเดิมที่เราใช้คำนวณแผนให้อาหาร (D, วัย ฯลฯ)
+  // สมมติยังใช้ชื่อเดิมว่า getFeedingPlanForDate
+  const planResult = typeof getFeedingPlanForDate === "function"
+    ? getFeedingPlanForDate(startDate, now)
+    : null;
+
+  if (!planResult || !planResult.plan) {
+    console.warn("วันนี้อยู่นอกช่วงแผน / ไม่มีข้อมูล plan จึงไม่บันทึก Supabase");
+    return;
+  }
+
+  const { dayNo, plan } = planResult;
+
+  // ถ้ายังไม่มีระบบ batch_id ให้ใช้ null ไปก่อน
+  const currentBatchId = null;
+
+  // เวลา ณ ตอนที่กดปุ่ม เพื่อใส่ในหมายเหตุ
+  const timeText = now.toLocaleTimeString("th-TH", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/feeding_logs`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        Prefer: "return=representation",
+      },
+      body: JSON.stringify({
+        batch_id: currentBatchId,
+        day_in_cycle: dayNo,              // วันเลี้ยงที่เท่าไร
+        age_stage: plan.stage || null,    // วัยที่เท่าไร (ถ้ามีใน plan)
+        worm_weight_kg: null,             // ยังไม่เก็บน้ำหนัก
+        mulberry_weight_kg: null,         // ยังไม่เก็บปริมาณอาหาร
+        note: `ให้อาหารตามแผน เวลา ${timeText}`, // หมายเหตุ
+      }),
+    });
+
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error("Supabase feeding_logs error:", errText);
+      alert("❌ บันทึกข้อมูลการให้อาหารไปยังฐานข้อมูลไม่สำเร็จ");
+      return;
+    }
+
+    console.log("✅ บันทึกการให้อาหารลง Supabase แล้ว");
+  } catch (error) {
+    console.error("Supabase error:", error);
+    alert("เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูล Supabase");
+  }
+}
 
     async function saveRecord() {
       const wormWeight = parseFloat(
