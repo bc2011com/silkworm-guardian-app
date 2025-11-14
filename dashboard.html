@@ -1472,7 +1472,8 @@ async function logPlannedFeedingToSupabase() {
   const { dayNo, plan } = planResult;
 
   // ถ้ายังไม่มีระบบ batch_id ให้ใช้ null ไปก่อน
-  const currentBatchId = null;
+  const currentBatchId = 
+    localStorage.getItem("silkCurrentBatchId") ||null;
 
   // เวลา ณ ตอนที่กดปุ่ม เพื่อใส่ในหมายเหตุ
   const timeText = now.toLocaleTimeString("th-TH", {
