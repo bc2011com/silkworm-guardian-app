@@ -1007,7 +1007,34 @@
             <p class="report-note">
               แสดงผลผลิตเส้นไหม และอัตรารอดของแต่ละรอบการเลี้ยง
             </p>
+                      <!-- บันทึกข้อมูลการเลี้ยงล่าสุดจากระบบจริง -->
+          <div class="report-block" id="feedingLogsBlock">
+            <h3>บันทึกข้อมูลการเลี้ยงล่าสุดจากระบบ</h3>
+            <p class="report-note">
+              ข้อมูลจากฟอร์ม "บันทึกข้อมูลการเลี้ยง" (แสดง 10 รายการล่าสุด)
+            </p>
 
+            <div class="report-table-wrapper">
+              <table class="report-table" id="feedingLogsTable">
+                <thead>
+                  <tr>
+                    <th>วันเลี้ยงที่</th>
+                    <th>วัยที่</th>
+                    <th>น้ำหนักหนอน (กก.)</th>
+                    <th>ปริมาณอาหาร (กก.)</th>
+                    <th>หมายเหตุ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="5">ยังไม่มีข้อมูล</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+            
             <div class="chart-placeholder">
               กราฟผลผลิตเส้นไหมต่อรอบ (กก.)
               <canvas id="productionChart"></canvas>
