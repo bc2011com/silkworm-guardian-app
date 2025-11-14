@@ -1723,7 +1723,8 @@ function renderFeedingLogsTable(rows) {
       });
 
       if (pageName === "statistics") {
-        initCharts();
+        initCharts();  // กราฟเดิม (mock)
+        loadFeedingStats(); // ดึงข้อมูลจริงจาก Supabase
       }
       if (pageName === "feeding") {
         updateFeedingPage();
