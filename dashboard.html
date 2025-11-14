@@ -1018,6 +1018,7 @@
               <table class="report-table" id="feedingLogsTable">
                 <thead>
                   <tr>
+                    <th>รุ่นเลี้ยง</th>
                     <th>วันเลี้ยงที่</th>
                     <th>วัยที่</th>
                     <th>น้ำหนักหนอน (กก.)</th>
@@ -1611,6 +1612,7 @@ function renderFeedingLogsTable(rows) {
     const note = row.note || "";
 
     tr.innerHTML = `
+      <td>${batch}</td>
       <td>${day}</td>
       <td>${stage}</td>
       <td>${worm}</td>
