@@ -1119,19 +1119,36 @@
     </div>
 
     <!-- หน้าตั้งค่า -->
-    <div class="page" id="settingsPage">
+      <div class="page" id="settingsPage">
       <div class="sub-header">
         <button class="back-btn" onclick="showPage('home')">◀</button>
         <div class="page-title">⚙️ ตั้งค่าแอป</div>
       </div>
       <div style="padding: 20px;">
         <div class="form-section">
-          <div class="section-title">การตั้งค่าทั่วไป</div>
-          <p>ฟีเจอร์สำหรับปรับภาษา, หน่วยวัด, แจ้งเตือน ฯลฯ จะถูกเพิ่มในอนาคต</p>
+          <div class="section-title">การตั้งค่าแจ้งเตือน</div>
+
+          <div class="setting-row">
+            <div class="setting-label">
+              รับการแจ้งเตือนอัตโนมัติตามแผนการเลี้ยงไหม
+            </div>
+            <label class="switch">
+              <input
+                type="checkbox"
+                id="toggleNotifications"
+                onchange="onNotificationToggle(this.checked)"
+              />
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div id="notifyStatusText" class="setting-note">
+            ระบบจะแจ้งเตือนตามแผนการเลี้ยงอัตโนมัติ
+          </div>
         </div>
       </div>
     </div>
-  </div>
+
 
   <!-- ปุ่มฉุกเฉินด้านล่าง -->
   <button class="emergency-btn" onclick="emergency()" title="ฉุกเฉิน - โทรขอความช่วยเหลือ">
@@ -1190,9 +1207,10 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       showPage("home");
-      // เตรียมกราฟไว้ (แต่ยังไม่ต้องสร้างซ้ำถ้ามีอยู่แล้ว)
       initCharts();
+      loadNotificationPreference();
     });
+
 
     /* --------------------------
        ปุ่มฉุกเฉิน & คำสั่งอื่น ๆ
@@ -1321,6 +1339,9 @@
     let productionChartInstance = null;
     let survivalChartInstance = null;
 
+     // สถานะการเปิด/ปิดการแจ้งเตือน (ค่าเริ่มต้น: เปิด)
+    let notificationEnabled = true;
+    
     function initCharts() {
       if (typeof Chart === "undefined") return;
 
@@ -1431,6 +1452,48 @@
       utter.pitch = 1.0;  // โทนเสียง
 
       window.speechSynthesis.speak(utter);
+    }
+    function loadNotificationPreference() {
+      const saved = localStorage.getItem("notifyEnabled");
+
+      if (saved === null) {
+        // ยังไม่เคยตั้งค่า → ใช้ค่าเริ่มต้น = true
+        notificationEnabled = true;
+      } else {
+        notificationEnabled = saved === "true";
+      }
+
+      const checkbox = document.getElementById("toggleNotifications");
+      const statusText = document.getElementById("notifyStatusText");
+
+      if (checkbox) {
+        checkbox.checked = notificationEnabled;
+      }
+      if (statusText) {
+        statusText.textContent = notificationEnabled
+          ? "ระบบจะแจ้งเตือนตามแผนการเลี้ยงอัตโนมัติ"
+          : "ปิดการแจ้งเตือนอยู่ คุณยังสามารถดูตารางแผนการเลี้ยงได้ด้วยตนเอง";
+      }
+    }
+
+    function onNotificationToggle(checked) {
+      notificationEnabled = checked;
+      localStorage.setItem("notifyEnabled", String(notificationEnabled));
+
+      const statusText = document.getElementById("notifyStatusText");
+      if (statusText) {
+        statusText.textContent = notificationEnabled
+          ? "ระบบจะแจ้งเตือนตามแผนการเลี้ยงอัตโนมัติ"
+          : "ปิดการแจ้งเตือนอยู่ คุณยังสามารถดูตารางแผนการเลี้ยงได้ด้วยตนเอง";
+      }
+    }
+        function scheduleFeedingAlerts() {
+      if (!notificationEnabled) {
+        // ถ้า user ปิดแจ้งเตือน → ไม่ต้องตั้ง schedule
+        return;
+      }
+
+      // ตรงนี้ค่อยใส่ logic ตั้งเวลาแจ้งเตือนตามแผน 22–28 วัน
     }
 
   </script>
