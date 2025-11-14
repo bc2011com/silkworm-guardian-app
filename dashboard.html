@@ -1286,22 +1286,34 @@
     /* -------------------------
        การสร้างแผนเลี้ยง
     ------------------------- */
-    function createNewPlan() {
-      const startInput = document.getElementById("plan-start-date");
-      if (!startInput || !startInput.value) {
-        alert("กรุณาเลือกวันเริ่มต้นก่อนค่ะ");
-        return;
-      }
-      const startDateStr = startInput.value;
-      localStorage.setItem("silkStartDate", startDateStr);
+ function createNewPlan() {
+  // หา input วันเริ่มต้น และจำนวนไข่ไหม ในหน้า planningPage
+  const dateInput = document.querySelector(
+    "#planningPage input[type='date']"
+  );
+  const eggsSelect = document.querySelector("#planningPage select");
 
-      alert("✨ บันทึกวันเริ่มเลี้ยงแล้วค่ะ");
-      speakThai("บันทึกวันเริ่มเลี้ยงแล้วค่ะ ระบบจะคำนวณแผนให้อัตโนมัติ");
+  const startDate = dateInput ? dateInput.value : "";
+  const eggs = eggsSelect ? eggsSelect.value : "";
 
-      updateCurrentStageText();
-      updateFeedingPage();
-      showPage("home");
-    }
+  if (!startDate) {
+    alert("กรุณาเลือกวันเริ่มต้นก่อนค่ะ");
+    return;
+  }
+
+  // บันทึกวันเริ่มเลี้ยง (ใช้สำหรับคำนวณแผนให้อาหาร)
+  localStorage.setItem("silkStartDate", startDate);
+
+  // สร้างรหัสรุ่นเลี้ยงแบบอ่านง่าย เช่น 2025-11-09_2แผ่น
+  const batchId = `${startDate}_ไข่${eggs}แผ่น`;
+  localStorage.setItem("silkCurrentBatchId", batchId);
+
+  alert(
+    "✨ บันทึกวันเริ่มเลี้ยงและสร้างรุ่นเลี้ยงใหม่แล้วค่ะ\nรหัสรุ่น: " +
+      batchId
+  );
+}
+
 // --------------------------
 // พูดแจ้งเตือนแผนให้อาหาร (Text-to-Speech)
 // --------------------------
