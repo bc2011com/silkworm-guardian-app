@@ -757,22 +757,26 @@
         <div class="form-section">
           <div class="section-title" id="feedingTitle">⏰ เวลา 14:00 น. - ถึงเวลาให้อาหาร!</div>
           <p id="feedingDetail">วัยที่ 3 ต้องการใบหม่อนสด 1.5 กิโลกรัม</p>
-function updateFeedingPage() {
-  const stored = localStorage.getItem("silkStartDate");
-  if (!stored) return; // ยังไม่ได้ตั้งวันเริ่มเลี้ยง
+          
+      function updateFeedingPage() {
+        const stored = localStorage.getItem("silkStartDate");
+        if (!stored) return; // ยังไม่ได้ตั้งวันเริ่มเลี้ยง
 
-  const startDate = new Date(stored);
-  const today = new Date();
-  const { dayNo, plan } = getFeedingPlanForDate(startDate, today);
+          const startDate = new Date(stored);
+          const today = new Date();
+          const { dayNo, plan } = getFeedingPlanForDate(startDate, today);
 
-  const titleEl = document.getElementById("feedingTitle");
-  const detailEl = document.getElementById("feedingDetail");
+          const titleEl = document.getElementById("feedingTitle");
+          const detailEl = document.getElementById("feedingDetail");
 
-  if (!plan) {
-    if (titleEl) titleEl.textContent = "วันนี้อยู่นอกช่วงแผน 27 วัน";
-    if (detailEl) detailEl.textContent = "กรุณาตรวจสอบตารางการเลี้ยงหรือเริ่มรุ่นใหม่อีกครั้ง";
+      if (!plan) {
+      if (titleEl) titleEl.textContent = "วันนี้อยู่นอกช่วงแผน 27 วัน";
+      if (detailEl) detailEl.textContent = "กรุณาตรวจสอบตารางการเลี้ยงหรือเริ่มรุ่นใหม่อีกครั้ง";
     return;
   }
+      if (pageName === "feeding") {
+      updateFeedingPage();
+      }
 
   if (titleEl) {
     const timeText = plan.times.length > 0 ? plan.times.join(" และ ") : "วันนี้ไม่มีการให้อาหาร";
