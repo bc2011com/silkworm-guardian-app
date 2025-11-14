@@ -1594,16 +1594,15 @@ function renderFeedingLogsTable(rows) {
   tbody.innerHTML = "";
 
   if (!rows || rows.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5">ยังไม่มีข้อมูล</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="6">ยังไม่มีข้อมูล</td></tr>`;
     return;
   }
 
   // เอาเฉพาะ 10 รายการล่าสุด และเรียงจากใหม่ → เก่า
-  const latest = rows.slice(-10).reverse();
+  const latest = rows.slice(0, 10);
 
   for (const row of latest) {
-    const tr = document.createElement("tr");
-
+    const batch = row.batch_id || "-";
     const day = row.day_in_cycle ?? "-";
     const stage = row.age_stage ?? "-";
     const worm = row.worm_weight_kg != null ? row.worm_weight_kg.toFixed(2) : "-";
@@ -1611,6 +1610,7 @@ function renderFeedingLogsTable(rows) {
       row.mulberry_weight_kg != null ? row.mulberry_weight_kg.toFixed(2) : "-";
     const note = row.note || "";
 
+    const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${batch}</td>
       <td>${day}</td>
