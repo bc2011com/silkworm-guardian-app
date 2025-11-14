@@ -1514,49 +1514,65 @@ async function logPlannedFeedingToSupabase() {
     alert("เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูล Supabase");
   }
 }
+async function saveRecord() {
+  const wormWeight = parseFloat(
+    document.getElementById("log-worm-weight").value || 0
+  );
+  const foodWeight = parseFloat(
+    document.getElementById("log-food-weight").value || 0
+  );
+  const note = document.getElementById("log-note").value || "";
 
-    async function saveRecord() {
-      const wormWeight = parseFloat(
-        document.getElementById("log-worm-weight").value || 0
-      );
-      const foodWeight = parseFloat(
-        document.getElementById("log-food-weight").value || 0
-      );
-      const note = document.getElementById("log-note").value || "";
-      const currentBatchId = null;
+  // ✅ ดึง batch ปัจจุบันจาก localStorage
+  const currentBatchId =
+    localStorage.getItem("silkCurrentBatchId") || null;
 
-      if (!wormWeight && !foodWeight && !note.trim()) {
-        alert("กรุณากรอกข้อมูลอย่างน้อย 1 ช่องก่อนบันทึกค่ะ");
-        return;
+  if (!wormWeight && !foodWeight && !note.trim()) {
+    alert("กรุณากรอกข้อมูลอย่างน้อย 1 ช่องก่อนบันทึกค่ะ");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/feeding_logs`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          Prefer: "return=representation",
+        },
+        body: JSON.stringify({
+          batch_id: currentBatchId,      // ✅ เพิ่มบรรทัดนี้
+          day_in_cycle: 1,
+          age_stage: 3,
+          worm_weight_kg: wormWeight,
+          mulberry_weight_kg: foodWeight,
+          note: note,
+        }),
       }
+    );
 
-      try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/feeding_logs`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            apikey: SUPABASE_ANON_KEY,
-            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-            Prefer: "return=representation"
-          },
-          body: JSON.stringify({
-            batch_id: currentBatchId,
-            day_in_cycle: 1,
-            age_stage: 3,
-            worm_weight_kg: wormWeight,
-            mulberry_weight_kg: foodWeight,
-            note: note
-          })
-        });
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error(errText);
+      alert("❌ บันทึกข้อมูลไม่สำเร็จ");
+      return;
+    }
 
-        if (!response.ok) {
-          const errText = await response.text();
-          console.error(errText);
-          alert("❌ บันทึกข้อมูลไม่สำเร็จ");
-          return;
-        }
+    alert("✅ บันทึกข้อมูลสำเร็จแล้วค่ะ!");
 
-        alert("✅ บันทึกข้อมูลสำเร็จแล้วค่ะ!");
+    document.getElementById("log-worm-weight").value = "";
+    document.getElementById("log-food-weight").value = "";
+    document.getElementById("log-note").value = "";
+  } catch (error) {
+    console.error(error);
+    alert("เกิดข้อผิดพลาดในการเชื่อมต่อ");
+  }
+}
+
+
 /* --------------------------
    โหลดสถิติจาก Supabase (feeding_logs)
 --------------------------- */
