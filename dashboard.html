@@ -1353,13 +1353,26 @@
       const day = parseInt(document.getElementById("log-day").value || "0", 10);
       const stage = parseInt(document.getElementById("log-stage").value || "0", 10);
 
-      console.log("Preparing to save record:", {
-        day,
-        stage,
-        wormWeight,
-        foodWeight,
-        note,
-      });
+// ส่งข้อมูลไป Supabase
+  const { data, error } = await supabase
+    .from("feeding_logs")
+    .insert([
+      {
+        day_in_cycle: day,
+        age_stage: stage,
+        worm_weight_kg: wormWeight,
+        mulberry_weight_kg: foodWeight,
+        note: note,
+        batch_id: null // หรือใส่ค่าจริงภายหลัง
+      }
+    ]);
+      if (error) {
+        console.error(error);
+        alert("❌ บันทึกไม่สำเร็จ กรุณาลองใหม่");
+      } else {
+        alert("✔ บันทึกสำเร็จแล้ว");
+      }
+     }
 
       try {
         const response = await fetch(`${SUPABASE_URL}/rest/v1/feeding_logs`, {
