@@ -320,6 +320,18 @@
       font-family: 'Sarabun', Arial, sans-serif;
     }
 
+    /* ปรับ input type="date" ให้มีไอคอนปฏิทิน */
+    input[type="date"] {
+      appearance: none;
+      -webkit-appearance: none;
+      background: #ffffff
+        url("https://cdn-icons-png.flaticon.com/512/747/747310.png")
+        no-repeat right 10px center;
+      background-size: 22px;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+
     .action-btn {
       background: #4caf50;
       border: none;
@@ -447,14 +459,24 @@
     }
 
     .chart-container {
-      max-height: 260px !important;
-  overflow: hidden;
+      margin: 15px 0;
+      padding: 10px;
+      background: #fafafa;
+      border-radius: 10px;
+      border: 1px solid #e0e0e0;
+      max-height: 260px;
+      overflow: hidden;
     }
 
     .chart-title {
       font-size: 16px;
       font-weight: bold;
       margin-bottom: 5px;
+    }
+
+    #productionChart,
+    #survivalChart {
+      height: 230px !important;
     }
 
     .settings-section {
@@ -484,8 +506,12 @@
       color: #555;
     }
 
-    .page { display: none; }
-    .page.active { display: block; }
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+    }
 
     .logout-confirm {
       text-align: center;
@@ -521,14 +547,20 @@
       display: inline-block;
     }
 
-    .color-home { background: #4caf50; }
-    .color-stats { background: #2196f3; }
-    .color-settings { background: #ff9800; }
+    .color-home {
+      background: #4caf50;
+    }
+    .color-stats {
+      background: #2196f3;
+    }
+    .color-settings {
+      background: #ff9800;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- หน้าหลัก -->
+    <!-- หน้าแรก -->
     <div class="page active" id="homePage">
       <div class="header">
         <h1>🐛 อารักขารังไหมเลี้ยงอัจฉริยะ</h1>
@@ -539,7 +571,9 @@
       </div>
 
       <div class="status-bar">
-        <div class="current-stage" id="currentStageText">📅 วันที่ 15 ช่วงวัยที่ 3</div>
+        <div class="current-stage" id="currentStageText">
+          📅 ยังไม่ได้ตั้งวันเริ่มเลี้ยง
+        </div>
         <div class="weather-info">🌡️ 28°C 💧 75%</div>
       </div>
 
@@ -565,11 +599,11 @@
           <div class="key-metrics">
             <div class="metric-card">
               <div class="metric-label">จำนวนวันที่เลี้ยง</div>
-              <div class="metric-value" id="metricDayCount">15 วัน</div>
+              <div class="metric-value" id="metricDayCount">-</div>
             </div>
             <div class="metric-card">
               <div class="metric-label">วัยปัจจุบัน</div>
-              <div class="metric-value" id="metricStage">วัยที่ 3</div>
+              <div class="metric-value" id="metricStage">-</div>
             </div>
             <div class="metric-card">
               <div class="metric-label">อัตรารอดโดยประมาณ</div>
@@ -590,42 +624,42 @@
         <div class="function-grid">
           <div class="function-card priority-high" onclick="showPage('feeding')">
             <span class="function-icon">🍃</span>
-            <div class="function-title">การให้อาหาร<br/>แจ้งเตือน</div>
+            <div class="function-title">การให้อาหาร<br />แจ้งเตือน</div>
           </div>
 
           <div class="function-card priority-medium" onclick="showPage('temperature')">
             <span class="function-icon">🌡️</span>
-            <div class="function-title">อุณหภูมิ<br/>ความชื้น</div>
+            <div class="function-title">อุณหภูมิ<br />ความชื้น</div>
           </div>
 
           <div class="function-card" onclick="showPage('cleaning')">
             <span class="function-icon">🧹</span>
-            <div class="function-title">ทำความสะอาด<br/>โรงเลี้ยง</div>
+            <div class="function-title">ทำความสะอาด<br />โรงเลี้ยง</div>
           </div>
 
           <div class="function-card" onclick="showPage('waste')">
             <span class="function-icon">🗑️</span>
-            <div class="function-title">ถ่ายมูล<br/>ขยายพื้นที่</div>
+            <div class="function-title">ถ่ายมูล<br />ขยายพื้นที่</div>
           </div>
 
           <div class="function-card" onclick="showPage('disease')">
             <span class="function-icon">🦠</span>
-            <div class="function-title">เฝ้าระวัง<br/>โรคหนอนไหม</div>
+            <div class="function-title">เฝ้าระวัง<br />โรคหนอนไหม</div>
           </div>
 
           <div class="function-card" onclick="showPage('planning')">
             <span class="function-icon">📋</span>
-            <div class="function-title">วางแผน<br/>การเลี้ยง</div>
+            <div class="function-title">วางแผน<br />การเลี้ยง</div>
           </div>
 
           <div class="function-card" onclick="showPage('recording')">
             <span class="function-icon">📊</span>
-            <div class="function-title">บันทึก<br/>ข้อมูล</div>
+            <div class="function-title">บันทึก<br />ข้อมูล</div>
           </div>
 
           <div class="function-card" onclick="showPage('report')">
             <span class="function-icon">📋</span>
-            <div class="function-title">รายงาน<br/>โรค</div>
+            <div class="function-title">รายงาน<br />โรค</div>
           </div>
         </div>
 
@@ -644,7 +678,7 @@
       </div>
     </div>
 
-    <!-- หน้าการให้อาหาร -->
+    <!-- การให้อาหาร -->
     <div class="page" id="feedingPage">
       <div class="sub-header">
         <button class="back-btn" onclick="showPage('home')">◀</button>
@@ -652,8 +686,10 @@
       </div>
       <div style="padding: 20px;">
         <div class="form-section">
-          <div class="section-title" id="feedingTitle">⏰ เวลา 14:00 น. - ถึงเวลาให้อาหาร!</div>
-          <p id="feedingDetail">วัยที่ 3 ต้องการใบหม่อนสด 1.5 กิโลกรัม</p>
+          <div class="section-title" id="feedingTitle">ยังไม่ได้ตั้งวันเริ่มเลี้ยง</div>
+          <p id="feedingDetail">
+            กรุณาไปที่เมนูวางแผนการเลี้ยง และเลือกวันเริ่มต้นก่อนค่ะ
+          </p>
           <button class="action-btn" onclick="markFeedingDone()" style="width: 100%; margin-top: 15px;">
             ✅ ให้อาหารแล้ว
           </button>
@@ -661,17 +697,11 @@
 
         <div class="form-section">
           <div class="section-title">📆 ตั้งค่าวันเริ่มเลี้ยง</div>
-          <p class="info-note">ระบบจะช่วยคำนวณ "วันที่เลี้ยงที่เท่าไร" และวัยปัจจุบันตามคู่มือ 27 วัน</p>
+          <p class="info-note">
+            ระบบจะช่วยคำนวณ "วันเลี้ยงที่เท่าไร" และวัยปัจจุบันตามคู่มือ 27 วัน
+          </p>
           <label for="start-date">เลือกวันเริ่มเลี้ยง</label>
-          input[type="date"] {
-          appearance: none;
-          -webkit-appearance: none;
-          background: #ffffff url('https://cdn-icons-png.flaticon.com/512/747/747310.png') no-repeat right 10px center;
-          background-size: 22px;
-          padding-right: 40px;
-          cursor: pointer;
-          }
-
+          <input type="date" id="start-date" />
           <button class="action-btn" onclick="saveStartDate()">
             💾 บันทึกวันเริ่มเลี้ยง
           </button>
@@ -692,16 +722,14 @@
                   <th>หมายเหตุ</th>
                 </tr>
               </thead>
-              <tbody id="feedingPlanTableBody">
-                <!-- เติมด้วย JS ตาม FEEDING_PLAN -->
-              </tbody>
+              <tbody id="feedingPlanTableBody"></tbody>
             </table>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- หน้าอุณหภูมิและความชื้น -->
+    <!-- อุณหภูมิความชื้น -->
     <div class="page" id="temperaturePage">
       <div class="sub-header">
         <button class="back-btn" onclick="showPage('home')">◀</button>
@@ -730,7 +758,7 @@
       </div>
     </div>
 
-    <!-- หน้าทำความสะอาด -->
+    <!-- ทำความสะอาด -->
     <div class="page" id="cleaningPage">
       <div class="sub-header">
         <button class="back-btn" onclick="showPage('home')">◀</button>
@@ -752,15 +780,15 @@
           <button class="action-btn">
             💾 บันทึกการทำความสะอาด
           </button>
-        </div>
 
-        <div class="warning-box">
-          แนะนำ: การถ่ายมูลและทำความสะอาดบ่อย ๆ ช่วยลดความชื้นสะสมและลดโอกาสเกิดโรคในหนอนไหม
+          <div class="warning-box">
+            การถ่ายมูลและทำความสะอาดบ่อย ๆ ช่วยลดความชื้นสะสมและลดโอกาสเกิดโรคในหนอนไหม
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- หน้า ถ่ายมูล / ขยายพื้นที่ -->
+    <!-- ถ่ายมูล/ขยายพื้นที่ -->
     <div class="page" id="wastePage">
       <div class="sub-header">
         <button class="back-btn" onclick="showPage('home')">◀</button>
@@ -784,13 +812,13 @@
           </button>
 
           <div class="info-box">
-            หมายเหตุ: การขยายพื้นที่เลี้ยงให้เพียงพอช่วยให้หนอนไหมเติบโตดี ลดการเบียดเสียด
+            การขยายพื้นที่เลี้ยงให้เพียงพอช่วยให้หนอนไหมเติบโตดี ลดการเบียดเสียด
           </div>
         </div>
       </div>
     </div>
 
-    <!-- หน้าเฝ้าระวังโรค -->
+    <!-- เฝ้าระวังโรค -->
     <div class="page" id="diseasePage">
       <div class="sub-header">
         <button class="back-btn" onclick="showPage('home')">◀</button>
@@ -821,7 +849,7 @@
       </div>
     </div>
 
-    <!-- หน้า วางแผนการเลี้ยง -->
+    <!-- วางแผนการเลี้ยง -->
     <div class="page" id="planningPage">
       <div class="sub-header">
         <button class="back-btn" onclick="showPage('home')">◀</button>
@@ -839,13 +867,13 @@
             ✅ สร้างแผนการเลี้ยง
           </button>
           <div class="info-box">
-            เมื่อสร้างแผน ระบบจะแสดงเป็นตารางในหน้า "สถิติ" และช่วยประเมินผลผลิตในแต่ละรุ่น
+            เมื่อสร้างแผน ระบบจะแสดงเป็นตารางในหน้า "สถิติ" (ตัวอย่าง – ยังไม่เชื่อมฐานข้อมูล)
           </div>
         </div>
       </div>
     </div>
 
-    <!-- หน้า บันทึกข้อมูล -->
+    <!-- บันทึกข้อมูล -->
     <div class="page" id="recordingPage">
       <div class="sub-header">
         <button class="back-btn" onclick="showPage('home')">◀</button>
@@ -855,7 +883,7 @@
         <div class="form-section">
           <div class="section-title">บันทึกน้ำหนักตัวไหม และอาหารที่ใช้</div>
           <p class="section-description">
-            <strong>ตัวอย่าง:</strong> หนอนไหมวัย 3 ใช้ใบหม่อน 1.5 กก. น้ำหนักรวมหนอนไหม 2.0 กก.
+            ตัวอย่าง: หนอนไหมวัย 3 ใช้ใบหม่อน 1.5 กก. น้ำหนักรวมหนอนไหม 2.0 กก.
           </p>
 
           <div class="feeding-log-form">
@@ -872,13 +900,27 @@
             </select>
 
             <label for="log-worm-weight">น้ำหนักตัวไหมรวม (กิโลกรัม)</label>
-            <input type="number" id="log-worm-weight" step="0.1" placeholder="เช่น 2.0" />
+            <input
+              type="number"
+              id="log-worm-weight"
+              step="0.1"
+              placeholder="เช่น 2.0"
+            />
 
             <label for="log-food-weight">น้ำหนักใบหม่อนที่ใช้ (กิโลกรัม)</label>
-            <input type="number" id="log-food-weight" step="0.1" placeholder="เช่น 1.5" />
+            <input
+              type="number"
+              id="log-food-weight"
+              step="0.1"
+              placeholder="เช่น 1.5"
+            />
 
             <label for="log-note">หมายเหตุ</label>
-            <textarea id="log-note" rows="2" placeholder="เช่น วันนี้ตัวไหมกินดี ไม่มีอาการผิดปกติ"></textarea>
+            <textarea
+              id="log-note"
+              rows="2"
+              placeholder="เช่น วันนี้ตัวไหมกินดี ไม่มีอาการผิดปกติ"
+            ></textarea>
 
             <button class="action-btn" onclick="saveRecord()" style="width: 100%;">
               💾 บันทึกข้อมูล
@@ -892,7 +934,7 @@
       </div>
     </div>
 
-    <!-- หน้า รายงานโรค -->
+    <!-- รายงานโรค -->
     <div class="page" id="reportPage">
       <div class="sub-header">
         <button class="back-btn" onclick="showPage('home')">◀</button>
@@ -922,35 +964,46 @@
       </div>
     </div>
 
-    <!-- หน้า สถิติ -->
+    <!-- สถิติ -->
     <div class="page" id="statisticsPage">
-      <div class="sub-header" style="background:#4caf50;">
+      <div class="sub-header" style="background: #4caf50;">
         <button class="back-btn" onclick="showPage('home')">◀</button>
         <div class="page-title">📈 สถิติผลผลิตและการให้อาหาร</div>
       </div>
       <div style="padding: 15px 16px 80px;">
         <div class="report-main-card">
-          <div style="font-size: 20px; font-weight: 700; color:#2e7d32; margin-bottom: 6px;">
+          <div
+            style="
+              font-size: 20px;
+              font-weight: 700;
+              color: #2e7d32;
+              margin-bottom: 6px;
+            "
+          >
             ภาพรวมผลผลิตต่อรอบการเลี้ยง
           </div>
-          <div style="font-size: 14px; color:#555; margin-bottom: 6px;">
-            ข้อมูลจำลองสำหรับแสดงกราฟ – ภายหลังสามารถเชื่อมฐานข้อมูล Supabase เพื่อใช้ข้อมูลจริง
+          <div style="font-size: 14px; color: #555; margin-bottom: 6px;">
+            ข้อมูลจำลองสำหรับแสดงกราฟ – ภายหลังสามารถเชื่อมฐานข้อมูล Supabase
+            เพื่อใช้ข้อมูลจริง
           </div>
 
           <div class="chart-container">
-            <div class="chart-title">กราฟผลผลิตรังไหม (กิโลกรัม) ต่อรอบการเลี้ยง</div>
-            <canvas id="productionChart" height="180"></canvas>
+            <div class="chart-title">
+              กราฟผลผลิตรังไหม (กิโลกรัม) ต่อรอบการเลี้ยง
+            </div>
+            <canvas id="productionChart"></canvas>
           </div>
 
           <div class="chart-container">
             <div class="chart-title">กราฟอัตรารอดของหนอนไหม (%)</div>
-            <canvas id="survivalChart" height="180"></canvas>
+            <canvas id="survivalChart"></canvas>
           </div>
 
           <div class="form-section">
             <div class="section-title">📊 ตารางบันทึกการให้อาหาร (ตัวอย่าง)</div>
             <p class="small-tip">
-              ข้อมูลด้านล่างนี้สามารถดึงจากตาราง <strong>feeding_logs</strong> ใน Supabase แสดงเป็นประวัติย้อนหลัง
+              ข้อมูลด้านล่างนี้สามารถดึงจากตาราง
+              <strong>feeding_logs</strong> ใน Supabase แสดงเป็นประวัติย้อนหลัง
             </p>
             <div class="table-wrapper">
               <table id="feedingLogsTable">
@@ -963,9 +1016,7 @@
                     <th>หมายเหตุ</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <!-- เติมด้วย JS จาก Supabase -->
-                </tbody>
+                <tbody></tbody>
               </table>
             </div>
           </div>
@@ -973,9 +1024,9 @@
       </div>
     </div>
 
-    <!-- หน้า ตั้งค่า -->
+    <!-- ตั้งค่า -->
     <div class="page" id="settingsPage">
-      <div class="sub-header" style="background:#ff9800;">
+      <div class="sub-header" style="background: #ff9800;">
         <button class="back-btn" onclick="showPage('home')">◀</button>
         <div class="page-title">⚙️ ตั้งค่าระบบ</div>
       </div>
@@ -983,7 +1034,11 @@
         <div class="settings-group">
           <h3>🔔 การแจ้งเตือน</h3>
           <label class="toggle-row">
-            <input type="checkbox" id="toggleNotifications" onclick="onNotificationToggle(this.checked)" />
+            <input
+              type="checkbox"
+              id="toggleNotifications"
+              onclick="onNotificationToggle(this.checked)"
+            />
             เปิด/ปิด การแจ้งเตือนตามแผนการให้อาหาร
           </label>
           <p id="notifyStatusText" class="small-tip">
@@ -994,26 +1049,30 @@
         <div class="settings-group">
           <h3>📱 ข้อมูลการใช้งาน</h3>
           <p>
-            ระบบนี้ออกแบบมาสำหรับเกษตรกรผู้เลี้ยงไหม สามารถใช้งานผ่านโทรศัพท์มือถือได้ โดยเน้นตัวหนังสือใหญ่และเมนูชัดเจน
+            ระบบนี้ออกแบบมาสำหรับเกษตรกรผู้เลี้ยงไหม สามารถใช้งานผ่านโทรศัพท์มือถือได้
+            โดยเน้นตัวหนังสือใหญ่และเมนูชัดเจน
           </p>
         </div>
 
         <div class="settings-group">
           <h3>ℹ️ ข้อมูลเวอร์ชัน</h3>
-          <p>รุ่นต้นแบบสำหรับโครงการวิจัย – แสดงหน้าจอ Dashboard เวอร์ชันเดิมตามที่ใช้ในรายงาน</p>
+          <p>รุ่นต้นแบบสำหรับโครงการวิจัย – Dashboard เวอร์ชันเดิม</p>
         </div>
       </div>
     </div>
-
   </div>
 
-  <!-- แถบเมนูด้านล่าง -->
+  <!-- Bottom nav -->
   <div class="bottom-nav">
     <div class="nav-item active" data-page="home" onclick="showPage('home')">
       <span class="nav-icon">🏠</span>
       <div class="nav-text">หน้าหลัก</div>
     </div>
-    <div class="nav-item" data-page="statistics" onclick="showPage('statistics')">
+    <div
+      class="nav-item"
+      data-page="statistics"
+      onclick="showPage('statistics')"
+    >
       <span class="nav-icon">📈</span>
       <div class="nav-text">สถิติ</div>
     </div>
@@ -1027,22 +1086,21 @@
     </div>
   </div>
 
-  <!-- Chart.js -->
+  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
-    /* -------------------------
-       ตัวแปรสถานะหลัก
-    ------------------------- */
+    /* ------------------ ตัวแปรสำคัญ ------------------ */
     let productionChartInstance = null;
     let survivalChartInstance = null;
-
-    // เปิด/ปิดแจ้งเตือน (default = true)
     let notificationEnabled = true;
 
-    /* -------------------------
-       แผนการให้อาหาร 27 วัน (ตัวอย่างปรับจากคู่มือ)
-    ------------------------- */
+    /* Supabase REST API */
+    const SUPABASE_URL = "https://dpgnqrxanxyxhibkfspx.supabase.co";
+    const SUPABASE_ANON_KEY =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwZ25xcnhhbnh5eGhpYmtmc3B4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQwMjQxOTYsImV4cCI6MjA3ODYwMTk2OX0.CTWYu4ZxS_gW6G4r0zGNNj6gVkNE6jSWmcGoXc6GaxI";
+
+    /* แผนการให้อาหาร 27 วัน */
     const FEEDING_PLAN = [
       { day: 1, stage: 1, times: ["07:00", "11:00", "16:00"], note: "ใบหม่อนอ่อน" },
       { day: 2, stage: 1, times: ["07:00", "11:00", "16:00"], note: "ใบหม่อนอ่อน" },
@@ -1050,19 +1108,16 @@
       { day: 4, stage: 2, times: ["07:00", "11:00", "16:00"], note: "ถ่ายมูล + ขยายพื้นที่เล็กน้อย" },
       { day: 5, stage: 2, times: ["07:00", "11:00", "16:00"], note: "เพิ่มปริมาณใบหม่อน" },
       { day: 6, stage: 2, times: ["07:00", "11:00", "16:00"], note: "เตรียมขยายพื้นที่" },
-
       { day: 7, stage: 3, times: ["07:00", "13:00", "18:00"], note: "ใบหม่อนสด 1.0 กก." },
       { day: 8, stage: 3, times: ["07:00", "13:00", "18:00"], note: "ถ่ายมูล + ขยายพื้นที่" },
       { day: 9, stage: 3, times: ["07:00", "13:00", "18:00"], note: "อาหารเพิ่มขึ้น" },
       { day: 10, stage: 3, times: ["07:00", "13:00", "18:00"], note: "ตรวจสุขภาพ" },
       { day: 11, stage: 3, times: ["07:00", "13:00", "18:00"], note: "ถ่ายมูล + เพิ่มแผ่นเลี้ยง" },
-
       { day: 12, stage: 4, times: ["08:00", "17:00"], note: "ใบหม่อนมากขึ้น" },
       { day: 13, stage: 4, times: ["08:00", "17:00"], note: "เตรียมขยายพื้นที่" },
       { day: 14, stage: 4, times: ["08:00", "17:00"], note: "ถ่ายมูล + ขยายพื้นที่" },
       { day: 15, stage: 4, times: ["08:00", "17:00"], note: "เช็คความชื้น" },
       { day: 16, stage: 4, times: ["08:00", "17:00"], note: "ตรวจสุขภาพ" },
-
       { day: 17, stage: 5, times: ["09:00", "17:00"], note: "เริ่มเข้าสู่วัยสุดท้าย" },
       { day: 18, stage: 5, times: ["09:00", "17:00"], note: "อาหารเพิ่มขึ้นมาก" },
       { day: 19, stage: 5, times: ["09:00", "17:00"], note: "เตรียมขึ้นคอน" },
@@ -1073,12 +1128,10 @@
       { day: 24, stage: 5, times: [], note: "พักให้รังไหมแข็งตัว" },
       { day: 25, stage: 5, times: [], note: "ตัดรังไหม เตรียมเก็บเกี่ยว" },
       { day: 26, stage: 5, times: [], note: "เก็บข้อมูลผลผลิต" },
-      { day: 27, stage: 5, times: [], note: "สรุปผลรอบการเลี้ยง" },
+      { day: 27, stage: 5, times: [], note: "สรุปผลรอบการเลี้ยง" }
     ];
 
-    /* -------------------------
-       Utility: คำนวณวันเลี้ยงจากวันเริ่มต้น
-    ------------------------- */
+    /* utility คำนวณวันเลี้ยง */
     function getDayNoFromStart(startDateStr, currentDate) {
       if (!startDateStr) return null;
       const startDate = new Date(startDateStr);
@@ -1088,9 +1141,6 @@
       return dayNo;
     }
 
-    /* -------------------------
-       เติมตารางแผนการให้อาหาร (หน้า feedingPage)
-    ------------------------- */
     function renderFeedingPlanTable() {
       const tbody = document.getElementById("feedingPlanTableBody");
       if (!tbody) return;
@@ -1100,16 +1150,13 @@
         tr.innerHTML = `
           <td>${plan.day}</td>
           <td>วัย ${plan.stage}</td>
-          <td>${plan.times.length > 0 ? plan.times.join(", ") : "-"}</td>
+          <td>${plan.times.length ? plan.times.join(", ") : "-"}</td>
           <td>${plan.note}</td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    /* -------------------------
-       อัปเดตข้อความ "วันที่เลี้ยงที่เท่าไร" บนหน้าแรก
-    ------------------------- */
     function updateCurrentStageText() {
       const startStr = localStorage.getItem("silkStartDate");
       const el = document.getElementById("currentStageText");
@@ -1122,23 +1169,23 @@
       const dayNo = getDayNoFromStart(startStr, today);
 
       if (!dayNo) {
-        el.textContent = "ยังไม่ได้ตั้งวันเริ่มเลี้ยง – กรุณาไปที่เมนู \"การให้อาหาร\" แล้วตั้งวันเริ่มเลี้ยง";
+        el.textContent =
+          "📅 ยังไม่ได้ตั้งวันเริ่มเลี้ยง – กรุณาไปที่เมนู \"การให้อาหาร\" และตั้งวันเริ่มเลี้ยง";
         if (metricDayCount) metricDayCount.textContent = "-";
         if (metricStage) metricStage.textContent = "-";
         return;
       }
 
-      const plan = FEEDING_PLAN.find(p => p.day === dayNo);
+      const plan = FEEDING_PLAN.find((p) => p.day === dayNo);
       const stageText = plan ? `ช่วงวัยที่ ${plan.stage}` : "นอกช่วงแผน 27 วัน";
       el.textContent = `📅 วันที่ ${dayNo} ${stageText}`;
 
       if (metricDayCount) metricDayCount.textContent = `${dayNo} วัน`;
-      if (metricStage) metricStage.textContent = plan ? `วัยที่ ${plan.stage}` : "ไม่อยู่ในแผน";
+      if (metricStage) metricStage.textContent = plan
+        ? `วัยที่ ${plan.stage}`
+        : "ไม่อยู่ในแผน";
     }
 
-    /* -------------------------
-       อัปเดตหน้าการให้อาหาร
-    ------------------------- */
     function updateFeedingPage() {
       const startStr = localStorage.getItem("silkStartDate");
       const titleEl = document.getElementById("feedingTitle");
@@ -1146,17 +1193,22 @@
 
       if (!startStr) {
         if (titleEl) titleEl.textContent = "ยังไม่ได้ตั้งวันเริ่มเลี้ยง";
-        if (detailEl) detailEl.textContent = "กรุณาไปที่เมนูวางแผนการเลี้ยง และเลือกวันเริ่มต้นก่อนค่ะ";
+        if (detailEl)
+          detailEl.textContent =
+            "กรุณาไปที่เมนูวางแผนการเลี้ยง และเลือกวันเริ่มต้นก่อนค่ะ";
         return;
       }
 
       const today = new Date();
       const dayNo = getDayNoFromStart(startStr, today);
-      const plan = FEEDING_PLAN.find(p => p.day === dayNo);
+      const plan = FEEDING_PLAN.find((p) => p.day === dayNo);
 
       if (!plan) {
-        if (titleEl) titleEl.textContent = `วันเลี้ยงที่ ${dayNo} (นอกช่วงแผน 27 วัน)`;
-        if (detailEl) detailEl.textContent = "กรุณาตรวจสอบตารางการเลี้ยงหรือเริ่มรุ่นใหม่อีกครั้ง";
+        if (titleEl)
+          titleEl.textContent = `วันเลี้ยงที่ ${dayNo} (นอกช่วงแผน 27 วัน)`;
+        if (detailEl)
+          detailEl.textContent =
+            "กรุณาตรวจสอบตารางการเลี้ยงหรือเริ่มรุ่นใหม่อีกครั้ง";
         return;
       }
 
@@ -1165,17 +1217,13 @@
       }
 
       if (detailEl) {
-        const timeText =
-          plan.times.length > 0
-            ? plan.times.join(" นาฬิกา, ") + " นาฬิกา"
-            : "วันนี้ไม่มีการให้อาหารตามแผน";
+        const timeText = plan.times.length
+          ? plan.times.join(" นาฬิกา, ") + " นาฬิกา"
+          : "วันนี้ไม่มีการให้อาหารตามแผน";
         detailEl.textContent = `ให้ใบหม่อนตามรอบเวลา: ${timeText} | หมายเหตุ: ${plan.note}`;
       }
     }
 
-    /* -------------------------
-       บันทึกวันเริ่มเลี้ยง
-    ------------------------- */
     function saveStartDate() {
       const input = document.getElementById("start-date");
       if (!input || !input.value) {
@@ -1188,24 +1236,14 @@
       updateFeedingPage();
     }
 
-    /* -------------------------
-       พูดภาษาไทย (ใช้ Web Speech API หากรองรับ)
-    ------------------------- */
     function speakThai(text) {
-      if (!("speechSynthesis" in window)) {
-        console.warn("เบราว์เซอร์นี้ไม่รองรับการสังเคราะห์เสียง");
-        return;
-      }
+      if (!("speechSynthesis" in window)) return;
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = "th-TH";
       speechSynthesis.cancel();
       speechSynthesis.speak(utterance);
     }
 
-    /* -------------------------
-       เมื่อกดปุ่ม "ให้อาหารแล้ว"
-       (แก้เป็น async function เพื่อใช้ await ได้)
-    ------------------------- */
     async function markFeedingDone() {
       if (notificationEnabled) {
         speakThai(
@@ -1222,17 +1260,17 @@
       const startStr = localStorage.getItem("silkStartDate");
       const today = new Date();
       const dayNo = getDayNoFromStart(startStr, today);
-      const plan = dayNo ? FEEDING_PLAN.find(p => p.day === dayNo) : null;
+      const plan = dayNo ? FEEDING_PLAN.find((p) => p.day === dayNo) : null;
 
       let msg = "";
 
       if (!dayNo || !plan) {
-        msg = "วันนี้ยังไม่ได้ตั้งวันเริ่มเลี้ยง หรืออยู่นอกช่วงแผน 27 วันค่ะ";
+        msg =
+          "วันนี้ยังไม่ได้ตั้งวันเริ่มเลี้ยง หรืออยู่นอกช่วงแผน 27 วันค่ะ";
       } else {
-        const timeText =
-          plan.times.length > 0
-            ? plan.times.join(" นาฬิกา และ ")
-            : "วันนี้ไม่มีการให้อาหาร";
+        const timeText = plan.times.length
+          ? plan.times.join(" นาฬิกา และ ")
+          : "วันนี้ไม่มีการให้อาหาร";
         msg =
           "วันนี้เป็นวันเลี้ยงที่ " +
           dayNo +
@@ -1241,60 +1279,42 @@
           " เวลาตามแผนคือ " +
           timeText +
           " หมายเหตุ " +
-          plan.note +
-          " ";
+          plan.note;
       }
 
       if (notificationEnabled) {
-        msg += "ตอนนี้เปิดการแจ้งเตือนอัตโนมัติอยู่ค่ะ ระบบจะเตือนให้ตามแผนค่ะ";
+        msg +=
+          " ตอนนี้เปิดการแจ้งเตือนอัตโนมัติอยู่ค่ะ ระบบจะเตือนให้ตามแผนค่ะ";
       } else {
-        msg += "ตอนนี้คุณปิดการแจ้งเตือนอยู่ ระบบจะไม่เตือนเวลาให้อาหารค่ะ";
+        msg +=
+          " ตอนนี้คุณปิดการแจ้งเตือนอยู่ ระบบจะไม่เตือนเวลาให้อาหารค่ะ";
       }
 
       speakThai(msg);
     }
 
-    /* -------------------------
-       Supabase Config (บันทึกข้อมูลบันทึกประจำวัน)
-    ------------------------- */
-    const SUPABASE_URL = "https://dpgnqrxanxyxhibkfspx.supabase.co";
-    const SUPABASE_ANON_KEY =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwZ25xcnhhbnh5eGhpYmtmc3B4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQwMjQxOTYsImV4cCI6MjA3ODYwMTk2OX0.CTWYu4ZxS_gW6G4r0zGNNj6gVkNE6jSWmcGoXc6GaxI";
+    function getFeedingPlanForDate(startDate, currentDate) {
+      const diffMs = currentDate - startDate;
+      const dayNo = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
+      const plan = FEEDING_PLAN.find((p) => p.day === dayNo) || null;
+      return { dayNo, plan };
+    }
 
-    /* --------------------------
-       บันทึกการให้อาหารตามแผน (กดปุ่ม "ให้อาหารแล้ว")
-    --------------------------- */
     async function logPlannedFeedingToSupabase() {
-      // ถ้าไม่มีวันเริ่มเลี้ยง ให้หยุด
       const stored = localStorage.getItem("silkStartDate");
-      if (!stored) {
-        console.warn("ยังไม่ได้ตั้งวันเริ่มเลี้ยง จึงไม่บันทึก Supabase");
-        return;
-      }
+      if (!stored) return;
 
       const startDate = new Date(stored);
       const now = new Date();
 
-      // ใช้ฟังก์ชันเดิมที่เราใช้คำนวณแผนให้อาหาร (D, วัย ฯลฯ)
-      // สมมติยังใช้ชื่อเดิมว่า getFeedingPlanForDate
-      const planResult = typeof getFeedingPlanForDate === "function"
-        ? getFeedingPlanForDate(startDate, now)
-        : null;
-
-      if (!planResult || !planResult.plan) {
-        console.warn("วันนี้อยู่นอกช่วงแผน / ไม่มีข้อมูล plan จึงไม่บันทึก Supabase");
-        return;
-      }
-
+      const planResult = getFeedingPlanForDate(startDate, now);
+      if (!planResult || !planResult.plan) return;
       const { dayNo, plan } = planResult;
 
-      // ถ้ายังไม่มีระบบ batch_id ให้ใช้ null ไปก่อน
       const currentBatchId = null;
-
-      // เวลา ณ ตอนที่กดปุ่ม เพื่อใส่ในหมายเหตุ
       const timeText = now.toLocaleTimeString("th-TH", {
         hour: "2-digit",
-        minute: "2-digit",
+        minute: "2-digit"
       });
 
       try {
@@ -1304,21 +1324,20 @@
             "Content-Type": "application/json",
             apikey: SUPABASE_ANON_KEY,
             Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-            Prefer: "return=representation",
+            Prefer: "return=representation"
           },
           body: JSON.stringify({
             batch_id: currentBatchId,
-            day_in_cycle: dayNo,              // วันเลี้ยงที่เท่าไร
-            age_stage: plan.stage || null,    // วัยที่เท่าไร (ถ้ามีใน plan)
-            worm_weight_kg: null,             // ยังไม่เก็บน้ำหนัก
-            mulberry_weight_kg: null,         // ยังไม่เก็บปริมาณอาหาร
-            note: `ให้อาหารตามแผน เวลา ${timeText}`, // หมายเหตุ
-          }),
+            day_in_cycle: dayNo,
+            age_stage: plan.stage || null,
+            worm_weight_kg: null,
+            mulberry_weight_kg: null,
+            note: `ให้อาหารตามแผน เวลา ${timeText}`
+          })
         });
 
         if (!response.ok) {
-          const errorText = await response.text();
-          console.error("บันทึก feeding_logs ไม่สำเร็จ:", errorText);
+          console.error("บันทึก feeding_logs ไม่สำเร็จ:", await response.text());
           return;
         }
 
@@ -1329,19 +1348,6 @@
       }
     }
 
-    /* -------------------------
-       ตัวอย่าง getFeedingPlanForDate (แบบง่าย)
-    ------------------------- */
-    function getFeedingPlanForDate(startDate, currentDate) {
-      const diffMs = currentDate - startDate;
-      const dayNo = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
-      const plan = FEEDING_PLAN.find((p) => p.day === dayNo) || null;
-      return { dayNo, plan };
-    }
-
-    /* -------------------------
-       บันทึกข้อมูล record (หน้า recordingPage)
-    ------------------------- */
     async function saveRecord() {
       const wormWeight = parseFloat(
         document.getElementById("log-worm-weight").value || 0
@@ -1351,28 +1357,18 @@
       );
       const note = document.getElementById("log-note").value || "";
       const day = parseInt(document.getElementById("log-day").value || "0", 10);
-      const stage = parseInt(document.getElementById("log-stage").value || "0", 10);
+      const stage = parseInt(
+        document.getElementById("log-stage").value || "0",
+        10
+      );
 
-// ส่งข้อมูลไป Supabase
-  const { data, error } = await supabase
-    .from("feeding_logs")
-    .insert([
-      {
-        day_in_cycle: day,
-        age_stage: stage,
-        worm_weight_kg: wormWeight,
-        mulberry_weight_kg: foodWeight,
-        note: note,
-        batch_id: null // หรือใส่ค่าจริงภายหลัง
-      }
-    ]);
-      if (error) {
-        console.error(error);
-        alert("❌ บันทึกไม่สำเร็จ กรุณาลองใหม่");
-      } else {
-        alert("✔ บันทึกสำเร็จแล้ว");
-      }
-     }
+      console.log("Preparing to save record:", {
+        day,
+        stage,
+        wormWeight,
+        foodWeight,
+        note
+      });
 
       try {
         const response = await fetch(`${SUPABASE_URL}/rest/v1/feeding_logs`, {
@@ -1381,7 +1377,7 @@
             "Content-Type": "application/json",
             apikey: SUPABASE_ANON_KEY,
             Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-            Prefer: "return=representation",
+            Prefer: "return=representation"
           },
           body: JSON.stringify({
             batch_id: null,
@@ -1389,8 +1385,8 @@
             age_stage: stage || null,
             worm_weight_kg: wormWeight || null,
             mulberry_weight_kg: foodWeight || null,
-            note: note || "",
-          }),
+            note: note || ""
+          })
         });
 
         if (!response.ok) {
@@ -1409,9 +1405,6 @@
       }
     }
 
-    /* -------------------------
-       โหลดสถิติจาก Supabase (feeding_logs)
-    ------------------------- */
     async function loadFeedingStats() {
       const table = document.querySelector("#feedingLogsTable tbody");
       if (!table) return;
@@ -1422,8 +1415,8 @@
           {
             headers: {
               apikey: SUPABASE_ANON_KEY,
-              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-            },
+              Authorization: `Bearer ${SUPABASE_ANON_KEY}`
+            }
           }
         );
 
@@ -1451,19 +1444,18 @@
         return;
       }
 
-      // เอาเฉพาะ 10 รายการล่าสุด และเรียงจากใหม่ → เก่า
       const latest = rows.slice(-10).reverse();
-
       for (const row of latest) {
         const tr = document.createElement("tr");
-
         const day = row.day_in_cycle ?? "-";
         const stage = row.age_stage ?? "-";
-        const worm = row.worm_weight_kg != null ? row.worm_weight_kg.toFixed(2) : "-";
+        const worm =
+          row.worm_weight_kg != null ? row.worm_weight_kg.toFixed(2) : "-";
         const food =
-          row.mulberry_weight_kg != null ? row.mulberry_weight_kg.toFixed(2) : "-";
+          row.mulberry_weight_kg != null
+            ? row.mulberry_weight_kg.toFixed(2)
+            : "-";
         const note = row.note || "";
-
         tr.innerHTML = `
           <td>${day}</td>
           <td>${stage}</td>
@@ -1475,9 +1467,6 @@
       }
     }
 
-    /* -------------------------
-       การแจ้งเตือน
-    ------------------------- */
     function loadNotificationPreference() {
       const saved = localStorage.getItem("notifyEnabled");
       if (saved === null) {
@@ -1489,9 +1478,7 @@
       const checkbox = document.getElementById("toggleNotifications");
       const statusText = document.getElementById("notifyStatusText");
 
-      if (checkbox) {
-        checkbox.checked = notificationEnabled;
-      }
+      if (checkbox) checkbox.checked = notificationEnabled;
       if (statusText) {
         statusText.textContent = notificationEnabled
           ? "ระบบจะแจ้งเตือนตามแผนการเลี้ยงอัตโนมัติ"
@@ -1505,9 +1492,6 @@
       loadNotificationPreference();
     }
 
-    /* -------------------------
-       กราฟ Chart.js (ตัวอย่าง)
-    ------------------------- */
     function initCharts() {
       const ctx1 = document.getElementById("productionChart");
       const ctx2 = document.getElementById("survivalChart");
@@ -1515,9 +1499,9 @@
       if (ctx1) {
         const labels = ["รุ่น 1", "รุ่น 2", "รุ่น 3", "รุ่น 4"];
         const data = [30, 32, 35, 40];
-        if (productionChartInstance) {
-          productionChartInstance.destroy();
-        }
+
+        if (productionChartInstance) productionChartInstance.destroy();
+
         productionChartInstance = new Chart(ctx1.getContext("2d"), {
           type: "bar",
           data: {
@@ -1526,28 +1510,24 @@
               {
                 label: "กิโลรังไหม (กก.)",
                 data,
-                backgroundColor: "rgba(76, 175, 80, 0.7)",
-              },
-            ],
+                backgroundColor: "rgba(76, 175, 80, 0.7)"
+              }
+            ]
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            scales: {
-              y: {
-                beginAtZero: true,
-              },
-            },
-          },
+            scales: { y: { beginAtZero: true } }
+          }
         });
       }
 
       if (ctx2) {
         const labels = ["รุ่น 1", "รุ่น 2", "รุ่น 3", "รุ่น 4"];
         const survivalRates = [92, 94, 90, 95];
-        if (survivalChartInstance) {
-          survivalChartInstance.destroy();
-        }
+
+        if (survivalChartInstance) survivalChartInstance.destroy();
+
         survivalChartInstance = new Chart(ctx2.getContext("2d"), {
           type: "line",
           data: {
@@ -1564,29 +1544,19 @@
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-              y: {
-                beginAtZero: true,
-                max: 100
-              }
+              y: { beginAtZero: true, max: 100 }
             }
           }
         });
       }
     }
 
-    /* -------------------------
-       สลับหน้า (page navigation)
-    ------------------------- */
     function showPage(pageName) {
       const pages = document.querySelectorAll(".page");
       pages.forEach((p) => p.classList.remove("active"));
 
       const target = document.getElementById(pageName + "Page");
-      if (target) {
-        target.classList.add("active");
-      } else {
-        console.error("ไม่พบหน้า:", pageName + "Page");
-      }
+      if (target) target.classList.add("active");
 
       const navItems = document.querySelectorAll(".nav-item");
       navItems.forEach((item) => {
@@ -1594,8 +1564,8 @@
       });
 
       if (pageName === "statistics") {
-        initCharts();  // กราฟเดิม (mock)
-        loadFeedingStats(); // ดึงข้อมูลจริงจาก Supabase
+        initCharts();
+        loadFeedingStats();
       }
       if (pageName === "feeding") {
         updateFeedingPage();
@@ -1603,7 +1573,6 @@
     }
 
     function logout() {
-      // กลับไปหน้า login (แก้ตามชื่อไฟล์จริงของอาจารย์ได้)
       window.location.href = "index.html";
     }
 
@@ -1613,17 +1582,9 @@
         alert("กรุณาเลือกวันเริ่มต้นก่อนค่ะ");
         return;
       }
-      const start = new Date(startInput.value);
-      if (isNaN(start.getTime())) {
-        alert("รูปแบบวันที่ไม่ถูกต้อง");
-        return;
-      }
       alert("✅ สร้างแผนการเลี้ยงตัวอย่างแล้ว (ตัวอย่าง – ยังไม่เชื่อมฐานข้อมูล)");
     }
 
-    /* -------------------------
-       DOM Loaded
-    ------------------------- */
     document.addEventListener("DOMContentLoaded", () => {
       showPage("home");
       initCharts();
@@ -1635,3 +1596,4 @@
   </script>
 </body>
 </html>
+
