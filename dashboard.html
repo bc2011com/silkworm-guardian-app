@@ -1473,30 +1473,35 @@ async function saveCleaningRecord() {
         showAlert("ผิดพลาด", "เกิดข้อผิดพลาดระหว่างบันทึกข้อมูล");
     }
 }
-    async function uploadCleaningPhoto(file) {
-    if (!file) return null;
+async function uploadCleaningPhoto(file) {
+  if (!file) return null;
 
-    const ext = file.name.split(".").pop();
-    const fileName = `clean_${Date.now()}.${ext}`;
-    const filePath = `cleaning/${fileName}`;
+  const ext = file.name.split(".").pop();
+  const fileName = `clean_${Date.now()}.${ext}`;
+  const filePath = `cleaning/${fileName}`;
 
-    const uploadUrl = `${SUPABASE_URL}/storage/v1/object/cleaning_photos/${filePath}`;
+  const uploadUrl = `${SUPABASE_URL}/storage/v1/object/cleaning_photos/${filePath}`;
 
-    const res = await fetch(uploadUrl, {
-        method: "POST",
-        headers: {
-            apikey: SUPABASE_ANON_KEY,
-            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-            "x-upsert": "true",
-            "Content-Type": file.type
-        },
-        body: file
-    });
+  const res = await fetch(uploadUrl, {
+    method: "POST",
+    headers: {
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+      "x-upsert": "true",
+      "Content-Type": file.type || "application/octet-stream",
+    },
+    body: file,
+  });
 
-    if (!res.ok) throw new Error("Upload failed");
+  if (!res.ok) {
+    console.error("Upload cleaning photo error:", await res.text());
+    throw new Error("อัปโหลดรูปไม่สำเร็จ");
+  }
 
-    return `${SUPABASE_URL}/storage/v1/object/public/cleaning_photos/${filePath}`;
+  // public URL
+  return `${SUPABASE_URL}/storage/v1/object/public/cleaning_photos/${filePath}`;
 }
+
 
     
     async function loadFeedingStats() {
