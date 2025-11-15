@@ -1413,66 +1413,68 @@
       }
     }
 async function saveCleaningRecord() {
-    const batchId = localStorage.getItem("batch_id") || null;
+  const batchId = localStorage.getItem("batch_id") || null;
 
-    const day = parseInt(document.getElementById("clean-day").value) || null;
-    const stage = parseInt(document.getElementById("clean-stage").value) || null;
+  // ตอนนี้ยังไม่มี input วันเลี้ยง / วัย แทนด้วย null ไปก่อน
+  const day = null;
+  const stage = null;
 
-    const type = document.getElementById("clean-type").value;
-    const note = document.getElementById("clean-note").value;
+  const cleaningType = document.getElementById("clean-type").value;
+  const note = document.getElementById("clean-note").value.trim();
+  const fileInput = document.getElementById("clean-photo");
+  const file = fileInput.files[0];
 
-    const deadWorm = parseInt(document.getElementById("dead-worm").value) || 0;
-    const weakWorm = parseInt(document.getElementById("weak-worm").value) || 0;
-    const leftoverLeaf = parseFloat(document.getElementById("leftover-leaf").value) || 0;
-
-    const file = document.getElementById("clean-photo").files[0];
-
-    try {
-        let photoUrl = null;
-        if (file) {
-            photoUrl = await uploadCleaningPhoto(file);
-        }
-
-        const payload = {
-            batch_id: batchId,
-            day_in_cycle: day,
-            age_stage: stage,
-            cleaning_type: type,
-            dead_worm_count: deadWorm,
-            weak_worm_count: weakWorm,
-            leftover_leaf_kg: leftoverLeaf,
-            note: note,
-            photo_url: photoUrl
-        };
-
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/cleaning_logs`, {
-            method: "POST",
-            headers: {
-                apikey: SUPABASE_ANON_KEY,
-                Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-                "Content-Type": "application/json",
-                Prefer: "return=representation"
-            },
-            body: JSON.stringify(payload)
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-            console.error(data);
-            showAlert("ผิดพลาด", "ไม่สามารถบันทึกข้อมูลได้");
-            return;
-        }
-
-        showAlert("สำเร็จ", "บันทึกทำความสะอาดเรียบร้อยแล้ว");
-        document.getElementById("clean-note").value = "";
-        document.getElementById("clean-photo").value = "";
-
-    } catch (err) {
-        console.error(err);
-        showAlert("ผิดพลาด", "เกิดข้อผิดพลาดระหว่างบันทึกข้อมูล");
+  try {
+    // 1) อัปโหลดรูป (ถ้ามี)
+    let photoUrl = null;
+    if (file) {
+      photoUrl = await uploadCleaningPhoto(file);
     }
+
+    // 2) เตรียมข้อมูลให้ตรงกับคอลัมน์ใน cleaning_logs
+    const payload = {
+      batch_id: batchId,
+      day_in_cycle: day,
+      age_stage: stage,
+      cleaning_type: cleaningType,
+      note: note,
+      photo_url: photoUrl,
+      // ฟิลด์อื่น ๆ จะเป็น null โดยอัตโนมัติ (dead_worm_count, weak_worm_count, leftover_leaf_kg)
+    };
+
+    console.log("Insert cleaning_logs payload:", payload);
+
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/cleaning_logs`, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        "Content-Type": "application/json",
+        Prefer: "return=representation",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+    console.log("Insert cleaning_logs response:", data);
+
+    if (!res.ok) {
+      console.error("Insert cleaning_logs error:", data);
+      alert("❌ บันทึกการทำความสะอาดไม่สำเร็จ\nกรุณาลองใหม่อีกครั้ง");
+      return;
+    }
+
+    alert("✅ บันทึกการทำความสะอาดเรียบร้อยแล้ว");
+
+    // เคลียร์ฟอร์ม
+    document.getElementById("clean-note").value = "";
+    fileInput.value = "";
+  } catch (err) {
+    console.error("saveCleaningRecord error:", err);
+    alert("❌ เกิดข้อผิดพลาดระหว่างบันทึกข้อมูล");
+  }
 }
+  
 async function uploadCleaningPhoto(file) {
   if (!file) return null;
 
