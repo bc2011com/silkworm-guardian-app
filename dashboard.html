@@ -785,7 +785,7 @@
             capture="environment"
             style="margin-bottom: 12px;"
           />
-          <button class="action-btn">
+          <button onclick="saveCleaningRecord()" class="action-btn">
             💾 บันทึกการทำความสะอาด
           </button>
 
@@ -1412,7 +1412,93 @@
         alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล");
       }
     }
+async function saveCleaningRecord() {
+    const batchId = localStorage.getItem("batch_id") || null;
 
+    const day = parseInt(document.getElementById("clean-day").value) || null;
+    const stage = parseInt(document.getElementById("clean-stage").value) || null;
+
+    const type = document.getElementById("clean-type").value;
+    const note = document.getElementById("clean-note").value;
+
+    const deadWorm = parseInt(document.getElementById("dead-worm").value) || 0;
+    const weakWorm = parseInt(document.getElementById("weak-worm").value) || 0;
+    const leftoverLeaf = parseFloat(document.getElementById("leftover-leaf").value) || 0;
+
+    const file = document.getElementById("clean-photo").files[0];
+
+    try {
+        let photoUrl = null;
+        if (file) {
+            photoUrl = await uploadCleaningPhoto(file);
+        }
+
+        const payload = {
+            batch_id: batchId,
+            day_in_cycle: day,
+            age_stage: stage,
+            cleaning_type: type,
+            dead_worm_count: deadWorm,
+            weak_worm_count: weakWorm,
+            leftover_leaf_kg: leftoverLeaf,
+            note: note,
+            photo_url: photoUrl
+        };
+
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/cleaning_logs`, {
+            method: "POST",
+            headers: {
+                apikey: SUPABASE_ANON_KEY,
+                Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+                "Content-Type": "application/json",
+                Prefer: "return=representation"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            console.error(data);
+            showAlert("ผิดพลาด", "ไม่สามารถบันทึกข้อมูลได้");
+            return;
+        }
+
+        showAlert("สำเร็จ", "บันทึกทำความสะอาดเรียบร้อยแล้ว");
+        document.getElementById("clean-note").value = "";
+        document.getElementById("clean-photo").value = "";
+
+    } catch (err) {
+        console.error(err);
+        showAlert("ผิดพลาด", "เกิดข้อผิดพลาดระหว่างบันทึกข้อมูล");
+    }
+}
+    async function uploadCleaningPhoto(file) {
+    if (!file) return null;
+
+    const ext = file.name.split(".").pop();
+    const fileName = `clean_${Date.now()}.${ext}`;
+    const filePath = `cleaning/${fileName}`;
+
+    const uploadUrl = `${SUPABASE_URL}/storage/v1/object/cleaning_photos/${filePath}`;
+
+    const res = await fetch(uploadUrl, {
+        method: "POST",
+        headers: {
+            apikey: SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+            "x-upsert": "true",
+            "Content-Type": file.type
+        },
+        body: file
+    });
+
+    if (!res.ok) throw new Error("Upload failed");
+
+    return `${SUPABASE_URL}/storage/v1/object/public/cleaning_photos/${filePath}`;
+}
+
+    
     async function loadFeedingStats() {
       const table = document.querySelector("#feedingLogsTable tbody");
       if (!table) return;
