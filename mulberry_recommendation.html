@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบแนะนำปริมาณใบหม่อนเลี้ยงไหม</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Sarabun', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px;
+      font-size: 18px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 960px;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      padding: 24px 20px 28px;
+    }
+
+    @media (min-width: 768px) {
+      .container {
+        padding: 28px 32px 32px;
+      }
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 4px;
+      text-align: center;
+      color: #1b5e20;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 16px;
+      color: #558b2f;
+      margin-bottom: 20px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .form-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-weight: 600;
+      color: #33691e;
+      font-size: 16px;
+    }
+
+    .hint {
+      font-size: 14px;
+      color: #757575;
+    }
+
+    select,
+    input[type="number"] {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #c5e1a5;
+      font-size: 16px;
+      outline: none;
+      background-color: #f9fff5;
+      transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+    }
+
+    select:focus,
+    input[type="number"]:focus {
+      border-color: #7cb342;
+      box-shadow: 0 0 0 2px rgba(124,179,66,0.2);
+      background-color: #ffffff;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      height: 32px;
+    }
+
+    .actions {
+      margin: 10px 0 8px;
+      display: flex;
+      justify-content: center;
+    }
+
+    button {
+      padding: 10px 22px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #689f38, #33691e);
+      color: #ffffff;
+      box-shadow: 0 6px 15px rgba(56,142,60,0.35);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.2s;
+    }
+
+    button:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(56,142,60,0.45);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 10px rgba(56,142,60,0.3);
+    }
+
+    .message {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .message.error {
+      background-color: #ffebee;
+      border: 1px solid #ef9a9a;
+      color: #b71c1c;
+    }
+
+    .message.warning {
+      background-color: #fffde7;
+      border: 1px solid #fff59d;
+      color: #f57f17;
+    }
+
+    .result-card {
+      margin-top: 14px;
+      background-color: #f9fff5;
+      border-radius: 14px;
+      border: 1px solid #c5e1a5;
+      padding: 14px 16px;
+      line-height: 1.8;
+    }
+
+    .result-title {
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 4px;
+      color: #1b5e20;
+    }
+
+    .result-key {
+      font-weight: 600;
+      color: #33691e;
+    }
+
+    .result-highlight {
+      font-weight: 700;
+      color: #e65100;
+    }
+
+    .note {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #757575;
+    }
+
+    hr {
+      margin: 16px 0;
+      border: none;
+      border-top: 1px dashed #c5e1a5;
+    }
+
+    .footer {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 13px;
+      color: #9e9e9e;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>ระบบแนะนำปริมาณใบหม่อนเลี้ยงไหม</h1>
+    <div class="subtitle">
+      สำหรับเกษตรกรเลี้ยงไหม – กรอกตามจริง ระบบจะช่วยคำนวณให้อัตโนมัติ
+    </div>
+
+    <div class="form-grid">
+      <!-- กลุ่มพันธุ์ไหม -->
+      <div class="form-group">
+        <label for="breedGroup">1) เลือกกลุ่มพันธุ์หนอนไหม</label>
+        <select id="breedGroup">
+          <option value="">-- กรุณาเลือกกลุ่มพันธุ์ --</option>
+          <option value="group_native">ไหมไทยพื้นบ้าน (รังสีเหลือง/จำปา)</option>
+          <option value="group_hybrid_thai">ไหมพันธุ์ลูกผสม (ไทย)</option>
+          <option value="group_hybrid_foreign">ไหมพันธุ์ลูกผสมต่างประเทศ</option>
+        </select>
+        <div class="hint">
+          ถ้าไม่แน่ใจ ให้เลือก “ไหมไทยพื้นบ้าน” (ส่วนใหญ่เลี้ยงกันในชุมชน)
+        </div>
+      </div>
+
+      <!-- พันธุ์ย่อย -->
+      <div class="form-group">
+        <label for="subBreed">2) เลือกพันธุ์ย่อย (ถ้าทราบ)</label>
+        <select id="subBreed" disabled>
+          <option value="">-- ไม่ระบุพันธุ์ย่อย --</option>
+        </select>
+        <div class="hint">
+          ถ้าจำชื่อพันธุ์ไม่ได้ สามารถเว้นว่างไว้ได้ ระบบใช้เฉพาะกลุ่มใหญ่ในการคำนวณ
+        </div>
+      </div>
+
+      <!-- จำนวนแผ่น -->
+      <div class="form-group">
+        <label for="sheetCount">3) จำนวนแผ่นไข่ไหมที่เลี้ยง</label>
+        <input
+          type="number"
+          id="sheetCount"
+          min="0.1"
+          step="0.1"
+          placeholder="เช่น 0.5, 1, 1.5, 2 แผ่น"
+        />
+        <div class="hint">
+          1 แผ่น มีหนอนไหมประมาณ 20,000–25,000 ฟอง<br>
+          ถ้าเลี้ยงครึ่งแผ่น ให้ใส่ 0.5
+        </div>
+      </div>
+
+      <!-- วัยไหม -->
+      <div class="form-group">
+        <label for="instar">4) เลือกวัยของหนอนไหมในตอนนี้</label>
+        <select id="instar">
+          <option value="">-- กรุณาเลือกวัยหนอนไหม --</option>
+          <option value="1">วัยที่ 1 (เพิ่งเริ่มเลี้ยง)</option>
+          <option value="2">วัยที่ 2</option>
+          <option value="3">วัยที่ 3</option>
+          <option value="4">วัยที่ 4</option>
+          <option value="5">วัยที่ 5 (ก่อนขึ้นคอนทำรัง)</option>
+        </select>
+        <div class="hint">
+          เลือกให้ตรงกับวัยปัจจุบัน ระบบจะคำนวณเฉพาะวัยนั้นให้
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="calcBtn">คำนวณปริมาณใบหม่อน</button>
+    </div>
+
+    <div id="messageArea"></div>
+    <div id="resultArea"></div>
+
+    <hr>
+
+    <div class="note">
+      หมายเหตุ: ปริมาณใบหม่อนที่คำนวณได้เป็นค่าประมาณตามมาตรฐานสำหรับ 1 แผ่นไข่ไหม
+      เกษตรกรควรใช้การสังเกตหนอนไหมร่วมด้วย เช่น ใบหมดเร็วเกินไป หรือเหลือค้างชั้นเลี้ยงมากเกินไป
+    </div>
+
+    <div class="footer">
+      เวอร์ชันทดลองสำหรับใช้ในชุมชนเลี้ยงไหม – ปรับเพิ่ม/ลดได้ตามประสบการณ์จริงของเกษตรกร
+    </div>
+  </div>
+
+  <script>
+    // ฐานข้อมูลพันธุ์ไหม (กลุ่มใหญ่ + ย่อย)
+    const silkwormBreeds = {
+      group_native: {
+        label: "ไหมไทยพื้นบ้าน",
+        totalLeafKgPerSheet: 200,
+        perInstar: {
+          1: 1.5,
+          2: 4.0,
+          3: 6.5,
+          4: 28,
+          5: 160
+        },
+        subBreeds: [
+          { id: "samrong1", name: "สำโรง 1", note: "รังสีเหลือง หัวป้านท้ายแหลม" },
+          { id: "nangtui",  name: "นางตุ่ย", note: "เลี้ยงง่าย แข็งแรง" },
+          { id: "sp1",      name: "นางน้อยสกลนคร (SP1)", note: "คัดแยกเพศได้ในระยะหนอน" },
+          { id: "nuetoon",  name: "เนื้อสีตุ่น", note: "รังสีจำปา" }
+        ]
+      },
+      group_hybrid_thai: {
+        label: "ไหมพันธุ์ลูกผสม (ไทย)",
+        totalLeafKgPerSheet: 300,
+        perInstar: {
+          1: 2.5,
+          2: 6.0,
+          3: 9.5,
+          4: 42,
+          5: 240
+        },
+        subBreeds: [
+          { id: "kosk2",   name: "พันธุ์ กสก.2", note: "ผลผลิตรังประมาณ 18–20 กก./แผ่น" },
+          { id: "dokbua",  name: "พันธุ์ดอกบัว", note: "ผลผลิตรังประมาณ 16–18 กก./แผ่น" },
+          { id: "sakol1",  name: "ไหมไทยลูกผสมสกลนคร 1" },
+          { id: "sakol2",  name: "ไหมไทยลูกผสมสกลนคร 2" },
+          { id: "ubon6035", name: "ไหมลูกผสมอุบลราชธานี 60-35" }
+        ]
+      },
+      group_hybrid_foreign: {
+        label: "ไหมพันธุ์ลูกผสมต่างประเทศ",
+        // ใช้ค่าอ้างอิงชั่วคราวเท่ากับลูกผสมไทย
+        totalLeafKgPerSheet: 300,
+        perInstar: {
+          1: 2.5,
+          2: 6.0,
+          3: 9.5,
+          4: 42,
+          5: 240
+        },
+        warning: "พันธุ์ลูกผสมต่างประเทศให้ผลผลิตรังสูง (ประมาณ 30 กก./แผ่น) ปริมาณใบหม่อนอาจแตกต่างจากมาตรฐานนี้ แนะนำปรึกษาเจ้าหน้าที่ศูนย์หม่อนไหมประกอบการตัดสินใจ",
+        subBreeds: [
+          { id: "japan",  name: "ลูกผสมสายญี่ปุ่น" },
+          { id: "china",  name: "ลูกผสมสายจีน" },
+          { id: "korea",  name: "ลูกผสมสายเกาหลี" },
+          { id: "taiwan", name: "ลูกผสมสายไต้หวัน" },
+          { id: "jimthompson", name: "สายพันธุ์บริษัทเอกชน (เช่น Jim Thompson)" }
+        ]
+      }
+    };
+
+    const daysPerInstar = {
+      1: 3,
+      2: 3,
+      3: 4,
+      4: 5,
+      5: 8
+    };
+
+    const breedGroupSelect = document.getElementById("breedGroup");
+    const subBreedSelect = document.getElementById("subBreed");
+    const sheetCountInput = document.getElementById("sheetCount");
+    const instarSelect = document.getElementById("instar");
+    const calcBtn = document.getElementById("calcBtn");
+    const messageArea = document.getElementById("messageArea");
+    const resultArea = document.getElementById("resultArea");
+
+    // เติมรายการพันธุ์ย่อยเมื่อเปลี่ยนกลุ่มพันธุ์
+    breedGroupSelect.addEventListener("change", () => {
+      const groupKey = breedGroupSelect.value;
+      subBreedSelect.innerHTML = "";
+      subBreedSelect.disabled = true;
+
+      const baseOption = document.createElement("option");
+      baseOption.value = "";
+      baseOption.textContent = "-- ไม่ระบุพันธุ์ย่อย --";
+      subBreedSelect.appendChild(baseOption);
+
+      if (!groupKey || !silkwormBreeds[groupKey]) {
+        return;
+      }
+
+      const group = silkwormBreeds[groupKey];
+      if (group.subBreeds && group.subBreeds.length > 0) {
+        group.subBreeds.forEach(sb => {
+          const opt = document.createElement("option");
+          opt.value = sb.id;
+          opt.textContent = sb.name;
+          subBreedSelect.appendChild(opt);
+        });
+        subBreedSelect.disabled = false;
+      }
+    });
+
+    // ฟังก์ชันช่วยสร้างข้อความแนะนำ
+    function buildResultText(groupKey, instar, sheets) {
+      const group = silkwormBreeds[groupKey];
+      const perInstarKg = group.perInstar[instar];
+      const totalPerSheet = perInstarKg;
+      const totalAllSheets = perInstarKg * sheets;
+
+      const days = daysPerInstar[instar] || 1;
+      const avgPerDay = totalAllSheets / days;
+
+      let instarName = "";
+      switch (Number(instar)) {
+        case 1: instarName = "วัยที่ 1 (วัยอ่อนเริ่มต้น)"; break;
+        case 2: instarName = "วัยที่ 2"; break;
+        case 3: instarName = "วัยที่ 3"; break;
+        case 4: instarName = "วัยที่ 4 (วัยแก่เริ่มกินมาก)"; break;
+        case 5: instarName = "วัยที่ 5 (วัยสุดท้ายก่อนขึ้นคอน)"; break;
+      }
+
+      // เสริมคำอธิบายตามวัย (แบบพูดกับชาวบ้าน)
+      let instarAdvice = "";
+      if (instar === "1" || instar === 1) {
+        instarAdvice = "ช่วงนี้เน้นใบอ่อน หั่นให้ละเอียด ให้น้อยแต่บ่อย 3–4 มื้อต่อวัน อย่าให้ใบแห้งคาคอก.";
+      } else if (instar === "2" || instar === 2) {
+        instarAdvice = "ใช้ใบกลางอ่อน หั่นชิ้นใหญ่ขึ้นหน่อย รักษาความชื้นและความสะอาด ลดความแออัด.";
+      } else if (instar === "3" || instar === 3) {
+        instarAdvice = "เป็นวัยอ่อนช่วงท้าย ปริมาณเริ่มเยอะขึ้น ต้องขยายพื้นที่เลี้ยงทุกวัน ใบอย่าให้เหลือเน่า.";
+      } else if (instar === "4" || instar === 4) {
+        instarAdvice = "เปลี่ยนเป็นให้ใบทั้งใบหรือทั้งกิ่ง ลดความชื้นในห้องเลี้ยง ให้ลมโกรก ถ่ายมูลสม่ำเสมอ.";
+      } else if (instar === "5" || instar === 5) {
+        instarAdvice = "วัยนี้กินหนักที่สุดของชีวิต ต้องเตรียมใบหม่อนให้พอทุกวัน สังเกตไหมสุก (ตัวโปร่ง เดินหาที่เกาะ) เพื่อหยุดให้อาหารและเตรียมขึ้นคอน.";
+      }
+
+      return {
+        instarName,
+        totalAllSheets,
+        days,
+        avgPerDay,
+        instarAdvice
+      };
+    }
+
+    function formatNumber(num, digits = 1) {
+      return Number(num).toFixed(digits).replace(/\.0+$/, '');
+    }
+
+    // กดปุ่มคำนวณ
+    calcBtn.addEventListener("click", () => {
+      messageArea.innerHTML = "";
+      resultArea.innerHTML = "";
+
+      const groupKey = breedGroupSelect.value;
+      const instar = instarSelect.value;
+      let sheets = sheetCountInput.value.trim();
+
+      const messages = [];
+
+      if (!groupKey) {
+        messages.push("กรุณาเลือกกลุ่มพันธุ์หนอนไหมให้เรียบร้อยก่อนค่ะ");
+      }
+
+      if (!instar) {
+        messages.push("กรุณาเลือกวัยของหนอนไหมในตอนนี้ด้วยค่ะ");
+      }
+
+      if (!sheets) {
+        sheets = "1";
+      }
+
+      const sheetsNum = Number(sheets);
+      if (isNaN(sheetsNum) || sheetsNum <= 0) {
+        messages.push("จำนวนแผ่นไข่ไหมต้องมากกว่า 0 แผ่น");
+      }
+
+      if (messages.length > 0) {
+        const div = document.createElement("div");
+        div.className = "message error";
+        div.innerHTML = messages.map(m => "• " + m).join("<br>");
+        messageArea.appendChild(div);
+        return;
+      }
+
+      const group = silkwormBreeds[groupKey];
+      if (!group || !group.perInstar[instar]) {
+        const div = document.createElement("div");
+        div.className = "message error";
+        div.textContent = "ไม่พบข้อมูลสำหรับกลุ่มพันธุ์และวัยไหมที่เลือก";
+        messageArea.appendChild(div);
+        return;
+      }
+
+      const result = buildResultText(groupKey, instar, sheetsNum);
+
+      // แสดงคำเตือนกรณีลูกผสมต่างประเทศ
+      if (groupKey === "group_hybrid_foreign" && group.warning) {
+        const warnDiv = document.createElement("div");
+        warnDiv.className = "message warning";
+        warnDiv.textContent = group.warning;
+        messageArea.appendChild(warnDiv);
+      }
+
+      // ข้อความสรุปผลแบบอ่านง่าย
+      const resultDiv = document.createElement("div");
+      resultDiv.className = "result-card";
+
+      const sheetsText = sheetsNum === 1
+        ? "1 แผ่น"
+        : formatNumber(sheetsNum, 1) + " แผ่น";
+
+      const perDayRangeText = (() => {
+        // ทำช่วงคร่าว ๆ: ±20% รอบค่าเฉลี่ย
+        const low = result.avgPerDay * 0.8;
+        const high = result.avgPerDay * 1.2;
+        return `${formatNumber(low, 1)}–${formatNumber(high, 1)} กก./วัน (โดยประมาณ)`;
+      })();
+
+      resultDiv.innerHTML = `
+        <div class="result-title">ผลการคำนวณปริมาณใบหม่อน</div>
+        <p>
+          กลุ่มพันธุ์: <span class="result-key">${group.label}</span><br>
+          จำนวนที่เลี้ยง: <span class="result-key">${sheetsText}</span><br>
+          วัยปัจจุบัน: <span class="result-key">${result.instarName}</span>
+        </p>
+        <p>
+          สำหรับวัยนี้ หนอนไหมจำนวน <span class="result-highlight">${sheetsText}</span>
+          ต้องใช้ใบหม่อนรวมประมาณ
+          <span class="result-highlight">${formatNumber(result.totalAllSheets, 1)} กิโลกรัม</span>
+          ตลอดช่วงวัยนี้ (${result.days} วัน โดยประมาณ)
+        </p>
+        <p>
+          ถ้าแบ่งให้เป็นรายวัน จะอยู่ที่เฉลี่ยประมาณ
+          <span class="result-highlight">${formatNumber(result.avgPerDay, 1)} กิโลกรัม/วัน</span><br>
+          แนะนำให้เตรียมใบหม่อนวันละประมาณ
+          <span class="result-key">${perDayRangeText}</span>
+          แล้วสังเกตว่าใบหมดหรือเหลือในชั้นเลี้ยง เพื่อลดหรือเพิ่มตามสภาพจริง
+        </p>
+        <p>
+          ข้อแนะนำเพิ่มเติมสำหรับวัยนี้:<br>
+          <span class="result-key">${result.instarAdvice}</span>
+        </p>
+      `;
+
+      resultArea.appendChild(resultDiv);
+    });
+  </script>
+</body>
+</html>
