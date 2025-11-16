@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>สมัครสมาชิก - อารักขารังไหมเลี้ยงอัจฉริยะ</title>
+
+  <style>
+    body {
+      font-family: "Sarabun", sans-serif;
+      background: #e8f5e9;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 440px;
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 24px 22px 28px;
+      box-shadow: 0px 8px 20px rgba(0,0,0,0.12);
+      text-align: center;
+    }
+
+    .icon-area {
+      margin-bottom: 6px;
+    }
+
+    .icon-circle {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: #e8f5e9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      margin: 8px 0 4px;
+      color: #1b5e20;
+      font-size: 22px;
+    }
+
+    p.sub {
+      color: #388e3c;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 8px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #2e7d32;
+      margin-left: 6px;
+      margin-bottom: 3px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 11px;
+      border-radius: 10px;
+      border: 1px solid #c8e6c9;
+      font-size: 14px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #2e7d32;
+      box-shadow: 0 0 0 1px rgba(46,125,50,0.2);
+    }
+
+    .inline-note {
+      font-size: 11px;
+      color: #777;
+      margin-left: 6px;
+      margin-top: 1px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 14px;
+      background: #2e7d32;
+      color: #ffffff;
+      font-size: 16px;
+      border: none;
+      border-radius: 24px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+
+    .error {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #d32f2f;
+    }
+
+    .success {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #2e7d32;
+    }
+
+    .note {
+      font-size: 11px;
+      color: #777;
+      margin-top: 10px;
+      text-align: left;
+    }
+
+    .link-login {
+      margin-top: 12px;
+      font-size: 13px;
+    }
+
+    .link-login a {
+      color: #1e88e5;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+    // TODO: แก้ให้เป็นค่าจริงของโปรเจกต์ Supabase คุณ
+    const SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
+    const SUPABASE_ANON_KEY = "YOUR-ANON-KEY";
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("registerForm");
+      const btn = document.getElementById("btnRegister");
+      const errorBox = document.getElementById("errorBox");
+      const successBox = document.getElementById("successBox");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        errorBox.textContent = "";
+        successBox.textContent = "";
+
+        const full_name = document.getElementById("full_name").value.trim();
+        const farm_name = document.getElementById("farm_name").value.trim();
+        const username = document.getElementById("username").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const password2 = document.getElementById("password2").value.trim();
+
+        if (!full_name || !farm_name || !username || !email || !password || !password2) {
+          errorBox.textContent = "กรุณากรอกข้อมูลให้ครบทุกช่อง";
+          return;
+        }
+
+        if (password !== password2) {
+          errorBox.textContent = "รหัสผ่านทั้งสองช่องไม่ตรงกัน";
+          return;
+        }
+
+        if (password.length < 6) {
+          errorBox.textContent = "รหัสผ่านควรมีอย่างน้อย 6 ตัวอักษร";
+          return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = "กำลังสมัครสมาชิก...";
+
+        try {
+          // 1) ตรวจว่า username ซ้ำหรือไม่
+          const { data: existUser, error: existErr } = await supabase
+            .from("profiles")
+            .select("id")
+            .eq("username", username)
+            .maybeSingle();
+
+          if (existErr) throw existErr;
+          if (existUser) {
+            errorBox.textContent = "ชื่อผู้ใช้นี้ถูกใช้แล้ว กรุณาเลือกชื่ออื่น";
+            btn.disabled = false;
+            btn.textContent = "สมัครสมาชิก";
+            return;
+          }
+
+          // 2) สมัครใน auth.users (email + password)
+          const { data: signUpData, error: signUpErr } = await supabase.auth.signUp({
+            email,
+            password,
+          });
+
+          if (signUpErr) {
+            throw signUpErr;
+          }
+
+          const user = signUpData.user;
+          if (!user) {
+            throw new Error("ไม่สามารถสร้างบัญชีผู้ใช้ได้");
+          }
+
+          // 3) สร้างแถวใน profiles
+          const { error: profileErr } = await supabase.from("profiles").insert({
+            user_id: user.id,
+            full_name,
+            username,
+            farm_name,
+            email,
+          });
+
+          if (profileErr) {
+            throw profileErr;
+          }
+
+          successBox.textContent = "สมัครสมาชิกสำเร็จแล้ว กรุณาเข้าสู่ระบบด้วยชื่อผู้ใช้และรหัสผ่าน";
+          btn.textContent = "สมัครสมาชิกสำเร็จ";
+          
+          // พาไปหน้า login หลังจาก 1–2 วินาที
+          setTimeout(() => {
+            window.location.href = "login.html";
+          }, 1500);
+
+        } catch (err) {
+          console.error(err);
+          errorBox.textContent = "สมัครสมาชิกไม่สำเร็จ: " + (err.message || "เกิดข้อผิดพลาด");
+          btn.disabled = false;
+          btn.textContent = "สมัครสมาชิก";
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="icon-area">
+      <div class="icon-circle">🧶</div>
+    </div>
+    <h2>สมัครสมาชิกเกษตรกรเลี้ยงไหม</h2>
+    <p class="sub">ใช้บัญชีนี้สำหรับเข้าระบบอารักขารังไหมเลี้ยงอัจฉริยะ</p>
+
+    <form id="registerForm">
+      <div class="form-group">
+        <label for="full_name">ชื่อ–สกุลผู้เลี้ยงไหม</label>
+        <input id="full_name" type="text" placeholder="เช่น นางสมใจ ใจดี" />
+      </div>
+
+      <div class="form-group">
+        <label for="farm_name">ชื่อฟาร์ม / กลุ่มเกษตรกร</label>
+        <input id="farm_name" type="text" placeholder="เช่น กลุ่มเลี้ยงไหมบ้านตานา" />
+      </div>
+
+      <div class="form-group">
+        <label for="username">ชื่อผู้ใช้ (ใช้ตอนเข้าสู่ระบบ)</label>
+        <input id="username" type="text" placeholder="เช่น farmer01" />
+        <div class="inline-note">* แนะนำให้ใช้ตัวอักษรภาษาอังกฤษ + ตัวเลข เช่น farmer1, yaiAon</div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">อีเมล (ใช้กู้รหัสผ่าน)</label>
+        <input id="email" type="email" placeholder="เช่น farmer@example.com" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">รหัสผ่าน</label>
+        <input id="password" type="password" placeholder="อย่างน้อย 6 ตัวอักษร" />
+      </div>
+
+      <div class="form-group">
+        <label for="password2">ยืนยันรหัสผ่านอีกครั้ง</label>
+        <input id="password2" type="password" placeholder="กรอกรหัสผ่านซ้ำอีกครั้ง" />
+      </div>
+
+      <button type="submit" id="btnRegister">สมัครสมาชิก</button>
+
+      <div id="errorBox" class="error"></div>
+      <div id="successBox" class="success"></div>
+    </form>
+
+    <div class="link-login">
+      มีบัญชีอยู่แล้ว? <a href="login.html">เข้าสู่ระบบที่นี่</a>
+    </div>
+
+    <div class="note">
+      * แนะนำให้เกษตรกรจด "ชื่อผู้ใช้" และ "รหัสผ่าน" ลงในสมุดใกล้โรงเลี้ยง เพื่อกันลืม<br>
+      * อีเมลใช้สำหรับกู้รหัสผ่านในอนาคต (ให้เจ้าหน้าที่ช่วยดูแล)
+    </div>
+  </div>
+</body>
+</html>
