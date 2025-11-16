@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แผนการให้อาหารหนอนไหม 27 วัน</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Sarabun', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 16px;
+      font-size: 18px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      padding: 20px 16px 24px;
+    }
+
+    @media (min-width: 768px) {
+      .container {
+        padding: 24px 24px 28px;
+      }
+    }
+
+    h1 {
+      font-size: 22px;
+      margin-bottom: 4px;
+      text-align: center;
+      color: #1b5e20;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 15px;
+      color: #558b2f;
+      margin-bottom: 18px;
+    }
+
+    .form-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    @media (min-width: 768px) {
+      .form-grid {
+        flex-direction: row;
+      }
+      .form-group {
+        flex: 1;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-weight: 600;
+      color: #33691e;
+      font-size: 16px;
+    }
+
+    .hint {
+      font-size: 14px;
+      color: #757575;
+    }
+
+    select,
+    input[type="number"] {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #c5e1a5;
+      font-size: 16px;
+      outline: none;
+      background-color: #f9fff5;
+      transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+      width: 100%;
+    }
+
+    select:focus,
+    input[type="number"]:focus {
+      border-color: #7cb342;
+      box-shadow: 0 0 0 2px rgba(124,179,66,0.2);
+      background-color: #ffffff;
+    }
+
+    .actions {
+      margin: 8px 0 10px;
+      display: flex;
+      justify-content: center;
+    }
+
+    button.main-btn {
+      padding: 10px 22px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #689f38, #33691e);
+      color: #ffffff;
+      box-shadow: 0 6px 15px rgba(56,142,60,0.35);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.2s;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    button.main-btn:hover {
+      opacity: 0.97;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(56,142,60,0.45);
+    }
+
+    button.main-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 10px rgba(56,142,60,0.3);
+    }
+
+    .message {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .message.error {
+      background-color: #ffebee;
+      border: 1px solid #ef9a9a;
+      color: #b71c1c;
+    }
+
+    .result-card {
+      margin-top: 12px;
+      background-color: #f9fff5;
+      border-radius: 14px;
+      border: 1px solid #c5e1a5;
+      padding: 12px 14px;
+      line-height: 1.8;
+      font-size: 16px;
+    }
+
+    .result-title {
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 4px;
+      color: #1b5e20;
+    }
+
+    .result-key {
+      font-weight: 600;
+      color: #33691e;
+    }
+
+    .result-highlight {
+      font-weight: 700;
+      color: #e65100;
+    }
+
+    .speak-btn {
+      margin-top: 10px;
+      padding: 8px 16px;
+      font-size: 16px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: #43a047;
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(67,160,71,0.35);
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .speak-btn:hover { opacity: 0.97; }
+
+    hr {
+      margin: 16px 0;
+      border: none;
+      border-top: 1px dashed #c5e1a5;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      margin-top: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+    }
+
+    th, td {
+      border: 1px solid #e0e0e0;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #f1f8e9;
+      color: #33691e;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    td.center {
+      text-align: center;
+    }
+
+    tr.highlight-row {
+      background-color: #fffde7;
+    }
+
+    .note {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #757575;
+      line-height: 1.6;
+    }
+
+    .footer {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 12px;
+      color: #9e9e9e;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>แผนการให้อาหารหนอนไหม 27 วัน</h1>
+    <div class="subtitle">
+      ใช้ร่วมกับระบบแนะนำปริมาณใบหม่อน – ช่วยบอกเวลาให้อาหารที่เหมาะสมในแต่ละวัย
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="instarSelect">เลือกวัยของหนอนไหมตอนนี้</label>
+        <select id="instarSelect">
+          <option value="">-- กรุณาเลือกวัยหนอนไหม --</option>
+          <option value="1">วัยที่ 1 (วัยอ่อนเริ่มต้น)</option>
+          <option value="2">วัยที่ 2</option>
+          <option value="3">วัยที่ 3</option>
+          <option value="4">วัยที่ 4</option>
+          <option value="5">วัยที่ 5 (ก่อนขึ้นคอนทำรัง)</option>
+        </select>
+        <div class="hint">
+          วัย 1–3 = วัยอ่อน กินบ่อย 3–4 มื้อ/วัน<br>
+          วัย 4–5 = วัยแก่ กินมื้อใหญ่ 2–3 มื้อ/วัน
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="dayInput">วันเลี้ยง (1–27 วัน)</label>
+        <input type="number" id="dayInput" min="1" max="27" placeholder="เช่น 1, 5, 10, 20">
+        <div class="hint">
+          ถ้าไม่ทราบใส่ก็ได้ เลือกเฉพาะวัยอย่างเดียว ระบบยังแนะนำเวลาให้อาหารได้
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="main-btn" id="calcBtn">ดูแผนให้อาหารสำหรับวันนี้</button>
+    </div>
+
+    <div id="messageArea"></div>
+    <div id="resultArea"></div>
+
+    <hr>
+
+    <div class="table-wrapper">
+      <h2 style="font-size:18px; color:#33691e; margin-bottom:6px;">
+        แผนการให้อาหาร 27 วัน (สรุป)
+      </h2>
+      <table id="planTable">
+        <thead>
+          <tr>
+            <th style="width:70px;">วันเลี้ยง</th>
+            <th style="width:90px;">วัย</th>
+            <th style="width:180px;">รอบให้อาหาร<br>(เวลาคร่าว ๆ)</th>
+            <th>หมายเหตุ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- เติมด้วย JavaScript -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      หมายเหตุ: เวลาให้อาหารเป็นค่ามาตรฐาน สามารถขยับให้เหมาะกับวิถีชีวิตในแต่ละบ้านได้
+      แต่ควรรักษาจำนวนมือต่อวันให้ใกล้เคียง โดยเฉพาะวัยอ่อน 1–3 ควรให้ 3–4 มื้อ/วัน
+      เพื่อไม่ให้ใบหม่อนแห้งคาคอก
+    </div>
+
+    <div class="footer">
+      เวอร์ชันทดลอง – สามารถปรับแก้เวลาและข้อความให้ตรงกับคู่มือศูนย์หม่อนไหมในพื้นที่ได้
+    </div>
+  </div>
+
+  <script>
+    // รูปแบบการให้อาหารตามวัย
+    const feedingPatternByInstar = {
+      1: {
+        label: "วัยที่ 1 (วัยอ่อนเริ่มต้น)",
+        meals: ["07:00", "11:00", "16:00", "20:00"],
+        desc: "วัยอ่อนมาก ปากเล็ก ใบต้องอ่อนและไม่แห้ง ควรให้บ่อย 3–4 มื้อ/วัน เพื่อให้กินได้ตลอด."
+      },
+      2: {
+        label: "วัยที่ 2",
+        meals: ["07:00", "11:00", "16:00", "20:00"],
+        desc: "หนอนเริ่มแข็งแรงขึ้น แต่ยังถือว่าเป็นวัยอ่อน ให้วันละ 3–4 มื้อเหมือนวัย 1 และเริ่มขยายพื้นที่เลี้ยง."
+      },
+      3: {
+        label: "วัยที่ 3",
+        meals: ["07:00", "11:00", "16:00", "20:00"],
+        desc: "วัยอ่อนช่วงท้าย ปริมาณใบเริ่มเพิ่มขึ้น ควรให้บ่อย 3–4 มื้อ และคอยถ่ายมูล + ขยายพื้นที่เลี้ยง."
+      },
+      4: {
+        label: "วัยที่ 4",
+        meals: ["07:00", "13:00", "18:00"],
+        desc: "เริ่มเข้าสู่วัยแก่ กินมื้อใหญ่ขึ้นได้ ลดเหลือประมาณ 2–3 มื้อ/วัน และควบคุมความชื้นให้เหมาะสม."
+      },
+      5: {
+        label: "วัยที่ 5 (ก่อนขึ้นคอน)",
+        meals: ["07:00", "13:00", "18:00"],
+        desc: "วัยสุดท้าย กินหนักที่สุดของชีวิต เน้นใบแก่ทั้งใบหรือทั้งกิ่ง ดูการกินแต่ละวันและเตรียมขึ้นคอนเมื่อเริ่มสุก."
+      }
+    };
+
+    // ฟังก์ชันช่วยหาวัยจากวันเลี้ยงแบบคร่าว ๆ (ปรับได้ตามคู่มือจริง)
+    function estimateInstarFromDay(day) {
+      if (day <= 3) return 1;        // วัน 1–3 วัย 1
+      if (day <= 6) return 2;        // วัน 4–6 วัย 2
+      if (day <= 9) return 3;        // วัน 7–9 วัย 3
+      if (day <= 16) return 4;       // วัน 10–16 วัย 4
+      return 5;                      // วัน 17–27 วัย 5
+    }
+
+    // หมายเหตุสั้น ๆ สำหรับตาราง (ตัวอย่าง ปรับเพิ่มเองได้)
+    function buildNote(day, instar) {
+      if (day === 1 || day === 2 || day === 3) return "ใบหม่อนอ่อน หั่นละเอียด ขนาด 0.5–1 ซม.";
+      if (day === 4 || day === 8 || day === 11 || day === 17) return "ถ่ายมูล + ขยายพื้นที่เลี้ยงเล็กน้อย";
+      if (instar === 2) return "เพิ่มปริมาณใบหม่อนทีละน้อย พร้อมขยายพื้นที่";
+      if (instar === 3) return "ใบหม่อนสดมากขึ้น หั่นชิ้นใหญ่ขึ้น คอยดูใบไม่ให้เหลือเน่า";
+      if (instar === 4) return "เริ่มให้ใบทั้งใบ/ทั้งกิ่ง ควบคุมความชื้น 75–80%";
+      if (instar === 5) return "ให้ใบมากขึ้นตามการกิน สังเกตไหมสุกเพื่อเตรียมขึ้นคอน";
+      return "";
+    }
+
+    // สร้างตาราง 27 วันจาก pattern
+    const planTableBody = document.querySelector("#planTable tbody");
+
+    function renderPlanTable(selectedDay = null, selectedInstar = null) {
+      planTableBody.innerHTML = "";
+      for (let day = 1; day <= 27; day++) {
+        const instar = estimateInstarFromDay(day);
+        const pattern = feedingPatternByInstar[instar];
+        const tr = document.createElement("tr");
+
+        if ((selectedDay && day === selectedDay) ||
+            (selectedInstar && instar === selectedInstar)) {
+          tr.classList.add("highlight-row");
+        }
+
+        const tdDay = document.createElement("td");
+        tdDay.textContent = day;
+        tdDay.className = "center";
+
+        const tdInstar = document.createElement("td");
+        tdInstar.textContent = `วัย ${instar}`;
+        tdInstar.className = "center";
+
+        const tdMeals = document.createElement("td");
+        tdMeals.textContent = pattern.meals.join(", ");
+
+        const tdNote = document.createElement("td");
+        tdNote.textContent = buildNote(day, instar);
+
+        tr.appendChild(tdDay);
+        tr.appendChild(tdInstar);
+        tr.appendChild(tdMeals);
+        tr.appendChild(tdNote);
+
+        planTableBody.appendChild(tr);
+      }
+    }
+
+    renderPlanTable();
+
+    const instarSelect = document.getElementById("instarSelect");
+    const dayInput = document.getElementById("dayInput");
+    const calcBtn = document.getElementById("calcBtn");
+    const messageArea = document.getElementById("messageArea");
+    const resultArea = document.getElementById("resultArea");
+
+    let isSpeaking = false;
+
+    function speak(text, btn) {
+      if (!("speechSynthesis" in window)) {
+        alert("เบราว์เซอร์นี้ยังไม่รองรับการอ่านออกเสียงอัตโนมัติ");
+        return;
+      }
+      if (isSpeaking) {
+        window.speechSynthesis.cancel();
+        isSpeaking = false;
+        if (btn) btn.textContent = "▶ ฟังเสียงคำแนะนำ";
+        return;
+      }
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "th-TH";
+      u.rate = 0.95;
+      u.onend = () => {
+        isSpeaking = false;
+        if (btn) btn.textContent = "▶ ฟังเสียงคำแนะนำ";
+      };
+      isSpeaking = true;
+      if (btn) btn.textContent = "■ หยุดเสียง";
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+    }
+
+    calcBtn.addEventListener("click", () => {
+      messageArea.innerHTML = "";
+      resultArea.innerHTML = "";
+      window.speechSynthesis.cancel();
+      isSpeaking = false;
+
+      let instar = instarSelect.value ? Number(instarSelect.value) : null;
+      let day = dayInput.value ? Number(dayInput.value) : null;
+
+      const errors = [];
+      if (!instar && !day) {
+        errors.push("กรุณาเลือกอย่างน้อย 1 อย่าง ระหว่าง 'วัยหนอนไหม' หรือ 'วันเลี้ยง'");
+      }
+
+      if (day && (day < 1 || day > 27)) {
+        errors.push("วันเลี้ยงต้องอยู่ระหว่าง 1–27 วัน");
+      }
+
+      if (errors.length > 0) {
+        const div = document.createElement("div");
+        div.className = "message error";
+        div.innerHTML = errors.map(e => "• " + e).join("<br>");
+        messageArea.appendChild(div);
+        return;
+      }
+
+      // ถ้าไม่เลือกวัย แต่เลือกวัน → ประมาณวัยจากวัน
+      if (!instar && day) {
+        instar = estimateInstarFromDay(day);
+        instarSelect.value = instar;
+      }
+
+      // ถ้าเลือกวัย แต่ไม่เลือกวัน → ไม่เน้นวัน
+      if (instar && !day) {
+        day = null;
+      }
+
+      // แสดงผล
+      const pattern = feedingPatternByInstar[instar];
+      const mealsText = pattern.meals.join(", ");
+
+      const resultDiv = document.createElement("div");
+      resultDiv.className = "result-card";
+
+      resultDiv.innerHTML = `
+        <div class="result-title">แผนให้อาหารสำหรับวันนี้</div>
+        <p>
+          วัยปัจจุบัน: <span class="result-key">${pattern.label}</span><br>
+          ${day ? `วันเลี้ยงลำดับที่: <span class="result-key">${day}</span><br>` : ""}
+          รอบให้อาหารที่แนะนำ: 
+          <span class="result-highlight">${mealsText}</span>
+          (${pattern.meals.length} มื้อ/วัน)
+        </p>
+        <p>
+          สำหรับวัยนี้ แนะนำให้ยึดเวลาโดยประมาณตามตาราง และสังเกตว่าหนอนไหมกินหมดก่อนถึงมื้อถัดไปหรือไม่
+          หากใบหมดเร็วสามารถเพิ่มปริมาณใบในแต่ละมื้อได้เล็กน้อย
+        </p>
+        <p>
+          <span class="result-key">คำอธิบายเพิ่มเติม:</span><br>
+          ${pattern.desc}
+        </p>
+        <button type="button" class="speak-btn" id="speakBtn">▶ ฟังเสียงคำแนะนำ</button>
+      `;
+
+      resultArea.appendChild(resultDiv);
+
+      // เตรียมข้อความสำหรับอ่านออกเสียง
+      let speechText = `วันนี้หนอนไหมอยู่ใน ${pattern.label}. `;
+      if (day) speechText += `เป็นวันที่ ${day} ของการเลี้ยง. `;
+      speechText += `แนะนำให้ให้อาหารวันละ ${pattern.meals.length} มื้อ เวลา ${mealsText}. `;
+      speechText += pattern.desc;
+
+      const speakBtn = document.getElementById("speakBtn");
+      speakBtn.addEventListener("click", () => speak(speechText, speakBtn));
+
+      renderPlanTable(day || null, instar || null);
+    });
+
+    // ✅ เชื่อมกับหน้าแนะนำใบหม่อน (ถ้าหน้าอื่นยิง event มา)
+    // document.addEventListener("mulberryRecommendationCalculated", (e) => {
+    //   const { instar } = e.detail;
+    //   if (instar) {
+    //     instarSelect.value = String(instar);
+    //   }
+    // });
+
+  </script>
+</body>
+</html>
