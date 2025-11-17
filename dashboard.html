@@ -2,642 +2,123 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <title>อารักขารังไหมเลี้ยงอัจฉริยะ - Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>แดชบอร์ดเกษตรกรเลี้ยงไหม</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: "Sarabun", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     body {
-      font-family: "Sarabun", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #e8f5e9;
-      color: #1b5e20;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .app-shell {
-      width: 100%;
-      max-width: 480px;
-      min-height: 100vh;
-      background: #f4fff6;
-      box-shadow: 0 0 20px rgba(0,0,0,0.12);
-      display: flex;
-      flex-direction: column;
-    }
-
-    header {
-      background: linear-gradient(135deg, #2e7d32, #1b5e20);
-      color: #fff;
-      padding: 14px 16px 10px;
+      background: #e8f5e8;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-    }
-
-    header .title-block {
-      display: flex;
-      flex-direction: column;
-    }
-
-    header h1 {
-      font-size: 18px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    header h1 span.icon {
-      font-size: 20px;
-    }
-
-    header .subtitle {
-      font-size: 12px;
-      opacity: 0.9;
-    }
-
-    header .today-text {
-      font-size: 12px;
-      text-align: right;
-      opacity: 0.9;
-    }
-
-    main {
-      flex: 1;
-      overflow-y: auto;
-      padding: 10px 10px 70px;
+      justify-content: center;
+      padding: 16px;
     }
 
     .card {
       background: #ffffff;
-      border-radius: 18px;
-      padding: 12px 14px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.06);
-      margin-bottom: 10px;
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 6px;
-    }
-
-    .card-header-icon {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background: #e8f5e9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-    }
-
-    .card-header-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #1b5e20;
-    }
-
-    .card-subtitle {
-      font-size: 12px;
-      color: #616161;
-      margin-bottom: 6px;
-    }
-
-    .badge {
-      display: inline-block;
-      border-radius: 999px;
-      font-size: 11px;
-      padding: 2px 8px;
-      margin-right: 6px;
-      margin-top: 2px;
-    }
-
-    .badge-green {
-      background: #e8f5e9;
-      color: #1b5e20;
-      border: 1px solid #a5d6a7;
-    }
-
-    .badge-orange {
-      background: #fff3e0;
-      color: #e65100;
-      border: 1px solid #ffb74d;
-    }
-
-    .badge-blue {
-      background: #e3f2fd;
-      color: #1e88e5;
-      border: 1px solid #90caf9;
-    }
-
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 6px;
-      margin-top: 6px;
-    }
-
-    .metric-box {
-      background: #f4f9f5;
-      border-radius: 14px;
-      padding: 6px 8px;
-      border: 1px solid #e0f2f1;
-    }
-
-    .metric-label {
-      font-size: 11px;
-      color: #616161;
-    }
-
-    .metric-value {
-      font-size: 14px;
-      font-weight: 700;
-      color: #1b5e20;
-    }
-
-    .metric-note {
-      font-size: 10px;
-      color: #9e9e9e;
-    }
-
-    .btn-main {
+      border-radius: 24px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+      max-width: 600px;
       width: 100%;
-      border-radius: 999px;
-      padding: 10px 14px;
+      padding: 24px 24px 20px;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .title-block h1 {
+      font-size: 20px;
+      color: #1b5e20;
+      margin-bottom: 4px;
+    }
+
+    .title-block p {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .logout-btn {
       border: none;
-      background: #2e7d32;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #ef5350;
       color: #fff;
-      font-size: 15px;
-      font-weight: 700;
+      font-size: 14px;
       cursor: pointer;
+    }
+
+    .logout-btn:hover {
+      background: #d32f2f;
+    }
+
+    .info-box {
+      background: #f1f8e9;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .info-row {
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .info-label {
+      color: #555;
+    }
+
+    .info-value {
+      font-weight: 600;
+      color: #1b5e20;
+    }
+
+    .note {
+      font-size: 13px;
+      color: #777;
       margin-top: 8px;
     }
-
-    .btn-main:disabled {
-      opacity: 0.6;
-      cursor: default;
-    }
-
-    .btn-outline {
-      width: 100%;
-      border-radius: 999px;
-      padding: 8px 12px;
-      border: 1px solid #a5d6a7;
-      background: #f8fff9;
-      color: #1b5e20;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 6px;
-    }
-
-    .btn-outline.secondary {
-      border-color: #90caf9;
-      color: #1565c0;
-      background: #e3f2fd;
-    }
-
-    .list-text {
-      font-size: 13px;
-      margin-top: 4px;
-      color: #424242;
-    }
-
-    .list-text ul {
-      margin-left: 18px;
-      margin-top: 4px;
-    }
-
-    .list-text li {
-      margin-bottom: 2px;
-    }
-
-    .small-note {
-      font-size: 11px;
-      color: #9e9e9e;
-      margin-top: 6px;
-    }
-
-    .empty-message {
-      font-size: 13px;
-      color: #757575;
-      margin-top: 4px;
-    }
-
-    footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      display: flex;
-      justify-content: center;
-    }
-
-    .bottom-nav {
-      width: 100%;
-      max-width: 480px;
-      background: #ffffff;
-      border-top: 1px solid #c8e6c9;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      padding: 4px 0;
-    }
-
-    .nav-item {
-      text-align: center;
-      font-size: 11px;
-      color: #757575;
-      padding: 4px 0;
-    }
-
-    .nav-item span.icon {
-      display: block;
-      font-size: 18px;
-    }
-
-    .nav-item.active {
-      color: #1b5e20;
-      font-weight: 700;
-    }
   </style>
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-    // TODO: แก้ให้เป็นของโปรเจกต์จริง
-    const SUPABASE_URL = "https://YOUR-PROJECT-ID.supabase.co";
-    const SUPABASE_ANON_KEY = "YOUR-ANON-KEY";
-
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    let currentUser = null;
-    let activeBatch = null;
-    let todayStr = null;
-    let todayDayNo = null;
-    let todayInstar = null;
-    let todayMealsTimes = null;
-    let todayMealsCount = null;
-
-    document.addEventListener("DOMContentLoaded", () => {
-      initDashboard().catch(console.error);
-    });
-
-    async function initDashboard() {
-      todayStr = new Date().toISOString().slice(0, 10);
-      document.getElementById("todayText").textContent =
-        "วันนี้: " + formatThaiDate(new Date());
-
-      const { data: userData, error: userError } = await supabase.auth.getUser();
-      if (userError || !userData?.user) {
-        // ถ้าไม่ได้ login ให้ย้อนกลับไปหน้า login
-        window.location.href = "login.html";
-        return;
-      }
-      currentUser = userData.user;
-
-      await loadActiveBatch();
-    }
-
-    function formatThaiDate(d) {
-      const months = [
-        "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
-        "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
-      ];
-      const day = d.getDate();
-      const month = months[d.getMonth()];
-      const year = d.getFullYear() + 543;
-      return `${day} ${month} ${year}`;
-    }
-
-    function calcDayNo(startDateStr, todayStrLocal) {
-      const start = new Date(startDateStr);
-      const today = new Date(todayStrLocal);
-      const diffMs = today.setHours(0,0,0,0) - start.setHours(0,0,0,0);
-      return Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
-    }
-
-    // mapping แบบง่าย 27 วัน → แบ่ง 5 วัย
-    function calcInstar(dayNo) {
-      if (dayNo <= 3) return 1;
-      if (dayNo <= 6) return 2;
-      if (dayNo <= 9) return 3;
-      if (dayNo <= 16) return 4;
-      return 5;
-    }
-
-    // ตารางเวลาให้อาหารแบบง่ายตามวัยไหม
-    function getMealsForInstar(instar) {
-      if (instar <= 3) {
-        // วัยอ่อน: 3–4 มื้อ
-        return {
-          times: "07:00, 11:00, 16:00, 20:00",
-          count: 4,
-          description: "วัยอ่อนควรให้ถี่ 3–4 มื้อ/วัน เพื่อให้ใบหม่อนชุ่มชื้น ไม่แห้งกรอบ"
-        };
-      } else {
-        // วัย 4–5: 3 มื้อ (เช้า–บ่าย–ค่ำ)
-        return {
-          times: "07:00, 13:00, 18:00",
-          count: 3,
-          description: "วัย 4–5 สามารถลดเหลือ 2–3 มื้อ/วัน แต่ให้ปริมาณต่อมื้อเพิ่มขึ้น"
-        };
-      }
-    }
-
-    async function loadActiveBatch() {
-      const statusEl = document.getElementById("batchStatus");
-      const metricsEl = document.getElementById("batchMetrics");
-      const feedingStatusEl = document.getElementById("feedingStatus");
-      const btnLogFeeding = document.getElementById("btnLogFeeding");
-      const btnGoFeedingPlan = document.getElementById("btnGoFeedingPlan");
-      const btnGoLeafRecom = document.getElementById("btnGoLeafRecom");
-
-      statusEl.textContent = "กำลังโหลดข้อมูลรุ่นการเลี้ยง...";
-      feedingStatusEl.textContent = "";
-      btnLogFeeding.disabled = true;
-
-      const { data, error } = await supabase
-        .from("silkworm_batches")
-        .select("*")
-        .eq("user_id", currentUser.id)
-        .eq("status", "raising")
-        .limit(1)
-        .maybeSingle();
-
-      if (error) {
-        console.error(error);
-        statusEl.textContent = "โหลดข้อมูลไม่สำเร็จ โปรดลองใหม่อีกครั้ง";
-        return;
-      }
-
-      if (!data) {
-        activeBatch = null;
-        statusEl.innerHTML =
-          "ตอนนี้คุณยังไม่ได้เริ่มรุ่นการเลี้ยงไหมรอบใหม่<br>" +
-          "กรุณาเริ่มรอบใหม่หลังจากพักโรงเลี้ยงและทำความสะอาดเรียบร้อยแล้ว";
-        metricsEl.innerHTML = "";
-        feedingStatusEl.innerHTML =
-          "ยังไม่มีข้อมูลให้อาหาร เนื่องจากยังไม่มีรุ่นที่กำลังเลี้ยง";
-        btnLogFeeding.disabled = true;
-        btnGoFeedingPlan.onclick = () => {
-          window.location.href = "feeding_plan.html";
-        };
-        btnGoLeafRecom.onclick = () => {
-          window.location.href = "mulberry_recommendation.html";
-        };
-        return;
-      }
-
-      activeBatch = data;
-
-      const dayNo = calcDayNo(activeBatch.start_date, todayStr);
-      todayDayNo = dayNo < 1 ? 1 : dayNo;
-      todayInstar = calcInstar(todayDayNo);
-
-      const { times, count, description } = getMealsForInstar(todayInstar);
-      todayMealsTimes = times;
-      todayMealsCount = count;
-
-      statusEl.textContent =
-        `รุ่นเลี้ยงปัจจุบัน: เริ่มเลี้ยงวันที่ ${formatThaiDate(new Date(activeBatch.start_date))}`;
-
-      metricsEl.innerHTML = `
-        <div class="metrics-grid">
-          <div class="metric-box">
-            <div class="metric-label">วันเลี้ยงวันนี้</div>
-            <div class="metric-value">วันที่ ${todayDayNo}</div>
-            <div class="metric-note">เลี้ยงสะสมตั้งแต่วันเริ่มต้น</div>
-          </div>
-          <div class="metric-box">
-            <div class="metric-label">วัยหนอนไหมวันนี้</div>
-            <div class="metric-value">วัยที่ ${todayInstar}</div>
-            <div class="metric-note">วัย 1–3 = วัยอ่อน, วัย 4–5 = วัยแก่</div>
-          </div>
-          <div class="metric-box">
-            <div class="metric-label">จำนวนแผ่นไข่ที่เลี้ยง</div>
-            <div class="metric-value">${activeBatch.egg_sheet_count ?? "-" } แผ่น</div>
-            <div class="metric-note">กลุ่มพันธุ์: ${activeBatch.breed_group || "-"}</div>
-          </div>
-          <div class="metric-box">
-            <div class="metric-label">สถานะรุ่นเลี้ยง</div>
-            <div class="metric-value">กำลังเลี้ยงอยู่</div>
-            <div class="metric-note">ระบบจำกัด 1 รุ่นต่อผู้ใช้ 1 คน</div>
-          </div>
-        </div>
-      `;
-
-      // แสดงแผนให้อาหารวันนี้
-      feedingStatusEl.innerHTML = `
-        <div class="badge badge-green">วันเลี้ยงที่ ${todayDayNo}</div>
-        <div class="badge badge-orange">วัยที่ ${todayInstar}</div>
-        <div class="badge badge-blue">${count} มื้อ/วัน</div>
-        <div class="list-text">
-          <strong>รอบให้อาหารที่แนะนำ:</strong><br>
-          ${times} น.<br>
-          <ul>
-            <li>${description}</li>
-            <li>ปรับตามสภาพใบหม่อนจริง ถ้าใบแห้งเร็วให้เพิ่มความถี่</li>
-          </ul>
-        </div>
-      `;
-
-      // กำหนดปุ่มลิงก์ไปหน้าอื่น
-      btnGoFeedingPlan.onclick = () => {
-        window.location.href = "feeding_plan.html";
-      };
-      btnGoLeafRecom.onclick = () => {
-        window.location.href = "mulberry_recommendation.html";
-      };
-
-      // โหลด log วันนี้
-      await loadTodayFeedingLog();
-    }
-
-    async function loadTodayFeedingLog() {
-      const summaryEl = document.getElementById("feedingLogSummary");
-      const btnLogFeeding = document.getElementById("btnLogFeeding");
-
-      if (!activeBatch) {
-        summaryEl.textContent = "ยังไม่มีรุ่นการเลี้ยงที่กำลัง active";
-        btnLogFeeding.disabled = true;
-        return;
-      }
-
-      const { data, error } = await supabase
-        .from("feeding_logs")
-        .select("*")
-        .eq("batch_id", activeBatch.id)
-        .eq("feeding_date", todayStr)
-        .limit(1);
-
-      if (error) {
-        console.error(error);
-        summaryEl.textContent = "โหลดข้อมูลการให้อาหารไม่สำเร็จ";
-        btnLogFeeding.disabled = true;
-        return;
-      }
-
-      if (!data || data.length === 0) {
-        summaryEl.innerHTML = `
-          <div class="empty-message">
-            วันนี้ยังไม่ได้บันทึกว่าให้อาหารแล้ว<br>
-            เมื่อให้อาหารครบตามแผน สามารถกดปุ่มด้านล่างเพื่อบันทึกค่ะ
-          </div>
-        `;
-        btnLogFeeding.disabled = false;
-        btnLogFeeding.onclick = logTodayFeeding;
-      } else {
-        const log = data[0];
-        summaryEl.innerHTML = `
-          <div class="list-text">
-            <strong>บันทึกวันนี้แล้ว</strong><br>
-            วันที่: ${formatThaiDate(new Date(log.feeding_date))}<br>
-            วันเลี้ยงที่: ${log.day_no}, วัยที่: ${log.instar}<br>
-            ให้อาหาร ${log.meals_count} มื้อ เวลา: ${log.meals_times || "-"}<br>
-            <span class="metric-note">บันทึกเมื่อ: ${new Date(log.created_at).toLocaleString("th-TH")}</span>
-          </div>
-        `;
-        btnLogFeeding.disabled = true;
-        btnLogFeeding.onclick = null;
-      }
-    }
-
-    async function logTodayFeeding() {
-      if (!activeBatch || !currentUser) return;
-
-      const btn = document.getElementById("btnLogFeeding");
-      btn.disabled = true;
-      btn.textContent = "กำลังบันทึก...";
-
-      const { error } = await supabase.from("feeding_logs").insert({
-        batch_id: activeBatch.id,
-        user_id: currentUser.id,
-        feeding_date: todayStr,
-        day_no: todayDayNo,
-        instar: todayInstar,
-        meals_times: todayMealsTimes,
-        meals_count: todayMealsCount
-      });
-
-      if (error) {
-        console.error(error);
-        alert("บันทึกไม่สำเร็จ: " + error.message);
-        btn.disabled = false;
-        btn.textContent = "✔ บันทึกว่าให้อาหารครบแล้ววันนี้";
-        return;
-      }
-
-      btn.textContent = "บันทึกเรียบร้อยแล้ว ✔";
-      await loadTodayFeedingLog();
-    }
-
-    // สำหรับปุ่มออกจากระบบใน bottom nav
-    async function logout() {
-      await supabase.auth.signOut();
-      window.location.href = "login.html";
-    }
-
-    window.logout = logout; // ให้เรียกจาก onclick ได้
-  </script>
 </head>
 <body>
-  <div class="app-shell">
-    <header>
+  <div class="card">
+    <div class="header-row">
       <div class="title-block">
-        <h1><span class="icon">🧵</span>อารักขารังไหมเลี้ยงอัจฉริยะ</h1>
-        <div class="subtitle">Dashboard การให้อาหารหนอนไหม 5 วัย</div>
+        <h1>แดชบอร์ดเกษตรกรเลี้ยงไหม</h1>
+        <p>ระบบอารักขารังไหมเลี้ยงอัจฉริยะ</p>
       </div>
-      <div class="today-text" id="todayText">วันนี้: -</div>
-    </header>
+      <button id="logout-btn" class="logout-btn">ออกจากระบบ</button>
+    </div>
 
-    <main>
-      <!-- การ์ดสถานะรุ่นเลี้ยง -->
-      <section class="card">
-        <div class="card-header">
-          <div class="card-header-icon">📦</div>
-          <div class="card-header-title">สถานะรุ่นการเลี้ยงปัจจุบัน</div>
-        </div>
-        <div id="batchStatus" class="card-subtitle">
-          กำลังโหลดข้อมูลรุ่นการเลี้ยง...
-        </div>
-        <div id="batchMetrics"></div>
-        <div class="small-note">
-          * ระบบจำกัดให้เกษตรกรเลี้ยงทีละ 1 รุ่นต่อโรงเลี้ยง เพื่อป้องกันโรคและให้มีช่วงพักทำความสะอาด
-        </div>
-      </section>
+    <div class="info-box">
+      <div class="info-row">
+        <span class="info-label">ชื่อเกษตรกร: </span>
+        <span class="info-value" id="farmer-name">กำลังโหลด...</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">ชื่อฟาร์ม/กลุ่ม: </span>
+        <span class="info-value" id="farm-name">กำลังโหลด...</span>
+      </div>
+    </div>
 
-      <!-- การ์ดแผนให้อาหารวันนี้ -->
-      <section class="card">
-        <div class="card-header">
-          <div class="card-header-icon">🍃</div>
-          <div class="card-header-title">แผนให้อาหารหนอนไหมสำหรับวันนี้</div>
-        </div>
-        <div id="feedingStatus" class="card-subtitle">
-          กำลังคำนวณแผนให้อาหารตามวันเลี้ยงและวัยไหม...
-        </div>
-
-        <button class="btn-outline" id="btnGoFeedingPlan">
-          📋 ดูแผนให้อาหาร 27 วัน (ละเอียด)
-        </button>
-        <button class="btn-outline secondary" id="btnGoLeafRecom">
-          🌿 คำนวณปริมาณใบหม่อนที่ต้องเตรียม
-        </button>
-
-        <div class="small-note">
-          * ปริมาณใบหม่อนควรปรับตามจำนวนแผ่นไข่และประสบการณ์จริงของเกษตรกร
-        </div>
-      </section>
-
-      <!-- การ์ดบันทึกการให้อาหาร -->
-      <section class="card">
-        <div class="card-header">
-          <div class="card-header-icon">✅</div>
-          <div class="card-header-title">บันทึกการให้อาหารวันนี้</div>
-        </div>
-        <div id="feedingLogSummary" class="card-subtitle">
-          กำลังตรวจสอบว่ามีการบันทึกวันนี้แล้วหรือยัง...
-        </div>
-
-        <button class="btn-main" id="btnLogFeeding" disabled>
-          ✔ บันทึกว่าให้อาหารครบแล้ววันนี้
-        </button>
-
-        <div class="small-note">
-          * ปุ่มนี้ใช้บันทึกแบบสรุปว่า “ให้อาหารครบตามแผนแล้ว”<br>
-          ในอนาคตสามารถเพิ่มการกรอกปริมาณใบหม่อนและอุณหภูมิ/ความชื้นได้
-        </div>
-      </section>
-    </main>
-
-    <!-- Bottom navigation -->
-    <footer>
-      <nav class="bottom-nav">
-        <div class="nav-item active">
-          <span class="icon">🏠</span>
-          หน้าหลัก
-        </div>
-        <div class="nav-item" onclick="window.location.href='stats.html'">
-          <span class="icon">📊</span>
-          สถิติ
-        </div>
-        <div class="nav-item" onclick="window.location.href='settings.html'">
-          <span class="icon">⚙️</span>
-          ตั้งค่า
-        </div>
-        <div class="nav-item" onclick="logout()">
-          <span class="icon">🚪</span>
-          ออกจากระบบ
-        </div>
-      </nav>
-    </footer>
+    <p class="note">
+      * ภายหลังเราจะเพิ่มปุ่มสำหรับบันทึกการให้อาหารไหม, การทำความสะอาด, ดูสถิติผลผลิต, ฟังเสียงแนะนำแต่ละวัย ฯลฯ ในหน้านี้
+    </p>
   </div>
+
+  <!-- ต้องตรวจสอบว่า login แล้วหรือยัง + ดึงโปรไฟล์มาแสดง -->
+  <script type="module" src="./auth-guard.js"></script>
+  <!-- ปุ่มออกจากระบบ -->
+  <script type="module" src="./logout.js"></script>
 </body>
 </html>
