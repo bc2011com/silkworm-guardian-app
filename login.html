@@ -2,245 +2,205 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <title>เข้าสู่ระบบ – อารักขารังไหมเลี้ยงอัจฉริยะ</title>
+  <title>เข้าสู่ระบบอารักขารังไหมเลี้ยงอัจฉริยะ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: "Sarabun", system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", sans-serif;
+      font-family: "Sarabun", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     body {
       min-height: 100vh;
-      background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);
+      background: #e8f5e8;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
     .card {
-      width: 100%;
-      max-width: 520px;
       background: #ffffff;
+      padding: 32px 28px 28px;
       border-radius: 24px;
-      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
-      padding: 40px 40px 32px;
-      text-align: center;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+      max-width: 420px;
+      width: 100%;
     }
 
-    .avatar {
-      width: 96px;
-      height: 96px;
+    .icon-circle {
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
-      background: #e3f2fd;
+      background: #e8f5f5;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 16px;
-      font-size: 54px;
+      margin: 0 auto 12px;
+      font-size: 40px;
     }
 
     h1 {
-      font-size: 24px;
+      font-size: 22px;
+      text-align: center;
       color: #1b5e20;
       margin-bottom: 4px;
     }
 
     .subtitle {
+      text-align: center;
       font-size: 14px;
-      color: #558b2f;
-      margin-bottom: 28px;
+      color: #555;
+      margin-bottom: 20px;
     }
 
     .form-group {
-      text-align: left;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     label {
-      font-size: 14px;
-      color: #33691e;
       display: block;
-      margin-bottom: 6px;
+      font-size: 14px;
+      color: #2e7d32;
+      margin-bottom: 4px;
     }
 
     input[type="text"],
     input[type="password"] {
       width: 100%;
-      padding: 12px 14px;
-      border-radius: 10px;
-      border: 1px solid #c8e6c9;
-      background: #f9fff9;
+      padding: 10px 12px;
       font-size: 15px;
+      border-radius: 12px;
+      border: 1px solid #cfd8dc;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-    input[type="text"]:focus,
-    input[type="password"]:focus {
+    input:focus {
       border-color: #43a047;
-      box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.18);
-      background: #ffffff;
+      box-shadow: 0 0 0 2px rgba(67,160,71,0.18);
     }
 
-    .password-wrapper {
+    .password-row {
       position: relative;
     }
 
-    .toggle-password {
+    .toggle-eye {
       position: absolute;
       right: 12px;
       top: 50%;
       transform: translateY(-50%);
-      border: none;
-      background: none;
       cursor: pointer;
       font-size: 18px;
       opacity: 0.6;
     }
 
-    .toggle-password:hover {
-      opacity: 1;
-    }
-
-    .btn-primary {
+    .btn {
       width: 100%;
       border: none;
+      padding: 12px;
       border-radius: 999px;
       background: #2e7d32;
-      color: #ffffff;
-      padding: 14px;
+      color: #fff;
       font-size: 16px;
-      font-weight: 600;
       cursor: pointer;
-      margin-top: 16px;
-      transition: background 0.2s, transform 0.1s, box-shadow 0.1s;
-      box-shadow: 0 8px 18px rgba(46, 125, 50, 0.28);
+      margin-top: 8px;
+      transition: background 0.2s, transform 0.05s;
     }
 
-    .btn-primary:hover {
+    .btn:hover {
       background: #1b5e20;
-      transform: translateY(-1px);
-      box-shadow: 0 10px 22px rgba(27, 94, 32, 0.32);
     }
 
-    .btn-primary:active {
-      transform: translateY(0);
-      box-shadow: 0 5px 12px rgba(27, 94, 32, 0.24);
+    .btn:active {
+      transform: scale(0.98);
     }
 
-    .error-text {
-      margin-top: 12px;
-      font-size: 14px;
-      color: #c62828;
-    }
-
-    .footer-note {
-      margin-top: 18px;
-      font-size: 12px;
-      color: #616161;
+    .hint {
+      margin-top: 10px;
+      font-size: 11px;
+      color: #666;
       line-height: 1.5;
     }
 
-    .footer-note strong {
-      color: #2e7d32;
-    }
-
-    .register-link {
-      margin-top: 18px;
+    .link-row {
+      text-align: center;
       font-size: 14px;
+      margin-top: 16px;
+      color: #333;
     }
 
-    .register-link a {
+    .link-row a {
       color: #1e88e5;
       text-decoration: none;
       font-weight: 600;
     }
 
-    .register-link a:hover {
+    .link-row a:hover {
       text-decoration: underline;
     }
 
-    @media (max-width: 600px) {
-      .card {
-        margin: 16px;
-        padding: 28px 20px 20px;
-        border-radius: 20px;
-      }
+    .error-text {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #c62828;
+      text-align: center;
     }
   </style>
 </head>
 <body>
   <div class="card">
-    <div class="avatar">😺</div>
+    <div class="icon-circle">😺</div>
     <h1>อารักขารังไหมเลี้ยงอัจฉริยะ</h1>
-    <div class="subtitle">สำหรับเกษตรกรผู้เลี้ยงไหม 5 วัย</div>
+    <p class="subtitle">สำหรับเกษตรกรผู้เลี้ยงไหม 5 วัย</p>
 
     <form id="login-form">
       <div class="form-group">
         <label for="username">ชื่อผู้ใช้</label>
-        <input
-          id="username"
-          type="text"
-          placeholder="เช่น farmer01"
-          autocomplete="username"
-        />
+        <input type="text" id="username" placeholder="เช่น farmer01" required />
       </div>
 
-      <div class="form-group">
+      <div class="form-group password-row">
         <label for="password">รหัสผ่าน</label>
-        <div class="password-wrapper">
-          <input
-            id="password"
-            type="password"
-            placeholder="กรอกรหัสผ่าน"
-            autocomplete="current-password"
-          />
-          <button type="button" class="toggle-password" id="toggle-password">
-            👁
-          </button>
-        </div>
+        <input type="password" id="password" placeholder="กรอกรหัสผ่าน" required />
+        <span id="toggle-password" class="toggle-eye">👁️</span>
       </div>
 
-      <button type="submit" class="btn-primary">เข้าสู่ระบบ</button>
-      <p class="error-text" id="error-text"></p>
+      <button type="submit" class="btn" id="login-btn">เข้าสู่ระบบ</button>
+
+      <div class="error-text" id="error-text"></div>
+
+      <p class="link-row">
+        ยังไม่มีบัญชีผู้ใช้? <a href="register.html">สมัครสมาชิก</a>
+      </p>
+
+      <p class="hint">
+        * แนะนำให้เกษตรกรบันทึกทั้ง “ชื่อผู้ใช้” และ “รหัสผ่าน” ลงในสมุด หรือบันทึกในโทรศัพท์ของตนเอง<br />
+        * หากลืมรหัสผ่าน กรุณาติดต่อผู้ดูแลระบบ
+      </p>
     </form>
-
-    <div class="register-link">
-      ยังไม่มีบัญชีผู้ใช้? <a href="register.html">สมัครสมาชิก</a>
-    </div>
-
-    <div class="footer-note">
-      * แนะนำให้เกษตรกรบันทึก <strong>"ชื่อผู้ใช้"</strong> และ
-      <strong>"รหัสผ่าน"</strong> ลงในสมุด หรือบันทึกในโทรศัพท์เพื่อป้องกันลืม<br />
-      * หากลืมรหัสผ่าน กรุณาติดต่อผู้ดูแลระบบ
-    </div>
   </div>
 
-  <!-- สคริปต์ Supabase + ล็อกอินด้วย username -->
   <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-    // TODO: แก้ค่าตรงนี้ให้เป็นของโปรเจกต์จริงของอาจารย์
-    const SUPABASE_URL = "https://dpgnqrxanxyxhibkfspx.supabase.co";        // <- URL จริง
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwZ25xcnhhbnh5eGhpYmtmc3B4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMwMjU5NjksImV4cCI6MjA3ODYwMTk2OX0.CTWYu4ZxS_gW6G4r0zGNNj6gVkNE6jSWmcGoXc6GaxI";       // <- ANON KEY จริง
-
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    import { supabase } from "./supabase.js";
 
     const form = document.getElementById("login-form");
     const usernameInput = document.getElementById("username");
     const passwordInput = document.getElementById("password");
-    const errorText = document.getElementById("error-text");
     const togglePasswordBtn = document.getElementById("toggle-password");
+    const errorText = document.getElementById("error-text");
+    const loginBtn = document.getElementById("login-btn");
+
+    function setLoading(isLoading) {
+      loginBtn.disabled = isLoading;
+      loginBtn.textContent = isLoading ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ";
+    }
 
     // ปุ่มโชว์/ซ่อนรหัสผ่าน
     togglePasswordBtn.addEventListener("click", () => {
-      const isPassword = passwordInput.type === "password";
-      passwordInput.type = isPassword ? "text" : "password";
-      togglePasswordBtn.textContent = isPassword ? "🙈" : "👁";
+      const type = passwordInput.type === "password" ? "text" : "password";
+      passwordInput.type = type;
     });
 
     form.addEventListener("submit", async (e) => {
@@ -251,41 +211,56 @@
       const password = passwordInput.value;
 
       if (!username || !password) {
-        errorText.textContent = "กรุณากรอกชื่อผู้ใช้และรหัสผ่านให้ครบถ้วน";
+        errorText.textContent = "กรุณากรอกชื่อผู้ใช้และรหัสผ่าน";
         return;
       }
 
+      setLoading(true);
+
       try {
-        // 1) ดึง email จากตาราง profiles ด้วย username
+        // 1) หา email จากตาราง profiles ตาม username
         const { data: profile, error: profileError } = await supabase
           .from("profiles")
           .select("email")
           .eq("username", username)
-          .single();
+          .maybeSingle();
 
-        if (profileError || !profile || !profile.email) {
-          errorText.textContent = "ชื่อผู้ใช้ไม่ถูกต้องหรือไม่มีอยู่ในระบบ";
+        if (profileError) {
+          console.error(profileError);
+          errorText.textContent = "ไม่สามารถตรวจสอบข้อมูลผู้ใช้ได้";
+          setLoading(false);
           return;
         }
 
-        // 2) ล็อกอินผ่าน Supabase Auth (email + password)
-        const { data, error: loginError } = await supabase.auth.signInWithPassword({
-          email: profile.email,
-          password,
+        if (!profile || !profile.email) {
+          errorText.textContent = "ชื่อผู้ใช้ไม่ถูกต้องหรือไม่มีอยู่ในระบบ";
+          setLoading(false);
+          return;
+        }
+
+        const email = profile.email;
+
+        // 2) ใช้ email + password ไป login ที่ Supabase Auth
+        const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password
         });
 
-        if (loginError) {
-          console.error(loginError);
-          errorText.textContent = "รหัสผ่านไม่ถูกต้อง";
+        if (signInError) {
+          console.error(signInError);
+          // ตรงนี้จะรวมกรณีรหัสผ่านผิดด้วย
+          errorText.textContent = "รหัสผ่านไม่ถูกต้อง หรือบัญชีนี้ยังไม่พร้อมใช้งาน";
+          setLoading(false);
           return;
         }
 
-        // 3) ล็อกอินสำเร็จ → ไปหน้า Dashboard หลัก
+        // สำเร็จ → ไปหน้า dashboard
         window.location.href = "dashboard.html";
       } catch (err) {
         console.error(err);
-        errorText.textContent =
-          "เกิดข้อผิดพลาดในการเชื่อมต่อระบบ กรุณาลองใหม่อีกครั้ง";
+        errorText.textContent = "เกิดข้อผิดพลาดที่ไม่คาดคิด กรุณาลองใหม่อีกครั้ง";
+      } finally {
+        setLoading(false);
       }
     });
   </script>
