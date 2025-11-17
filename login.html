@@ -1,186 +1,58 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>เข้าสู่ระบบ - อารักขารังไหมเลี้ยงอัจฉริยะ</title>
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-  <style>
-    body {
-      font-family: "Sarabun", sans-serif;
-      background: #e8f5e9;
-      margin: 0;
-      padding: 0;
+  // 1) ตั้งค่า Supabase ของคุณ
+  const SUPABASE_URL = "https://dpgnqrxanxyxhibkfspx.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwZ25xcnhhbnh5eGhpYmtmc3B4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMwMjU5NjksImV4cCI6MjA3ODYwMTk2OX0.CTWYu4ZxS_gW6G4r0zGNNj6gVkNE6jSWmcGoXc6GaxI";
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const form = document.getElementById("login-form");
+  const usernameInput = document.getElementById("username");
+  const passwordInput = document.getElementById("password");
+  const errorText = document.getElementById("error-text");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorText.textContent = "";
+
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!username || !password) {
+      errorText.textContent = "กรุณากรอกชื่อผู้ใช้และรหัสผ่านให้ครบถ้วน";
+      return;
     }
 
-    .container {
-      max-width: 420px;
-      margin: 60px auto;
-      background: #ffffff;
-      border-radius: 20px;
-      padding: 30px 25px;
-      text-align: center;
-      box-shadow: 0px 8px 20px rgba(0,0,0,0.15);
-    }
+    try {
+      // 2) หา email จากตาราง profiles ด้วย username
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("email")
+        .eq("username", username)
+        .single();
 
-    .icon-area img {
-      width: 80px;
-      height: 80px;
-    }
+      if (profileError || !profile || !profile.email) {
+        errorText.textContent = "ชื่อผู้ใช้ไม่ถูกต้องหรือไม่มีอยู่ในระบบ";
+        return;
+      }
 
-    h2 {
-      margin: 10px 0 5px;
-      color: #1b5e20;
-      font-weight: 700;
-    }
-
-    p.sub {
-      color: #388e3c;
-      font-size: 14px;
-      margin-bottom: 25px;
-    }
-
-    input {
-      width: 90%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 10px;
-      border: 1px solid #c8e6c9;
-      font-size: 15px;
-    }
-
-    button {
-      width: 95%;
-      padding: 14px;
-      margin-top: 20px;
-      background: #2e7d32;
-      color: #ffffff;
-      font-size: 17px;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    button:hover {
-      background: #1b5e20;
-    }
-
-    .note {
-      font-size: 12px;
-      color: #777;
-      margin-top: 12px;
-    }
-
-    .error {
-      margin-top: 15px;
-      color: #d32f2f;
-      font-size: 14px;
-    }
-  </style>
-
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-    // TODO: แก้ค่าตรงนี้ให้เป็นของโปรเจกต์คุณ
-    const SUPABASE_URL = "https://dpgnqrxanxyxhibkfspx.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwZ25xcnhhbnh5eGhpYmtmc3B4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMwMjU5NjksImV4cCI6MjA3ODYwMTk2OX0.CTWYu4ZxS_gW6G4r0zGNNj6gVkNE6jSWmcGoXc6GaxI";
-
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const form = document.getElementById("loginForm");
-
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const username = document.getElementById("username").value.trim();
-        const password = document.getElementById("password").value.trim();
-        const errorBox = document.getElementById("errorBox");
-
-        errorBox.textContent = "";
-
-        if (!username || !password) {
-          errorBox.textContent = "กรุณากรอกชื่อผู้ใช้และรหัสผ่านให้ครบถ้วน";
-          return;
-        }
-
-        // -----------------------------
-        // 1) หา user email จาก profiles ก่อน
-        // (เพราะคุณใช้ username ไม่ใช่อีเมล)
-        // -----------------------------
-        const { data: profileData, error: profileErr } = await supabase
-          .from("profiles")
-          .select("user_id")
-          .eq("username", username)
-          .maybeSingle();
-
-        if (profileErr || !profileData) {
-          errorBox.textContent = "ชื่อผู้ใช้ไม่ถูกต้องหรือไม่มีอยู่ในระบบ";
-          return;
-        }
-
-        const userId = profileData.user_id;
-
-        // -----------------------------
-        // 2) ดึง auth.users ผ่าน RPC (จำเป็น เพราะ Supabase V2 ไม่ให้ query ตรง)
-        // -----------------------------
-        const { data: userEmailData, error: userEmailErr } = await supabase.rpc(
-          "get_user_email",
-          { uid: userId }
-        );
-
-        if (userEmailErr || !userEmailData) {
-          errorBox.textContent = "ไม่พบอีเมลของผู้ใช้ในระบบ";
-          return;
-        }
-
-        const email = userEmailData;
-
-        // -----------------------------
-        // 3) ทำการ sign in ด้วย email + password
-        // -----------------------------
-        const { error: loginErr } = await supabase.auth.signInWithPassword({
-          email: email,
-          password: password,
-        });
-
-        if (loginErr) {
-          errorBox.textContent = "รหัสผ่านไม่ถูกต้อง";
-          return;
-        }
-
-        // -----------------------------
-        // 4) สำเร็จ → ไปหน้า dashboard.html
-        // -----------------------------
-        window.location.href = "dashboard.html";
+      // 3) ล็อกอินด้วย email + password ผ่าน Supabase Auth
+      const { data, error: loginError } = await supabase.auth.signInWithPassword({
+        email: profile.email,
+        password,
       });
-    });
-  </script>
-</head>
-<body>
 
-  <div class="container">
-    <div class="icon-area">
-      <img src="https://cdn-icons-png.flaticon.com/512/189/189001.png" />
-    </div>
+      if (loginError) {
+        console.error(loginError);
+        errorText.textContent = "รหัสผ่านไม่ถูกต้อง";
+        return;
+      }
 
-    <h2>อารักขารังไหมเลี้ยงอัจฉริยะ</h2>
-    <p class="sub">สำหรับเกษตรกรผู้เลี้ยงไหม 5 วัย</p>
-
-    <form id="loginForm">
-      <input id="username" type="text" placeholder="ชื่อผู้ใช้" required />
-      <input id="password" type="password" placeholder="รหัสผ่าน" required />
-      <button type="submit">เข้าสู่ระบบ</button>
-    </form>
-
-    <div class="error" id="errorBox"></div>
-
-    <div class="note">
-      * แนะนำให้เกษตรกรบันทึก "ชื่อผู้ใช้" และ "รหัสผ่าน" ลงในสมุด หรือบนกระดาษใกล้โรงเลี้ยง<br>
-      * หากลืมรหัสผ่าน กรุณาติดต่อผู้ดูแลระบบ
-    </div>
-  </div>
-
-</body>
-</html>
+      // 4) ล็อกอินสำเร็จ → ไปหน้า Dashboard
+      window.location.href = "dashboard.html";
+    } catch (err) {
+      console.error(err);
+      errorText.textContent = "เกิดข้อผิดพลาดในการเชื่อมต่อระบบ กรุณาลองใหม่อีกครั้ง";
+    }
+  });
+</script>
