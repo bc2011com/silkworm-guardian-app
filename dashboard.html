@@ -2,123 +2,85 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <title>แดชบอร์ดเกษตรกรเลี้ยงไหม</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: "Sarabun", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
+  <title>แดชบอร์ดเกษตรกรเลี้ยงไหม</title>
 
-    body {
-      min-height: 100vh;
-      background: #e8f5e8;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-
-    .card {
-      background: #ffffff;
-      border-radius: 24px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.06);
-      max-width: 600px;
-      width: 100%;
-      padding: 24px 24px 20px;
-    }
-
-    .header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 18px;
-    }
-
-    .title-block h1 {
-      font-size: 20px;
-      color: #1b5e20;
-      margin-bottom: 4px;
-    }
-
-    .title-block p {
-      font-size: 14px;
-      color: #555;
-    }
-
-    .logout-btn {
-      border: none;
-      padding: 8px 14px;
-      border-radius: 999px;
-      background: #ef5350;
-      color: #fff;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    .logout-btn:hover {
-      background: #d32f2f;
-    }
-
-    .info-box {
-      background: #f1f8e9;
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 12px;
-    }
-
-    .info-row {
-      font-size: 15px;
-      margin-bottom: 6px;
-    }
-
-    .info-label {
-      color: #555;
-    }
-
-    .info-value {
-      font-weight: 600;
-      color: #1b5e20;
-    }
-
-    .note {
-      font-size: 13px;
-      color: #777;
-      margin-top: 8px;
-    }
-  </style>
+  <!-- ใส่ <style> หรือ <link rel="stylesheet" ...> ของ Dashboard เดิมได้ตามปกติ -->
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="card">
-    <div class="header-row">
-      <div class="title-block">
-        <h1>แดชบอร์ดเกษตรกรเลี้ยงไหม</h1>
-        <p>ระบบอารักขารังไหมเลี้ยงอัจฉริยะ</p>
+
+  <!-- แถบบนแสดงชื่อเกษตรกร / ฟาร์ม + ปุ่มออกจากระบบ (จะใช้ต่อได้เลย) -->
+  <section class="dashboard-header">
+    <div class="dashboard-card">
+      <h2>แดชบอร์ดเกษตรกรเลี้ยงไหม</h2>
+      <p>ระบบอารักขารังไหมเลี้ยงอัจฉริยะ</p>
+
+      <div class="farmer-info-box">
+        <p>ชื่อเกษตรกร: <span id="farmer-name">กำลังโหลด...</span></p>
+        <p>ชื่อฟาร์ม/กลุ่ม: <span id="farm-name">กำลังโหลด...</span></p>
       </div>
+
       <button id="logout-btn" class="logout-btn">ออกจากระบบ</button>
     </div>
+  </section>
 
-    <div class="info-box">
-      <div class="info-row">
-        <span class="info-label">ชื่อเกษตรกร: </span>
-        <span class="info-value" id="farmer-name">กำลังโหลด...</span>
-      </div>
-      <div class="info-row">
-        <span class="info-label">ชื่อฟาร์ม/กลุ่ม: </span>
-        <span class="info-value" id="farm-name">กำลังโหลด...</span>
-      </div>
-    </div>
+  <!-- ==========================
+       วาง HTML Dashboard เดิมตรงนี้
+       (เวอร์ชันที่เคยสวย ๆ บอกว่าวันที่เท่าไหร่ วัยที่เท่าไหร่ ฯลฯ)
+       ========================== -->
+  <!-- ตัวอย่าง: 
+  <main class="main-dashboard">
+    ... โค้ดเดิมของหน้า dashboard เก่า ...
+  </main>
+  -->
 
-    <p class="note">
-      * ภายหลังเราจะเพิ่มปุ่มสำหรับบันทึกการให้อาหารไหม, การทำความสะอาด, ดูสถิติผลผลิต, ฟังเสียงแนะนำแต่ละวัย ฯลฯ ในหน้านี้
-    </p>
-  </div>
+  <!-- สคริปต์เชื่อม Supabase + Auth Guard -->
+  <script type="module">
+    import { supabase } from "./supabase.js";
+    import { requireAuth } from "./auth-guard.js";
 
-  <!-- ต้องตรวจสอบว่า login แล้วหรือยัง + ดึงโปรไฟล์มาแสดง -->
-  <script type="module" src="./auth-guard.js"></script>
-  <!-- ปุ่มออกจากระบบ -->
-  <script type="module" src="./logout.js"></script>
+    // 1) บังคับให้ต้องล็อกอินก่อน
+    const { user } = await requireAuth();
+
+    // 2) ดึงโปรไฟล์จากตาราง profiles
+    const { data: profile, error } = await supabase
+      .from("profiles")
+      .select("full_name, farm_name")
+      .eq("user_id", user.id)
+      .single();
+
+    const farmerNameEl = document.getElementById("farmer-name");
+    const farmNameEl = document.getElementById("farm-name");
+
+    if (error) {
+      console.error("โหลดโปรไฟล์ไม่ได้", error);
+      farmerNameEl.textContent = "ไม่พบข้อมูล";
+      farmNameEl.textContent = "-";
+    } else if (profile) {
+      farmerNameEl.textContent = profile.full_name || "-";
+      farmNameEl.textContent = profile.farm_name || "-";
+    }
+
+    // 3) ปุ่มออกจากระบบ
+    const logoutBtn = document.getElementById("logout-btn");
+    logoutBtn.addEventListener("click", async () => {
+      await supabase.auth.signOut();
+      window.location.href = "login.html";
+    });
+
+    // 4) ถ้าใน Dashboard เดิมมีโค้ด JS คำนวณวัยไหม / ดึงข้อมูล batch ฯลฯ
+    //    ให้นำโค้ดเดิมมาวางข้างล่างนี้ แล้วเปลี่ยนให้ filter ด้วย user.id ถ้าจำเป็น เช่น:
+    //
+    // const { data: activeBatch } = await supabase
+    //   .from("silkworm_batches")
+    //   .select("*")
+    //   .eq("user_id", user.id)
+    //   .eq("is_active", true)
+    //   .single();
+    //
+    // แล้วใช้ activeBatch ไปแสดงว่า
+    // วันนี้เลี้ยงไหม "วัยที่ X" "วันที่เลี้ยงที่ Y" ฯลฯ
+  </script>
 </body>
 </html>
