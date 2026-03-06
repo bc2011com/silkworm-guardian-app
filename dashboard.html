@@ -207,60 +207,59 @@
         <p>สถานะ: <span class="value" id="batch-status">กรุณาเพิ่มข้อมูลรอบเลี้ยงไหม</span></p>
       </section>
 
-      <a href="start_batch.html" class="card-button green">
+    <div class="menu-card full-width" onclick="goPage('start_batch.html')">
       <div class="icon-circle">🌱</div>
-      <h3>เริ่มรอบการเลี้ยงใหม่</h3>
-      <p>กำหนดวันเริ่มและจำนวนแผ่นไข่ไหม</p>
-      </a>
+      <div class="menu-title">เริ่มรอบการเลี้ยงใหม่</div>
+      <div class="menu-subtitle">กำหนดวันเริ่มเลี้ยงจำนวนแผ่นไข่ไหม</div>
+    </div>
       
-      <section class="cards-grid">
-        <a href="#" class="card-button blue">
-          <div class="icon-circle">📷</div>
-          <h3>ถ่ายภาพ</h3>
-          <p>บันทึกภาพหนอนไหม / โรงเลี้ยง</p>
-        </a>
+      <div class="menu-card active" onclick="goPage('camera.html')">
+      <div class="icon-circle">📷</div>
+      <div class="menu-title">ถ่ายภาพ</div>
+      <div class="menu-subtitle">บันทึกภาพหนอนไหม / โรงเลี้ยง</div>
+    </div>
 
-        <a href="#" class="card-button green">
-          <div class="icon-circle">📞</div>
-          <h3>โทรคุยกับไหมคำ</h3>
-          <p>ถามตอบปัญหาการเลี้ยงไหม</p>
-        </a>
+ <div class="menu-card" onclick="goPage('maikham_chat.html')">
+  <div class="icon-circle">📞</div>
+  <div class="menu-title">โทรคุยกับไหมคำ</div>
+  <div class="menu-subtitle">ถามตอบปัญหาการเลี้ยงไหม</div>
+</div>
 
-        <a href="feeding_plan.html" class="card-button orange">
-          <div class="icon-circle">🍽️</div>
-          <h3>การให้อาหาร</h3>
-          <p>ดูแผนให้อาหารไหม 27 วัน</p>
-        </a>
+<div class="menu-card feed-card" onclick="goPage('feeding.html')">
+  <div class="icon-circle">🍽️</div>
+  <div class="menu-title">การให้อาหาร</div>
+  <div class="menu-subtitle">ดูแผนให้อาหารไหม 27 วัน</div>
+</div>
 
-        <a href="#" class="card-button">
-          <div class="icon-circle">🌡️</div>
-          <h3>อุณหภูมิ–ความชื้น</h3>
-          <p>คำแนะนำสภาพโรงเลี้ยงที่เหมาะสม</p>
-        </a>
+<div class="menu-card" onclick="goPage('environment.html')">
+  <div class="icon-circle">🌡️</div>
+  <div class="menu-title">อุณหภูมิ-ความชื้น</div>
+  <div class="menu-subtitle">คำแนะนำสภาพโรงเลี้ยงที่เหมาะสม</div>
+</div>
 
-        <a href="#" class="card-button">
-          <div class="icon-circle">🧹</div>
-          <h3>ทำความสะอาด</h3>
-          <p>บันทึกการทำความสะอาดโรงเลี้ยง</p>
-        </a>
+<div class="menu-card" onclick="goPage('cleaning.html')">
+  <div class="icon-circle">🧹</div>
+  <div class="menu-title">ทำความสะอาด</div>
+  <div class="menu-subtitle">บันทึกการทำความสะอาดโรงเลี้ยง</div>
+</div>
 
-        <a href="#" class="card-button red">
-          <div class="icon-circle">🦠</div>
-          <h3>เฝ้าระวังโรคไหม</h3>
-          <p>สังเกตอาการ / บันทึกโรคและศัตรูไหม</p>
-        </a>
+<div class="menu-card disease-card" onclick="goPage('disease.html')">
+  <div class="icon-circle">🦠</div>
+  <div class="menu-title">เฝ้าระวังโรคไหม</div>
+  <div class="menu-subtitle">สังเกตอาการ / บันทึกโรคและศัตรูไหม</div>
+</div>
 
-        <a href="#" class="card-button">
-          <div class="icon-circle">📊</div>
-          <h3>บันทึกข้อมูล</h3>
-          <p>จดบันทึกข้อมูลอาหาร / ทำความสะอาด</p>
-        </a>
+<div class="menu-card" onclick="goPage('logs.html')">
+  <div class="icon-circle">📊</div>
+  <div class="menu-title">บันทึกข้อมูล</div>
+  <div class="menu-subtitle">จดบันทึกข้อมูลอาหาร / ทำความสะอาด</div>
+</div>
 
-        <a href="mulberry_recommendation.html" class="card-button green">
-          <div class="icon-circle">🌿</div>
-          <h3>คำแนะนำใบหม่อน</h3>
-          <p>คำนวณปริมาณใบหม่อนที่ควรเตรียม</p>
-        </a>
+<div class="menu-card" onclick="goPage('leaf_recommend.html')">
+  <div class="icon-circle">🌿</div>
+  <div class="menu-title">คำแนะนำใบหม่อน</div>
+  <div class="menu-subtitle">คำนวณปริมาณใบหม่อนที่ควรเตรียม</div>
+</div>
       </section>
 
       <section class="voice-box">
@@ -418,6 +417,15 @@
   }
 
   loadDashboard();
+</script>
+  <script>
+  function goPage(page) {
+    window.location.href = page;
+  }
+
+  function showMessage(title) {
+    alert(title + " : หน้านี้กำลังพัฒนาต่อ");
+  }
 </script>
 </body>
 </html>
