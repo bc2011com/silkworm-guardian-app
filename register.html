@@ -198,7 +198,6 @@
     const fullNameInput = document.getElementById("full_name");
     const farmNameInput = document.getElementById("farm_name");
     const usernameInput = document.getElementById("username");
-    const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
     const confirmPasswordInput = document.getElementById("confirm_password");
 
@@ -219,11 +218,10 @@
       const full_name = fullNameInput.value.trim();
       const farm_name = farmNameInput.value.trim();
       const username = usernameInput.value.trim();
-      const email = emailInput.value.trim();
       const password = passwordInput.value;
       const confirmPassword = confirmPasswordInput.value;
 
-      if (!full_name || !farm_name || !username || !email || !password || !confirmPassword) {
+      if (!full_name || !farm_name || !username || !password || !confirmPassword) {
         errorText.textContent = "กรุณากรอกข้อมูลให้ครบทุกช่อง";
         return;
       }
@@ -241,7 +239,7 @@
       setLoading(true);
 
       try {
-        // 1) สมัครสมาชิกใน Supabase Auth (email + password)
+        // 1) สมัครสมาชิกใน Supabase Auth (password)
         const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
           email,
           password
