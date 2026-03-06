@@ -194,12 +194,42 @@
 
         const user = authData.user;
 
-        // ปิดรอบเดิมทั้งหมดก่อน
-        const { error: deactivateError } = await supabase
-          .from("silkworm_batches")
-          .update({ is_active: false })
-          .eq("user_id", user.id)
-          .eq("is_active", true);
+      // ตรวจว่ามีรอบเดิมที่ยัง active อยู่หรือไม่
+const { data: existingActiveBatch, error: existingBatchError } = await supabase
+  .from("silkworm_batches")
+  .select("id, batch_name")
+  .eq("user_id", user.id)
+  .eq("is_active", true)
+  .maybeSingle();
+
+if (existingBatchError) {
+  console.error(existingBatchError);
+  showMessage("ตรวจสอบรอบการเลี้ยงเดิมไม่สำเร็จ", "error");
+  return;
+}
+
+if (existingActiveBatch) {
+  const ok = confirm(
+    `ขณะนี้มีรอบการเลี้ยงที่กำลังใช้งานอยู่ (${existingActiveBatch.batch_name})\nต้องการปิดรอบเดิมและเริ่มรอบใหม่หรือไม่?`
+  );
+
+  if (!ok) {
+    showMessage("ยกเลิกการเริ่มรอบใหม่", "error");
+    return;
+  }
+
+  const { error: deactivateError } = await supabase
+    .from("silkworm_batches")
+    .update({ is_active: false })
+    .eq("user_id", user.id)
+    .eq("is_active", true);
+
+  if (deactivateError) {
+    console.error(deactivateError);
+    showMessage("ปิดรอบเดิมไม่สำเร็จ", "error");
+    return;
+  }
+}
 
         if (deactivateError) {
           console.error(deactivateError);
@@ -241,4 +271,5 @@
     });
   </script>
 </body>
+
 </html>
