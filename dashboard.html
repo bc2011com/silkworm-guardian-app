@@ -370,6 +370,21 @@
     }
 
     loadDashboard();
+
+    if (logoutBtn) {
+  logoutBtn.addEventListener("click", async () => {
+
+    const confirmLogout = confirm("ต้องการออกจากระบบหรือไม่ ?");
+
+    if (!confirmLogout) return;
+
+    await supabase.auth.signOut();
+
+    window.location.href = "login.html";
+
+  });
+}
+
   </script>
 </body>
 </html>
