@@ -291,122 +291,133 @@
   </div>
 
   <script type="module">
-    import { supabase } from "./supabase.js";
+  import { supabase } from "./supabase.js";
 
-    const todayDateEl = document.getElementById("today-date");
-    const farmerNameEl = document.getElementById("farmerName");
-    const farmNameEl = document.getElementById("farmName");
-    const batchNameEl = document.getElementById("batch-name");
-    const batchStatusEl = document.getElementById("batch-status");
-    const instarTextEl = document.getElementById("current-instar-text");
-    const logoutBtn = document.getElementById("logout-btn");
+  const todayDateEl = document.getElementById("today-date");
+  const farmerNameEl = document.getElementById("farmerName");
+  const farmNameEl = document.getElementById("farmName");
+  const batchNameEl = document.getElementById("batch-name");
+  const batchStatusEl = document.getElementById("batch-status");
+  const instarTextEl = document.getElementById("current-instar-text");
+  const logoutBtn = document.getElementById("logout-btn");
 
-    function showThaiDate() {
-      const today = new Date();
-      const thaiMonths = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
-      todayDateEl.textContent = `วันนี้ ${today.getDate()} ${thaiMonths[today.getMonth()]} ${today.getFullYear() + 543}`;
-    }
+  function showThaiDate() {
+    const today = new Date();
+    const thaiMonths = [
+      "ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.",
+      "ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."
+    ];
+    todayDateEl.textContent =
+      `วันนี้ ${today.getDate()} ${thaiMonths[today.getMonth()]} ${today.getFullYear() + 543}`;
+  }
 
-    async function loadDashboard() {
-      try {
-        showThaiDate();
+  function calculateInstar(day) {
+    if (day <= 3) return 1;
+    if (day <= 6) return 2;
+    if (day <= 9) return 3;
+    if (day <= 13) return 4;
+    return 5;
+  }
 
-        const { data: authData, error: authError } = await supabase.auth.getUser();
-        if (authError || !authData?.user) {
-          window.location.href = "login.html";
-          return;
-        }
+  async function loadDashboard() {
+    try {
+      showThaiDate();
 
-        const user = authData.user;
-
-        const { data: profile, error: profileError } = await supabase
-          .from("profiles")
-          .select("full_name, farm_name, username")
-          .eq("user_id", user.id)
-          .maybeSingle();
-
-        if (profileError) {
-          console.error("โหลดโปรไฟล์ไม่ได้:", profileError);
-          farmerNameEl.textContent = "ไม่พบข้อมูล";
-          farmNameEl.textContent = "-";
-        } else if (profile) {
-          farmerNameEl.textContent = profile.full_name || profile.username || "ไม่ระบุ";
-          farmNameEl.textContent = profile.farm_name || "-";
-        } else {
-          farmerNameEl.textContent = "ไม่พบข้อมูล";
-          farmNameEl.textContent = "-";
-        }
-
-        const { data: activeBatch, error: batchError } = await supabase
-          .from("silkworm_batches")
-          .select("batch_name, current_instar, current_day")
-          .eq("user_id", user.id)
-          .eq("is_active", true)
-          .maybeSingle();
-
-        if (batchError) {
-          console.error("โหลดข้อมูลรอบเลี้ยงไหมไม่ได้:", batchError);
-        }
-
-       if (!activeBatch) {
-
-  batchNameEl.textContent = "ยังไม่ได้เริ่มรอบการเลี้ยง";
-  batchStatusEl.textContent = "กดเริ่มรอบใหม่ในเมนู";
-  instarTextEl.textContent = "ยังไม่มีข้อมูลรอบเลี้ยงไหมในระบบ";
-
-} else {
-
-  const startDate = new Date(activeBatch.start_date);
-  const today = new Date();
-
-  const diffTime = today - startDate;
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
-
-  let instar = 1;
-
-  if (diffDays <= 3) instar = 1;
-  else if (diffDays <= 6) instar = 2;
-  else if (diffDays <= 9) instar = 3;
-  else if (diffDays <= 13) instar = 4;
-  else instar = 5;
-
-  batchNameEl.textContent = activeBatch.batch_name;
-
-  batchStatusEl.textContent =
-    "กำลังเลี้ยงไหมวัยที่ " + instar + " (วันที่ " + diffDays + ")";
-
-  instarTextEl.textContent =
-    "วันนี้เลี้ยงไหมวัยที่ " + instar + " วันที่ " + diffDays + " ของรอบนี้";
-
-}
-
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", async () => {
-        try {
-          await supabase.auth.signOut();
-        } catch (e) {
-          console.error("ออกจากระบบไม่สำเร็จ:", e);
-        }
+      const { data: authData, error: authError } = await supabase.auth.getUser();
+      if (authError || !authData?.user) {
         window.location.href = "login.html";
-      });
+        return;
+      }
+
+      const user = authData.user;
+
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("full_name, farm_name, username")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (profileError) {
+        console.error("โหลดโปรไฟล์ไม่ได้:", profileError);
+        farmerNameEl.textContent = "ไม่พบข้อมูล";
+        farmNameEl.textContent = "-";
+      } else if (profile) {
+        farmerNameEl.textContent = profile.full_name || profile.username || "ไม่ระบุ";
+        farmNameEl.textContent = profile.farm_name || "-";
+      } else {
+        farmerNameEl.textContent = "ไม่พบข้อมูล";
+        farmNameEl.textContent = "-";
+      }
+
+      const { data: activeBatch, error: batchError } = await supabase
+        .from("silkworm_batches")
+        .select("batch_name, current_instar, current_day, start_date, egg_sheets")
+        .eq("user_id", user.id)
+        .eq("is_active", true)
+        .maybeSingle();
+
+      if (batchError) {
+        console.error("โหลดข้อมูลรอบเลี้ยงไหมไม่ได้:", batchError);
+        batchNameEl.textContent = "ยังไม่ได้เริ่มรอบการเลี้ยง";
+        batchStatusEl.textContent = "กรุณาเพิ่มข้อมูลรอบเลี้ยงไหม";
+        instarTextEl.textContent = "ยังไม่มีข้อมูลรอบเลี้ยงไหมในระบบ";
+        return;
+      }
+
+      if (!activeBatch) {
+        batchNameEl.textContent = "ยังไม่ได้เริ่มรอบการเลี้ยง";
+        batchStatusEl.textContent = "กดเริ่มรอบใหม่ในเมนู";
+        instarTextEl.textContent = "ยังไม่มีข้อมูลรอบเลี้ยงไหมในระบบ";
+        return;
+      }
+
+      const startDate = new Date(activeBatch.start_date);
+      const today = new Date();
+
+      startDate.setHours(0, 0, 0, 0);
+      today.setHours(0, 0, 0, 0);
+
+      let diffDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24)) + 1;
+
+      if (diffDays < 1) {
+        batchNameEl.textContent = activeBatch.batch_name;
+        batchStatusEl.textContent = `รอบนี้มีกำหนดเริ่มวันที่ ${activeBatch.start_date}`;
+        instarTextEl.textContent = "รอบการเลี้ยงนี้ยังไม่ถึงวันเริ่ม";
+        return;
+      }
+
+      const instar = calculateInstar(diffDays);
+
+      batchNameEl.textContent = activeBatch.batch_name;
+      batchStatusEl.textContent = `กำลังเลี้ยงไหมวัยที่ ${instar} (วันที่ ${diffDays})`;
+      instarTextEl.textContent = `วันนี้เลี้ยงไหมวัยที่ ${instar} วันที่ ${diffDays} ของรอบนี้`;
+
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดใน dashboard:", error);
+      farmerNameEl.textContent = "ไม่พบข้อมูล";
+      farmNameEl.textContent = "-";
+      batchNameEl.textContent = "โหลดข้อมูลไม่สำเร็จ";
+      batchStatusEl.textContent = "กรุณาลองใหม่อีกครั้ง";
+      instarTextEl.textContent = "เกิดข้อผิดพลาดในการคำนวณข้อมูล";
     }
+  }
 
-    loadDashboard();
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      const confirmLogout = confirm("ต้องการออกจากระบบหรือไม่ ?");
+      if (!confirmLogout) return;
 
-    if (logoutBtn) {
-  logoutBtn.addEventListener("click", async () => {
+      try {
+        await supabase.auth.signOut();
+      } catch (e) {
+        console.error("ออกจากระบบไม่สำเร็จ:", e);
+      }
 
-    const confirmLogout = confirm("ต้องการออกจากระบบหรือไม่ ?");
+      window.location.href = "login.html";
+    });
+  }
 
-    if (!confirmLogout) return;
-
-    await supabase.auth.signOut();
-
-    window.location.href = "login.html";
-
-  });
-}
-
-  </script>
+  loadDashboard();
+</script>
 </body>
 </html>
