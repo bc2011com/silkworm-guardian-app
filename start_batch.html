@@ -193,7 +193,30 @@
         }
 
         const user = authData.user;
+        // ตรวจว่าชื่อรอบซ้ำหรือไม่
+const { data: duplicateBatch, error: duplicateBatchError } = await supabase
+  .from("silkworm_batches")
+  .select("id, batch_name, start_date")
+  .eq("user_id", user.id)
+  .eq("batch_name", batch_name)
+  .maybeSingle();
 
+if (duplicateBatchError) {
+  console.error(duplicateBatchError);
+  showMessage("ตรวจสอบชื่อรอบการเลี้ยงไม่สำเร็จ", "error");
+  return;
+}
+
+if (duplicateBatch) {
+  const okDuplicate = confirm(
+    `มีชื่อรอบการเลี้ยง "${duplicateBatch.batch_name}" อยู่แล้ว\nเริ่มเมื่อ ${duplicateBatch.start_date}\nต้องการใช้ชื่อรอบนี้ซ้ำหรือไม่?`
+  );
+
+  if (!okDuplicate) {
+    showMessage("กรุณาเปลี่ยนชื่อรอบการเลี้ยงใหม่", "error");
+    return;
+  }
+}
       // ตรวจว่ามีรอบเดิมที่ยัง active อยู่หรือไม่
 const { data: existingActiveBatch, error: existingBatchError } = await supabase
   .from("silkworm_batches")
@@ -273,3 +296,4 @@ if (existingActiveBatch) {
 </body>
 
 </html>
+
