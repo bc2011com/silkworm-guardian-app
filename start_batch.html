@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>เริ่มรอบการเลี้ยงใหม่</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Sarabun", system-ui, sans-serif;
+      background: #e8f5e9;
+      color: #1b5e20;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 520px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      padding: 24px 20px 28px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .header .icon {
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      background: #e8f5e9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 38px;
+      margin: 0 auto 10px;
+    }
+    h1 {
+      font-size: 28px;
+      color: #1b5e20;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      color: #558b2f;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #2e7d32;
+    }
+    input {
+      width: 100%;
+      padding: 14px 14px;
+      font-size: 18px;
+      border: 1px solid #c8e6c9;
+      border-radius: 14px;
+      outline: none;
+      background: #fafffa;
+    }
+    input:focus {
+      border-color: #43a047;
+      box-shadow: 0 0 0 3px rgba(67,160,71,0.12);
+    }
+    .hint {
+      margin-top: 4px;
+      font-size: 13px;
+      color: #6d8b63;
+      line-height: 1.5;
+    }
+    .btn {
+      width: 100%;
+      border: none;
+      border-radius: 999px;
+      padding: 16px;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .btn-primary {
+      background: #2e7d32;
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: #1b5e20;
+    }
+    .btn-secondary {
+      background: #eef7ee;
+      color: #2e7d32;
+      margin-top: 10px;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+    }
+    .message {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 14px;
+      min-height: 22px;
+    }
+    .error { color: #c62828; }
+    .success { color: #2e7d32; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="icon">🌱</div>
+      <h1>เริ่มรอบการเลี้ยงใหม่</h1>
+      <p class="subtitle">
+        บันทึกข้อมูลตั้งต้นของรอบการเลี้ยงไหมใหม่<br />
+        ระบบจะตั้งค่า วันเลี้ยง = 1 และ ไหมวัย = 1 อัตโนมัติ
+      </p>
+    </div>
+
+    <form id="start-batch-form">
+      <div class="form-group">
+        <label for="batch_name">ชื่อรอบการเลี้ยง</label>
+        <input type="text" id="batch_name" placeholder="เช่น รุ่นที่ 1/2569" required />
+      </div>
+
+      <div class="form-group">
+        <label for="start_date">วันที่เริ่มเลี้ยง</label>
+        <input type="date" id="start_date" required />
+      </div>
+
+      <div class="form-group">
+        <label for="egg_sheets">จำนวนแผ่นไข่ไหม</label>
+        <input type="number" id="egg_sheets" step="0.5" min="0.5" placeholder="เช่น 1 หรือ 1.5" required />
+        <div class="hint">ตัวอย่าง 0.5, 1, 1.5, 2 แผ่น</div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="save-btn">เริ่มรอบการเลี้ยง</button>
+      <a href="dashboard.html" class="btn btn-secondary">กลับหน้า Dashboard</a>
+
+      <div id="message" class="message"></div>
+    </form>
+  </div>
+
+  <script type="module">
+    import { supabase } from "./supabase.js";
+
+    const form = document.getElementById("start-batch-form");
+    const batchNameInput = document.getElementById("batch_name");
+    const startDateInput = document.getElementById("start_date");
+    const eggSheetsInput = document.getElementById("egg_sheets");
+    const saveBtn = document.getElementById("save-btn");
+    const messageEl = document.getElementById("message");
+
+    // ใส่วันที่วันนี้อัตโนมัติ
+    const today = new Date().toISOString().split("T")[0];
+    startDateInput.value = today;
+
+    function showMessage(text, type = "") {
+      messageEl.textContent = text;
+      messageEl.className = "message " + type;
+    }
+
+    function setLoading(isLoading) {
+      saveBtn.disabled = isLoading;
+      saveBtn.textContent = isLoading ? "กำลังบันทึก..." : "เริ่มรอบการเลี้ยง";
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      showMessage("");
+
+      const batch_name = batchNameInput.value.trim();
+      const start_date = startDateInput.value;
+      const egg_sheets = parseFloat(eggSheetsInput.value);
+
+      if (!batch_name || !start_date || !egg_sheets) {
+        showMessage("กรุณากรอกข้อมูลให้ครบ", "error");
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const { data: authData, error: authError } = await supabase.auth.getUser();
+
+        if (authError || !authData?.user) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        const user = authData.user;
+
+        // ปิดรอบเดิมทั้งหมดก่อน
+        const { error: deactivateError } = await supabase
+          .from("silkworm_batches")
+          .update({ is_active: false })
+          .eq("user_id", user.id)
+          .eq("is_active", true);
+
+        if (deactivateError) {
+          console.error(deactivateError);
+          showMessage("ปิดรอบเดิมไม่สำเร็จ", "error");
+          return;
+        }
+
+        // สร้างรอบใหม่
+        const { error: insertError } = await supabase
+          .from("silkworm_batches")
+          .insert({
+            user_id: user.id,
+            batch_name,
+            start_date,
+            egg_sheets,
+            current_day: 1,
+            current_instar: 1,
+            is_active: true
+          });
+
+        if (insertError) {
+          console.error(insertError);
+          showMessage("บันทึกรอบการเลี้ยงไม่สำเร็จ: " + insertError.message, "error");
+          return;
+        }
+
+        showMessage("เริ่มรอบการเลี้ยงสำเร็จ กำลังกลับไปหน้า Dashboard...", "success");
+
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 1200);
+
+      } catch (err) {
+        console.error(err);
+        showMessage("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง", "error");
+      } finally {
+        setLoading(false);
+      }
+    });
+  </script>
+</body>
+</html>
