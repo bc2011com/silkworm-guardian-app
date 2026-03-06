@@ -1,268 +1,68 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-  <meta charset="UTF-8" />
-  <title>เข้าสู่ระบบอารักขารังไหมเลี้ยงอัจฉริยะ</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: "Sarabun", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
+<script type="module">
+import { supabase } from "./supabase.js";
 
-    body {
-      min-height: 100vh;
-      background: #e8f5e8;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+const form = document.getElementById("login-form");
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
+const togglePasswordBtn = document.getElementById("toggle-password");
+const errorText = document.getElementById("error-text");
+const loginBtn = document.getElementById("login-btn");
 
-    .card {
-      background: #ffffff;
-      padding: 32px 28px 28px;
-      border-radius: 24px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.06);
-      max-width: 420px;
-      width: 100%;
-    }
+function setLoading(isLoading) {
+  loginBtn.disabled = isLoading;
+  loginBtn.textContent = isLoading ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ";
+}
 
-    .icon-circle {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: #e8f5f5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 12px;
-      font-size: 40px;
-    }
+// ปุ่มโชว์/ซ่อนรหัสผ่าน
+togglePasswordBtn.addEventListener("click", () => {
+  const type = passwordInput.type === "password" ? "text" : "password";
+  passwordInput.type = type;
+});
 
-    h1 {
-      font-size: 22px;
-      text-align: center;
-      color: #1b5e20;
-      margin-bottom: 4px;
-    }
+// แปลง username เป็น email ภายในระบบ
+function makeInternalEmail(username){
+  return username + "@silkworm.local";
+}
 
-    .subtitle {
-      text-align: center;
-      font-size: 14px;
-      color: #555;
-      margin-bottom: 20px;
-    }
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  errorText.textContent = "";
 
-    .form-group {
-      margin-bottom: 14px;
-    }
+  const username = usernameInput.value.trim().toLowerCase();
+  const password = passwordInput.value;
 
-    label {
-      display: block;
-      font-size: 14px;
-      color: #2e7d32;
-      margin-bottom: 4px;
-    }
+  if (!username || !password) {
+    errorText.textContent = "กรุณากรอกชื่อผู้ใช้และรหัสผ่าน";
+    return;
+  }
 
-    input[type="text"],
-    input[type="password"] {
-      width: 100%;
-      padding: 10px 12px;
-      font-size: 15px;
-      border-radius: 12px;
-      border: 1px solid #cfd8dc;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
+  setLoading(true);
 
-    input:focus {
-      border-color: #43a047;
-      box-shadow: 0 0 0 2px rgba(67,160,71,0.18);
-    }
+  try {
 
-    .password-row {
-      position: relative;
-    }
+    // สร้าง email จาก username
+    const email = makeInternalEmail(username);
 
-    .toggle-eye {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      font-size: 18px;
-      opacity: 0.6;
-    }
-
-    .btn {
-      width: 100%;
-      border: none;
-      padding: 12px;
-      border-radius: 999px;
-      background: #2e7d32;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 8px;
-      transition: background 0.2s, transform 0.05s;
-    }
-
-    .btn:hover {
-      background: #1b5e20;
-    }
-
-    .btn:active {
-      transform: scale(0.98);
-    }
-
-    .hint {
-      margin-top: 10px;
-      font-size: 11px;
-      color: #666;
-      line-height: 1.5;
-    }
-
-    .link-row {
-      text-align: center;
-      font-size: 14px;
-      margin-top: 16px;
-      color: #333;
-    }
-
-    .link-row a {
-      color: #1e88e5;
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .link-row a:hover {
-      text-decoration: underline;
-    }
-
-    .error-text {
-      margin-top: 10px;
-      font-size: 13px;
-      color: #c62828;
-      text-align: center;
-    }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <div class="icon-circle">😺</div>
-    <h1>อารักขารังไหมเลี้ยงอัจฉริยะ</h1>
-    <p class="subtitle">สำหรับเกษตรกรผู้เลี้ยงไหม 5 วัย</p>
-
-    <form id="login-form">
-      <div class="form-group">
-        <label for="username">ชื่อผู้ใช้</label>
-        <input type="text" id="username" placeholder="เช่น farmer01" required />
-      </div>
-
-      <div class="form-group password-row">
-        <label for="password">รหัสผ่าน</label>
-        <input type="password" id="password" placeholder="กรอกรหัสผ่าน" required />
-        <span id="toggle-password" class="toggle-eye">👁️</span>
-      </div>
-
-      <button type="submit" class="btn" id="login-btn">เข้าสู่ระบบ</button>
-
-      <div class="error-text" id="error-text"></div>
-
-      <p class="link-row">
-        ยังไม่มีบัญชีผู้ใช้? <a href="register.html">สมัครสมาชิก</a>
-      </p>
-
-      <p class="hint">
-        * แนะนำให้เกษตรกรบันทึกทั้ง “ชื่อผู้ใช้” และ “รหัสผ่าน” ลงในสมุด หรือบันทึกในโทรศัพท์ของตนเอง<br />
-        * หากลืมรหัสผ่าน กรุณาติดต่อผู้ดูแลระบบ
-      </p>
-    </form>
-  </div>
-
-  <script type="module">
-    import { supabase } from "./supabase.js";
-
-    const form = document.getElementById("login-form");
-    const usernameInput = document.getElementById("username");
-    const passwordInput = document.getElementById("password");
-    const togglePasswordBtn = document.getElementById("toggle-password");
-    const errorText = document.getElementById("error-text");
-    const loginBtn = document.getElementById("login-btn");
-
-    function setLoading(isLoading) {
-      loginBtn.disabled = isLoading;
-      loginBtn.textContent = isLoading ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ";
-    }
-
-    // ปุ่มโชว์/ซ่อนรหัสผ่าน
-    togglePasswordBtn.addEventListener("click", () => {
-      const type = passwordInput.type === "password" ? "text" : "password";
-      passwordInput.type = type;
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
     });
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      errorText.textContent = "";
+    if (error) {
+      console.error(error);
+      errorText.textContent = "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
+      setLoading(false);
+      return;
+    }
 
-      const username = usernameInput.value.trim();
-      const password = passwordInput.value;
+    // login สำเร็จ
+    window.location.href = "dashboard.html";
 
-      if (!username || !password) {
-        errorText.textContent = "กรุณากรอกชื่อผู้ใช้และรหัสผ่าน";
-        return;
-      }
-
-      setLoading(true);
-
-      try {
-        // 1) หา email จากตาราง profiles ตาม username
-        const { data: profile, error: profileError } = await supabase
-          .from("profiles")
-          .select("email")
-          .eq("username", username)
-          .maybeSingle();
-
-        if (profileError) {
-          console.error(profileError);
-          errorText.textContent = "ไม่สามารถตรวจสอบข้อมูลผู้ใช้ได้";
-          setLoading(false);
-          return;
-        }
-
-        if (!profile || !profile.email) {
-          errorText.textContent = "ชื่อผู้ใช้ไม่ถูกต้องหรือไม่มีอยู่ในระบบ";
-          setLoading(false);
-          return;
-        }
-
-        const email = profile.email;
-
-        // 2) ใช้ email + password ไป login ที่ Supabase Auth
-        const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-          email,
-          password
-        });
-
-        if (signInError) {
-          console.error(signInError);
-          // ตรงนี้จะรวมกรณีรหัสผ่านผิดด้วย
-          errorText.textContent = "รหัสผ่านไม่ถูกต้อง หรือบัญชีนี้ยังไม่พร้อมใช้งาน";
-          setLoading(false);
-          return;
-        }
-
-        // สำเร็จ → ไปหน้า dashboard
-        window.location.href = "dashboard.html";
-      } catch (err) {
-        console.error(err);
-        errorText.textContent = "เกิดข้อผิดพลาดที่ไม่คาดคิด กรุณาลองใหม่อีกครั้ง";
-      } finally {
-        setLoading(false);
-      }
-    });
-  </script>
-</body>
-</html>
+  } catch (err) {
+    console.error(err);
+    errorText.textContent = "เกิดข้อผิดพลาด กรุณาลองใหม่";
+  } finally {
+    setLoading(false);
+  }
+});
+</script>
