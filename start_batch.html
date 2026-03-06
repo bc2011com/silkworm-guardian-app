@@ -155,7 +155,6 @@
     const saveBtn = document.getElementById("save-btn");
     const messageEl = document.getElementById("message");
 
-    // ใส่วันที่วันนี้อัตโนมัติ
     const today = new Date().toISOString().split("T")[0];
     startDateInput.value = today;
 
@@ -177,7 +176,7 @@
       const start_date = startDateInput.value;
       const egg_sheets = parseFloat(eggSheetsInput.value);
 
-      if (!batch_name || !start_date || !egg_sheets) {
+      if (!batch_name || !start_date || Number.isNaN(egg_sheets)) {
         showMessage("กรุณากรอกข้อมูลให้ครบ", "error");
         return;
       }
@@ -193,71 +192,67 @@
         }
 
         const user = authData.user;
+
         // ตรวจว่าชื่อรอบซ้ำหรือไม่
-const { data: duplicateBatch, error: duplicateBatchError } = await supabase
-  .from("silkworm_batches")
-  .select("id, batch_name, start_date")
-  .eq("user_id", user.id)
-  .eq("batch_name", batch_name)
-  .maybeSingle();
+        const { data: duplicateBatch, error: duplicateBatchError } = await supabase
+          .from("silkworm_batches")
+          .select("id, batch_name, start_date")
+          .eq("user_id", user.id)
+          .eq("batch_name", batch_name)
+          .maybeSingle();
 
-if (duplicateBatchError) {
-  console.error(duplicateBatchError);
-  showMessage("ตรวจสอบชื่อรอบการเลี้ยงไม่สำเร็จ", "error");
-  return;
-}
-
-if (duplicateBatch) {
-  const okDuplicate = confirm(
-    `มีชื่อรอบการเลี้ยง "${duplicateBatch.batch_name}" อยู่แล้ว\nเริ่มเมื่อ ${duplicateBatch.start_date}\nต้องการใช้ชื่อรอบนี้ซ้ำหรือไม่?`
-  );
-
-  if (!okDuplicate) {
-    showMessage("กรุณาเปลี่ยนชื่อรอบการเลี้ยงใหม่", "error");
-    return;
-  }
-}
-      // ตรวจว่ามีรอบเดิมที่ยัง active อยู่หรือไม่
-const { data: existingActiveBatch, error: existingBatchError } = await supabase
-  .from("silkworm_batches")
-  .select("id, batch_name")
-  .eq("user_id", user.id)
-  .eq("is_active", true)
-  .maybeSingle();
-
-if (existingBatchError) {
-  console.error(existingBatchError);
-  showMessage("ตรวจสอบรอบการเลี้ยงเดิมไม่สำเร็จ", "error");
-  return;
-}
-
-if (existingActiveBatch) {
-  const ok = confirm(
-    `ขณะนี้มีรอบการเลี้ยงที่กำลังใช้งานอยู่ (${existingActiveBatch.batch_name})\nต้องการปิดรอบเดิมและเริ่มรอบใหม่หรือไม่?`
-  );
-
-  if (!ok) {
-    showMessage("ยกเลิกการเริ่มรอบใหม่", "error");
-    return;
-  }
-
-  const { error: deactivateError } = await supabase
-    .from("silkworm_batches")
-    .update({ is_active: false })
-    .eq("user_id", user.id)
-    .eq("is_active", true);
-
-  if (deactivateError) {
-    console.error(deactivateError);
-    showMessage("ปิดรอบเดิมไม่สำเร็จ", "error");
-    return;
-  }
-}
-
-        if (deactivateError) {
-          console.error(deactivateError);
-          showMessage("ปิดรอบเดิมไม่สำเร็จ", "error");
+        if (duplicateBatchError) {
+          console.error(duplicateBatchError);
+          showMessage("ตรวจสอบชื่อรอบการเลี้ยงไม่สำเร็จ", "error");
           return;
+        }
+
+        if (duplicateBatch) {
+          const okDuplicate = confirm(
+            `มีชื่อรอบการเลี้ยง "${duplicateBatch.batch_name}" อยู่แล้ว\nเริ่มเมื่อ ${duplicateBatch.start_date}\nต้องการใช้ชื่อรอบนี้ซ้ำหรือไม่?`
+          );
+
+          if (!okDuplicate) {
+            showMessage("กรุณาเปลี่ยนชื่อรอบการเลี้ยงใหม่", "error");
+            return;
+          }
+        }
+
+        // ตรวจว่ามีรอบเดิมที่ยัง active อยู่หรือไม่
+        const { data: existingActiveBatch, error: existingBatchError } = await supabase
+          .from("silkworm_batches")
+          .select("id, batch_name")
+          .eq("user_id", user.id)
+          .eq("is_active", true)
+          .maybeSingle();
+
+        if (existingBatchError) {
+          console.error(existingBatchError);
+          showMessage("ตรวจสอบรอบการเลี้ยงเดิมไม่สำเร็จ", "error");
+          return;
+        }
+
+        if (existingActiveBatch) {
+          const ok = confirm(
+            `ขณะนี้มีรอบการเลี้ยงที่กำลังใช้งานอยู่ (${existingActiveBatch.batch_name})\nต้องการปิดรอบเดิมและเริ่มรอบใหม่หรือไม่?`
+          );
+
+          if (!ok) {
+            showMessage("ยกเลิกการเริ่มรอบใหม่", "error");
+            return;
+          }
+
+          const { error: deactivateError } = await supabase
+            .from("silkworm_batches")
+            .update({ is_active: false })
+            .eq("user_id", user.id)
+            .eq("is_active", true);
+
+          if (deactivateError) {
+            console.error(deactivateError);
+            showMessage("ปิดรอบเดิมไม่สำเร็จ", "error");
+            return;
+          }
         }
 
         // สร้างรอบใหม่
@@ -294,6 +289,4 @@ if (existingActiveBatch) {
     });
   </script>
 </body>
-
 </html>
-
