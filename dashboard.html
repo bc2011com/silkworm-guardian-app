@@ -312,8 +312,8 @@
         <span id="current-instar-text">กำลังตรวจสอบวัยของไหม…</span>
       </div>
       <div class="today-meta">
-        <span>ชื่อเกษตรกร: <strong id="farmer-name">กำลังโหลด...</strong></span>
-        <span>ฟาร์ม/กลุ่ม: <strong id="farm-name">กำลังโหลด...</strong></span>
+        <span>ชื่อเกษตรกร: <strong id="farmerName"></strong></span>
+        <span>ฟาร์ม/กลุ่ม: <strong id="farmName"></strong></span>
         <button id="logout-btn" class="logout-btn">ออกจากระบบ</button>
       </div>
     </section>
@@ -443,8 +443,8 @@
     todayDateEl.textContent = `วันนี้ ${d} ${m} ${y}`;
 
     // 3) ดึงโปรไฟล์จากตาราง profiles
-    const farmerNameEl = document.getElementById("farmer-name");
-    const farmNameEl = document.getElementById("farm-name");
+    const farmerNameEl = document.getElementById("farmerName");
+    const farmNameEl = document.getElementById("farmName");
 
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
@@ -452,6 +452,24 @@
       .eq("user_id", user.id)
       .single();
 
+     const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) return;
+
+  const { data } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("user_id", user.id)
+    .single();
+
+  if (data) {
+    document.getElementById("farmerName").textContent = data.full_name;
+    document.getElementById("farmName").textContent = data.farm_name;
+  }
+}
+
+loadProfile();
+    
     if (profileError) {
       console.error("โหลดโปรไฟล์ไม่ได้:", profileError);
       farmerNameEl.textContent = "ไม่พบข้อมูล";
