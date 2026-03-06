@@ -18,61 +18,61 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 20px;
     }
 
     .card {
       background: #ffffff;
       padding: 32px 28px 28px;
       border-radius: 24px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.06);
-      max-width: 480px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+      max-width: 520px;
       width: 100%;
     }
 
     .icon-circle {
-      width: 80px;
-      height: 80px;
+      width: 90px;
+      height: 90px;
       border-radius: 50%;
       background: #e3f2fd;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 12px;
-      font-size: 40px;
+      margin: 0 auto 14px;
+      font-size: 42px;
     }
 
     h1 {
       font-size: 22px;
       text-align: center;
       color: #1b5e20;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
     .subtitle {
       text-align: center;
       font-size: 14px;
       color: #555;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
     }
 
     .form-group {
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
     label {
       display: block;
-      font-size: 14px;
+      font-size: 15px;
       color: #2e7d32;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
     input[type="text"],
-    input[type="email"],
     input[type="password"] {
       width: 100%;
-      padding: 10px 12px;
-      font-size: 15px;
-      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 18px;
+      border-radius: 14px;
       border: 1px solid #cfd8dc;
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
@@ -80,20 +80,21 @@
 
     input:focus {
       border-color: #43a047;
-      box-shadow: 0 0 0 2px rgba(67,160,71,0.18);
+      box-shadow: 0 0 0 2px rgba(67, 160, 71, 0.18);
     }
 
     .btn {
       width: 100%;
       border: none;
-      padding: 12px;
+      padding: 14px;
       border-radius: 999px;
       background: #2e7d32;
       color: #fff;
-      font-size: 16px;
+      font-size: 20px;
+      font-weight: 600;
       cursor: pointer;
-      margin-top: 8px;
-      transition: background 0.2s, transform 0.05s;
+      margin-top: 10px;
+      transition: background 0.2s, transform 0.05s, opacity 0.2s;
     }
 
     .btn:hover {
@@ -104,17 +105,22 @@
       transform: scale(0.98);
     }
 
+    .btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
     .hint {
-      margin-top: 10px;
-      font-size: 11px;
+      margin-top: 12px;
+      font-size: 12px;
       color: #666;
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     .link-row {
       text-align: center;
-      font-size: 14px;
-      margin-top: 16px;
+      font-size: 16px;
+      margin-top: 18px;
       color: #333;
     }
 
@@ -129,17 +135,30 @@
     }
 
     .error-text {
-      margin-top: 10px;
-      font-size: 13px;
+      margin-top: 12px;
+      font-size: 14px;
       color: #c62828;
       text-align: center;
+      min-height: 20px;
     }
 
     .success-text {
-      margin-top: 10px;
-      font-size: 13px;
+      margin-top: 12px;
+      font-size: 14px;
       color: #2e7d32;
       text-align: center;
+      min-height: 20px;
+    }
+
+    .helper-box {
+      margin-top: 10px;
+      background: #f6fbf6;
+      border: 1px solid #dcefdc;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #355e3b;
+      line-height: 1.6;
     }
   </style>
 </head>
@@ -184,10 +203,10 @@
         มีบัญชีอยู่แล้ว? <a href="login.html">เข้าสู่ระบบที่นี่</a>
       </p>
 
-      <p class="hint">
-        * แนะนำให้เกษตรกรบันทึก “ชื่อผู้ใช้” และ “รหัสผ่าน” ลงในสมุด หรือบันทึกไว้ในโทรศัพท์เพื่อป้องกันลืม<br />
-        * อีเมลใช้สำหรับการกู้รหัสผ่านภายหลัง (ให้เจ้าหน้าที่ช่วยรีเซ็ต)
-      </p>
+      <div class="helper-box">
+        ระบบจะใช้ “ชื่อผู้ใช้” และ “รหัสผ่าน” เป็นหลักในการใช้งาน<br />
+        กรุณาจดชื่อผู้ใช้และรหัสผ่านเก็บไว้ เพื่อป้องกันลืม
+      </div>
     </form>
   </div>
 
@@ -210,19 +229,37 @@
       submitBtn.textContent = isLoading ? "กำลังสมัครสมาชิก..." : "สมัครสมาชิก";
     }
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    function clearMessages() {
       errorText.textContent = "";
       successText.textContent = "";
+    }
+
+    function sanitizeUsername(username) {
+      return username.trim().toLowerCase().replace(/[^a-z0-9_]/g, "");
+    }
+
+    function makeInternalEmail(username) {
+      return `${username}@silkworm.local`;
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      clearMessages();
 
       const full_name = fullNameInput.value.trim();
       const farm_name = farmNameInput.value.trim();
-      const username = usernameInput.value.trim();
+      const rawUsername = usernameInput.value.trim();
+      const username = sanitizeUsername(rawUsername);
       const password = passwordInput.value;
       const confirmPassword = confirmPasswordInput.value;
 
-      if (!full_name || !farm_name || !username || !password || !confirmPassword) {
+      if (!full_name || !farm_name || !rawUsername || !password || !confirmPassword) {
         errorText.textContent = "กรุณากรอกข้อมูลให้ครบทุกช่อง";
+        return;
+      }
+
+      if (username.length < 3) {
+        errorText.textContent = "ชื่อผู้ใช้ควรมีอย่างน้อย 3 ตัวอักษร และใช้ได้เฉพาะ a-z, 0-9, _";
         return;
       }
 
@@ -239,55 +276,76 @@
       setLoading(true);
 
       try {
-        // 1) สมัครสมาชิกใน Supabase Auth (password)
+        // ตรวจว่าชื่อผู้ใช้ซ้ำหรือยัง
+        const { data: existingProfile, error: existingProfileError } = await supabase
+          .from("profiles")
+          .select("id")
+          .eq("username", username)
+          .maybeSingle();
+
+        if (existingProfileError) {
+          console.error("existingProfileError:", existingProfileError);
+          errorText.textContent = "ตรวจสอบชื่อผู้ใช้ไม่สำเร็จ กรุณาลองใหม่";
+          return;
+        }
+
+        if (existingProfile) {
+          errorText.textContent = "ชื่อผู้ใช้นี้ถูกใช้แล้ว กรุณาเปลี่ยนชื่อผู้ใช้";
+          return;
+        }
+
+        // สร้างอีเมลภายในระบบจาก username เพื่อใช้กับ Supabase Auth
+        const internalEmail = makeInternalEmail(username);
+
+        // สมัครสมาชิกใน Supabase Auth
         const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-          email,
-          password
+          email: internalEmail,
+          password: password
         });
 
         if (signUpError) {
-          console.error(signUpError);
-          errorText.textContent = "สมัครสมาชิกไม่สำเร็จ: " + signUpError.message;
-          setLoading(false);
+          console.error("signUpError:", signUpError);
+
+          if (signUpError.message?.toLowerCase().includes("already registered")) {
+            errorText.textContent = "ชื่อผู้ใช้นี้มีอยู่แล้วในระบบ กรุณาใช้ชื่ออื่น";
+          } else {
+            errorText.textContent = "สมัครสมาชิกไม่สำเร็จ: " + signUpError.message;
+          }
           return;
         }
 
-        const user = signUpData.user;
+        const user = signUpData?.user;
         if (!user) {
           errorText.textContent = "ไม่สามารถสร้างบัญชีผู้ใช้ได้ กรุณาลองใหม่อีกครั้ง";
-          setLoading(false);
           return;
         }
 
-        // 2) บันทึกข้อมูลโปรไฟล์ลงตาราง public.profiles
-        const { error: profileError } = await supabase.from("profiles").insert({
-          user_id: user.id,
-          full_name,
-          username,
-          farm_name,
-      
-        });
+        // บันทึกข้อมูลโปรไฟล์
+        const { error: profileError } = await supabase
+          .from("profiles")
+          .insert({
+            user_id: user.id,
+            full_name: full_name,
+            farm_name: farm_name,
+            username: username
+          });
 
         if (profileError) {
-          console.error(profileError);
+          console.error("profileError:", profileError);
           errorText.textContent =
-            "สร้างบัญชีในระบบ Auth สำเร็จ แต่บันทึกข้อมูลโปรไฟล์ไม่สำเร็จ: " +
-            profileError.message;
-          setLoading(false);
+            "สร้างบัญชีสำเร็จ แต่บันทึกข้อมูลเกษตรกรไม่สำเร็จ: " + profileError.message;
           return;
         }
 
         successText.textContent = "สมัครสมาชิกสำเร็จ! กำลังพาไปหน้าเข้าสู่ระบบ...";
-
-        // เคลียร์ฟอร์ม
         form.reset();
 
-        // รอแป๊บเดียวแล้วพาไปหน้า login
         setTimeout(() => {
           window.location.href = "login.html";
         }, 1500);
+
       } catch (err) {
-        console.error(err);
+        console.error("unexpected error:", err);
         errorText.textContent = "เกิดข้อผิดพลาดที่ไม่คาดคิด กรุณาลองใหม่อีกครั้ง";
       } finally {
         setLoading(false);
