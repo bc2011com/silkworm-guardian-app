@@ -1,494 +1,96 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>แดชบอร์ดเกษตรกรเลี้ยงไหม</title>
+<script type="module">
+  import { supabase } from "./supabase.js";
+  import { requireAuth } from "./auth-guard.js";
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+  const todayDateEl = document.getElementById("today-date");
+  const farmerNameEl = document.getElementById("farmerName");
+  const farmNameEl = document.getElementById("farmName");
+  const batchNameEl = document.getElementById("batch-name");
+  const batchStatusEl = document.getElementById("batch-status");
+  const instarTextEl = document.getElementById("current-instar-text");
+  const logoutBtn = document.getElementById("logout-btn");
 
-    body {
-      font-family: "Sarabun", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #e8f5e9;
-      min-height: 100vh;
-      color: #1b5e20;
-    }
+  function showThaiDate() {
+    const today = new Date();
+    const thaiMonths = [
+      "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
+      "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
+    ];
+    const d = today.getDate();
+    const m = thaiMonths[today.getMonth()];
+    const y = today.getFullYear() + 543;
+    todayDateEl.textContent = `วันนี้ ${d} ${m} ${y}`;
+  }
 
-    .app-wrapper {
-      max-width: 480px;
-      margin: 0 auto;
-      min-height: 100vh;
-      background: #e8f5e9;
-      display: flex;
-      flex-direction: column;
-    }
+  async function loadDashboard() {
+    try {
+      showThaiDate();
 
-    .top-header {
-      background: linear-gradient(180deg, #2e7d32, #1b5e20);
-      padding: 18px 18px 14px;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+      const result = await requireAuth();
+      const user = result?.user;
 
-    .top-header-icon {
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      background: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 26px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-
-    .top-header-text h1 {
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 2px;
-    }
-
-    .top-header-text p {
-      font-size: 13px;
-      opacity: 0.9;
-    }
-
-    .today-strip {
-      background: #f1f8e9;
-      border-bottom: 1px solid #c8e6c9;
-      padding: 10px 14px 6px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .today-main {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      color: #1b5e20;
-      font-size: 13px;
-    }
-
-    .today-main span.label {
-      font-weight: 600;
-    }
-
-    .today-meta {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 2px;
-      font-size: 12px;
-      color: #33691e;
-    }
-
-    .logout-btn {
-      border: none;
-      background: #ef5350;
-      color: white;
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 12px;
-      cursor: pointer;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.18);
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .logout-btn:hover {
-      background: #e53935;
-    }
-
-    .content {
-      flex: 1;
-      padding: 16px 14px 80px;
-    }
-
-    .info-card {
-      background: #f9fff9;
-      border-radius: 14px;
-      padding: 14px 16px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-      margin-bottom: 16px;
-    }
-
-    .info-card h2 {
-      font-size: 16px;
-      margin-bottom: 4px;
-    }
-
-    .info-card p {
-      font-size: 13px;
-      color: #33691e;
-      margin-bottom: 2px;
-    }
-
-    .info-card span.value {
-      font-weight: 600;
-    }
-
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-
-    .card-button {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 14px 10px 10px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      text-decoration: none;
-      color: #1b5e20;
-      min-height: 110px;
-    }
-
-    .card-button .icon-circle {
-      width: 46px;
-      height: 46px;
-      border-radius: 999px;
-      background: #e8f5e9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 8px;
-      font-size: 24px;
-    }
-
-    .card-button h3 {
-      font-size: 14px;
-      text-align: center;
-      margin-bottom: 2px;
-    }
-
-    .card-button p {
-      text-align: center;
-      font-size: 12px;
-      color: #558b2f;
-    }
-
-    .card-button.orange {
-      background: #fff3e0;
-    }
-
-    .card-button.red {
-      background: #ffebee;
-    }
-
-    .card-button.blue {
-      background: #e3f2fd;
-    }
-
-    .card-button.green {
-      background: #e8f5e9;
-    }
-
-    .voice-box {
-      margin-top: 4px;
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 12px 14px 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-      font-size: 12px;
-      color: #33691e;
-    }
-
-    .voice-box-title {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 6px;
-      font-weight: 600;
-      font-size: 12px;
-    }
-
-    .voice-box ul {
-      list-style: none;
-      padding-left: 0;
-    }
-
-    .voice-box li {
-      margin-bottom: 3px;
-    }
-
-    .voice-key {
-      color: #1b5e20;
-      font-weight: 500;
-    }
-
-    .bottom-nav {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 0;
-      width: 100%;
-      max-width: 480px;
-      background: #ffffff;
-      border-top: 1px solid #c8e6c9;
-      padding: 6px 10px 8px;
-      display: flex;
-      justify-content: space-around;
-      z-index: 20;
-    }
-
-    .bottom-nav button,
-    .bottom-nav a {
-      background: none;
-      border: none;
-      text-align: center;
-      font-size: 11px;
-      color: #558b2f;
-      text-decoration: none;
-    }
-
-    .bottom-nav .nav-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: #e8f5e9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 2px;
-      font-size: 16px;
-      color: #2e7d32;
-    }
-
-    .bottom-nav .active .nav-icon {
-      background: #2e7d32;
-      color: #ffffff;
-    }
-
-    .bottom-nav .active span {
-      font-weight: 600;
-      color: #2e7d32;
-    }
-
-    @media (max-width: 360px) {
-      .cards-grid {
-        grid-template-columns: 1fr 1fr;
+      if (!user) {
+        window.location.href = "login.html";
+        return;
       }
-    }
-  </style>
-</head>
-<body>
-  <div class="app-wrapper">
 
-    <header class="top-header">
-      <div class="top-header-icon">🧵</div>
-      <div class="top-header-text">
-        <h1>อารักขารังไหมเลี้ยงอัจฉริยะ</h1>
-        <p>ช่วยเหลือเกษตรกรเลี้ยงไหมไทย</p>
-      </div>
-    </header>
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("full_name, farm_name, username")
+        .eq("user_id", user.id)
+        .maybeSingle();
 
-    <section class="today-strip">
-      <div class="today-main">
-        <span class="label" id="today-date">วันนี้ …</span>
-        <span id="current-instar-text">กำลังตรวจสอบวัยของไหม…</span>
-      </div>
-      <div class="today-meta">
-        <span>ชื่อเกษตรกร: <strong id="farmerName">กำลังโหลด...</strong></span>
-        <span>ฟาร์ม/กลุ่ม: <strong id="farmName">กำลังโหลด...</strong></span>
-        <button id="logout-btn" class="logout-btn">ออกจากระบบ</button>
-      </div>
-    </section>
-
-    <main class="content">
-      <section class="info-card">
-        <h2>ภาพรวมการเลี้ยงไหมรอบปัจจุบัน</h2>
-        <p>รอบการเลี้ยง: <span class="value" id="batch-name">ยังไม่ได้เริ่มรอบการเลี้ยง</span></p>
-        <p>สถานะ: <span class="value" id="batch-status">กรุณาเพิ่มข้อมูลรอบเลี้ยงไหม</span></p>
-      </section>
-
-      <section class="cards-grid">
-        <a href="#" class="card-button blue">
-          <div class="icon-circle">📷</div>
-          <h3>ถ่ายภาพ</h3>
-          <p>บันทึกภาพหนอนไหม / โรงเลี้ยง</p>
-        </a>
-
-        <a href="#" class="card-button green">
-          <div class="icon-circle">📞</div>
-          <h3>โทรคุยกับไหมคำ</h3>
-          <p>ถามตอบปัญหาการเลี้ยงไหม</p>
-        </a>
-
-        <a href="feeding_plan.html" class="card-button orange">
-          <div class="icon-circle">🍽️</div>
-          <h3>การให้อาหาร</h3>
-          <p>ดูแผนให้อาหารไหม 27 วัน</p>
-        </a>
-
-        <a href="#" class="card-button">
-          <div class="icon-circle">🌡️</div>
-          <h3>อุณหภูมิ–ความชื้น</h3>
-          <p>คำแนะนำสภาพโรงเลี้ยงที่เหมาะสม</p>
-        </a>
-
-        <a href="#" class="card-button">
-          <div class="icon-circle">🧹</div>
-          <h3>ทำความสะอาด</h3>
-          <p>บันทึกการทำความสะอาดโรงเลี้ยง</p>
-        </a>
-
-        <a href="#" class="card-button red">
-          <div class="icon-circle">🦠</div>
-          <h3>เฝ้าระวังโรคไหม</h3>
-          <p>สังเกตอาการ / บันทึกโรคและศัตรูไหม</p>
-        </a>
-
-        <a href="#" class="card-button">
-          <div class="icon-circle">📊</div>
-          <h3>บันทึกข้อมูล</h3>
-          <p>จดบันทึกข้อมูลอาหาร / ทำความสะอาด</p>
-        </a>
-
-        <a href="mulberry_recommendation.html" class="card-button green">
-          <div class="icon-circle">🌿</div>
-          <h3>คำแนะนำใบหม่อน</h3>
-          <p>คำนวณปริมาณใบหม่อนที่ควรเตรียม</p>
-        </a>
-      </section>
-
-      <section class="voice-box">
-        <div class="voice-box-title">
-          <span>🔑 คำสั่งเสียงที่ใช้ได้</span>
-        </div>
-        <ul>
-          <li><span class="voice-key">“ให้อาหารหนอนไหม”</span> – เปิดเมนูการให้อาหาร</li>
-          <li><span class="voice-key">“ตรวจอุณหภูมิ”</span> – ดูอุณหภูมิและความชื้น</li>
-          <li><span class="voice-key">“คำแนะนำใบหม่อน”</span> – คำนวณปริมาณใบหม่อน</li>
-          <li><span class="voice-key">“ดูแผน 27 วัน”</span> – เปิดแผนให้อาหาร 27 วัน</li>
-        </ul>
-      </section>
-    </main>
-
-    <nav class="bottom-nav">
-      <button class="active">
-        <div class="nav-icon">🏠</div>
-        <span>หน้าหลัก</span>
-      </button>
-      <a href="#">
-        <div class="nav-icon">📈</div>
-        <span>สถิติ</span>
-      </a>
-      <a href="#">
-        <div class="nav-icon">⚙️</div>
-        <span>ตั้งค่า</span>
-      </a>
-    </nav>
-  </div>
-
-  <script type="module">
-    import { supabase } from "./supabase.js";
-    import { requireAuth } from "./auth-guard.js";
-
-    const todayDateEl = document.getElementById("today-date");
-    const farmerNameEl = document.getElementById("farmerName");
-    const farmNameEl = document.getElementById("farmName");
-    const batchNameEl = document.getElementById("batch-name");
-    const batchStatusEl = document.getElementById("batch-status");
-    const instarTextEl = document.getElementById("current-instar-text");
-    const logoutBtn = document.getElementById("logout-btn");
-
-    function showThaiDate() {
-      const today = new Date();
-      const thaiMonths = [
-        "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
-        "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
-      ];
-      const d = today.getDate();
-      const m = thaiMonths[today.getMonth()];
-      const y = today.getFullYear() + 543;
-      todayDateEl.textContent = `วันนี้ ${d} ${m} ${y}`;
-    }
-
-    async function loadDashboard() {
-      try {
-        showThaiDate();
-
-        const { user } = await requireAuth();
-        if (!user) {
-          window.location.href = "login.html";
-          return;
-        }
-
-        const { data: profile, error: profileError } = await supabase
-          .from("profiles")
-          .select("full_name, farm_name, username")
-          .eq("user_id", user.id)
-          .maybeSingle();
-
-        if (profileError) {
-          console.error("โหลดโปรไฟล์ไม่ได้:", profileError);
-          farmerNameEl.textContent = "ไม่พบข้อมูล";
-          farmNameEl.textContent = "-";
-        } else if (profile) {
-          farmerNameEl.textContent = profile.full_name || profile.username || "ไม่ระบุ";
-          farmNameEl.textContent = profile.farm_name || "-";
-        } else {
-          farmerNameEl.textContent = "ไม่พบข้อมูล";
-          farmNameEl.textContent = "-";
-        }
-
-        const { data: activeBatch, error: batchError } = await supabase
-          .from("silkworm_batches")
-          .select("id, batch_name, is_active, current_instar, current_day")
-          .eq("user_id", user.id)
-          .eq("is_active", true)
-          .maybeSingle();
-
-        if (batchError) {
-          console.error("โหลดข้อมูลรอบเลี้ยงไหมไม่ได้:", batchError);
-          batchNameEl.textContent = "ยังไม่ได้เริ่มรอบการเลี้ยง";
-          batchStatusEl.textContent = "ยังไม่สามารถโหลดข้อมูลได้";
-          instarTextEl.textContent = "กรุณาตรวจสอบฐานข้อมูลรอบเลี้ยงไหม";
-        } else if (!activeBatch) {
-          batchNameEl.textContent = "ยังไม่ได้เริ่มรอบการเลี้ยง";
-          batchStatusEl.textContent = "กดเริ่มรอบใหม่ในเมนูบันทึกข้อมูล";
-          instarTextEl.textContent = "ยังไม่มีข้อมูลรอบเลี้ยงไหมในระบบ";
-        } else {
-          batchNameEl.textContent = activeBatch.batch_name || "รอบการเลี้ยงปัจจุบัน";
-          batchStatusEl.textContent =
-            `กำลังเลี้ยงไหมวัยที่ ${activeBatch.current_instar ?? "-"} (วันที่ ${activeBatch.current_day ?? "-"})`;
-          instarTextEl.textContent =
-            `วันนี้เลี้ยงไหมวัยที่ ${activeBatch.current_instar ?? "-"} วันที่ ${activeBatch.current_day ?? "-"} ของรอบนี้`;
-        }
-
-      } catch (error) {
-        console.error("เกิดข้อผิดพลาดใน dashboard:", error);
+      if (profileError) {
+        console.error("โหลดโปรไฟล์ไม่ได้:", profileError);
+        farmerNameEl.textContent = "ไม่พบข้อมูล";
+        farmNameEl.textContent = "-";
+      } else if (profile) {
+        farmerNameEl.textContent = profile.full_name || profile.username || "ไม่ระบุ";
+        farmNameEl.textContent = profile.farm_name || "-";
+      } else {
         farmerNameEl.textContent = "ไม่พบข้อมูล";
         farmNameEl.textContent = "-";
       }
-    }
 
-    logoutBtn.addEventListener("click", async () => {
-      try {
-        await supabase.auth.signOut();
-      } catch (e) {
-        console.error("ออกจากระบบไม่สำเร็จ:", e);
+      const { data: activeBatch, error: batchError } = await supabase
+        .from("silkworm_batches")
+        .select("id, batch_name, is_active, current_instar, current_day")
+        .eq("user_id", user.id)
+        .eq("is_active", true)
+        .maybeSingle();
+
+      if (batchError) {
+        console.error("โหลดข้อมูลรอบเลี้ยงไหมไม่ได้:", batchError);
+        batchNameEl.textContent = "ยังไม่ได้เริ่มรอบการเลี้ยง";
+        batchStatusEl.textContent = "ยังไม่สามารถโหลดข้อมูลได้";
+        instarTextEl.textContent = "กรุณาตรวจสอบฐานข้อมูลรอบเลี้ยงไหม";
+      } else if (!activeBatch) {
+        batchNameEl.textContent = "ยังไม่ได้เริ่มรอบการเลี้ยง";
+        batchStatusEl.textContent = "กดเริ่มรอบใหม่ในเมนูบันทึกข้อมูล";
+        instarTextEl.textContent = "ยังไม่มีข้อมูลรอบเลี้ยงไหมในระบบ";
+      } else {
+        batchNameEl.textContent = activeBatch.batch_name || "รอบการเลี้ยงปัจจุบัน";
+        batchStatusEl.textContent =
+          `กำลังเลี้ยงไหมวัยที่ ${activeBatch.current_instar ?? "-"} (วันที่ ${activeBatch.current_day ?? "-"})`;
+        instarTextEl.textContent =
+          `วันนี้เลี้ยงไหมวัยที่ ${activeBatch.current_instar ?? "-"} วันที่ ${activeBatch.current_day ?? "-"} ของรอบนี้`;
       }
-      window.location.href = "login.html";
-    });
 
-    loadDashboard();
-  </script>
-</body>
-</html>
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดใน dashboard:", error);
+      farmerNameEl.textContent = "ไม่พบข้อมูล";
+      farmNameEl.textContent = "-";
+    }
+  }
+
+  logoutBtn.addEventListener("click", async () => {
+    try {
+      await supabase.auth.signOut();
+    } catch (e) {
+      console.error("ออกจากระบบไม่สำเร็จ:", e);
+    }
+    window.location.href = "login.html";
+  });
+
+  loadDashboard();
+</script>
