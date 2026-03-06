@@ -28,7 +28,6 @@
       flex-direction: column;
     }
 
-    /* ---------- HEADER บนสุด ---------- */
     .top-header {
       background: linear-gradient(180deg, #2e7d32, #1b5e20);
       padding: 18px 18px 14px;
@@ -61,7 +60,6 @@
       opacity: 0.9;
     }
 
-    /* ---------- แถบข้อมูลวันนี้ + ปุ่มออก ---------- */
     .today-strip {
       background: #f1f8e9;
       border-bottom: 1px solid #c8e6c9;
@@ -112,7 +110,6 @@
       background: #e53935;
     }
 
-    /* ---------- เนื้อหาหลัก ---------- */
     .content {
       flex: 1;
       padding: 16px 14px 80px;
@@ -141,7 +138,6 @@
       font-weight: 600;
     }
 
-    /* ---------- GRID ปุ่มหลัก ---------- */
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -203,7 +199,6 @@
       background: #e8f5e9;
     }
 
-    /* ---------- กล่องคำสั่งเสียง ---------- */
     .voice-box {
       margin-top: 4px;
       background: #ffffff;
@@ -237,7 +232,6 @@
       font-weight: 500;
     }
 
-    /* ---------- แถบด้านล่าง ---------- */
     .bottom-nav {
       position: fixed;
       left: 50%;
@@ -296,7 +290,6 @@
 <body>
   <div class="app-wrapper">
 
-    <!-- HEADER -->
     <header class="top-header">
       <div class="top-header-icon">🧵</div>
       <div class="top-header-text">
@@ -305,91 +298,75 @@
       </div>
     </header>
 
-    <!-- แถบข้อมูลวันนี้ + ปุ่มออกจากระบบ -->
     <section class="today-strip">
       <div class="today-main">
         <span class="label" id="today-date">วันนี้ …</span>
         <span id="current-instar-text">กำลังตรวจสอบวัยของไหม…</span>
       </div>
       <div class="today-meta">
-        <span>ชื่อเกษตรกร: <strong id="farmerName"></strong></span>
-        <span>ฟาร์ม/กลุ่ม: <strong id="farmName"></strong></span>
+        <span>ชื่อเกษตรกร: <strong id="farmerName">กำลังโหลด...</strong></span>
+        <span>ฟาร์ม/กลุ่ม: <strong id="farmName">กำลังโหลด...</strong></span>
         <button id="logout-btn" class="logout-btn">ออกจากระบบ</button>
       </div>
     </section>
 
-    <!-- CONTENT หลัก -->
     <main class="content">
-
-      <!-- การ์ดข้อมูลสรุป -->
       <section class="info-card">
         <h2>ภาพรวมการเลี้ยงไหมรอบปัจจุบัน</h2>
         <p>รอบการเลี้ยง: <span class="value" id="batch-name">ยังไม่ได้เริ่มรอบการเลี้ยง</span></p>
         <p>สถานะ: <span class="value" id="batch-status">กรุณาเพิ่มข้อมูลรอบเลี้ยงไหม</span></p>
       </section>
 
-      <!-- ปุ่มหลัก (เหมือนหน้าเก่า) -->
       <section class="cards-grid">
-
-        <!-- ถ่ายภาพ -->
         <a href="#" class="card-button blue">
           <div class="icon-circle">📷</div>
           <h3>ถ่ายภาพ</h3>
           <p>บันทึกภาพหนอนไหม / โรงเลี้ยง</p>
         </a>
 
-        <!-- โทรถามถามไหมคำ AI -->
         <a href="#" class="card-button green">
           <div class="icon-circle">📞</div>
           <h3>โทรคุยกับไหมคำ</h3>
           <p>ถามตอบปัญหาการเลี้ยงไหม</p>
         </a>
 
-        <!-- การให้อาหาร (ลิงก์ไปแผนให้อาหาร 27 วัน) -->
         <a href="feeding_plan.html" class="card-button orange">
           <div class="icon-circle">🍽️</div>
           <h3>การให้อาหาร</h3>
           <p>ดูแผนให้อาหารไหม 27 วัน</p>
         </a>
 
-        <!-- อุณหภูมิ ความชื้น -->
         <a href="#" class="card-button">
           <div class="icon-circle">🌡️</div>
           <h3>อุณหภูมิ–ความชื้น</h3>
           <p>คำแนะนำสภาพโรงเลี้ยงที่เหมาะสม</p>
         </a>
 
-        <!-- ทำความสะอาดโรงเลี้ยง -->
         <a href="#" class="card-button">
           <div class="icon-circle">🧹</div>
           <h3>ทำความสะอาด</h3>
           <p>บันทึกการทำความสะอาดโรงเลี้ยง</p>
         </a>
 
-        <!-- รายงานโรค / ศัตรูไหม -->
         <a href="#" class="card-button red">
           <div class="icon-circle">🦠</div>
           <h3>เฝ้าระวังโรคไหม</h3>
           <p>สังเกตอาการ / บันทึกโรคและศัตรูไหม</p>
         </a>
 
-        <!-- บันทึกข้อมูล -->
         <a href="#" class="card-button">
           <div class="icon-circle">📊</div>
           <h3>บันทึกข้อมูล</h3>
           <p>จดบันทึกข้อมูลอาหาร / ทำความสะอาด</p>
         </a>
 
-        <!-- แนะนำปริมาณใบหม่อน -->
         <a href="mulberry_recommendation.html" class="card-button green">
           <div class="icon-circle">🌿</div>
           <h3>คำแนะนำใบหม่อน</h3>
           <p>คำนวณปริมาณใบหม่อนที่ควรเตรียม</p>
         </a>
-
       </section>
 
-      <!-- คำสั่งเสียง -->
       <section class="voice-box">
         <div class="voice-box-title">
           <span>🔑 คำสั่งเสียงที่ใช้ได้</span>
@@ -401,120 +378,117 @@
           <li><span class="voice-key">“ดูแผน 27 วัน”</span> – เปิดแผนให้อาหาร 27 วัน</li>
         </ul>
       </section>
-
     </main>
 
-    <!-- BOTTOM NAV -->
     <nav class="bottom-nav">
       <button class="active">
         <div class="nav-icon">🏠</div>
         <span>หน้าหลัก</span>
       </button>
-      <a href="#" class="">
+      <a href="#">
         <div class="nav-icon">📈</div>
         <span>สถิติ</span>
       </a>
-      <a href="#" class="">
+      <a href="#">
         <div class="nav-icon">⚙️</div>
         <span>ตั้งค่า</span>
       </a>
     </nav>
-
   </div>
 
-  <!-- เชื่อม Supabase + Auth (ใช้ไฟล์ที่มีอยู่แล้ว) -->
   <script type="module">
     import { supabase } from "./supabase.js";
     import { requireAuth } from "./auth-guard.js";
 
-    // 1) บังคับให้ต้องล็อกอินก่อน
-    const { user } = await requireAuth();
-
-    // 2) แสดงวันที่วันนี้แบบง่าย ๆ
     const todayDateEl = document.getElementById("today-date");
-    const today = new Date();
-    const thaiMonths = [
-      "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
-      "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
-    ];
-    const d = today.getDate();
-    const m = thaiMonths[today.getMonth()];
-    const y = today.getFullYear() + 543;
-    todayDateEl.textContent = `วันนี้ ${d} ${m} ${y}`;
-
-    // 3) ดึงโปรไฟล์จากตาราง profiles
     const farmerNameEl = document.getElementById("farmerName");
     const farmNameEl = document.getElementById("farmName");
-
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles")
-      .select("full_name, farm_name")
-      .eq("user_id", user.id)
-      .single();
-
-     const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) return;
-
-  const { data } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("user_id", user.id)
-    .single();
-
-  if (data) {
-    document.getElementById("farmerName").textContent = data.full_name;
-    document.getElementById("farmName").textContent = data.farm_name;
-  }
-}
-
-loadProfile();
-    
-    if (profileError) {
-      console.error("โหลดโปรไฟล์ไม่ได้:", profileError);
-      farmerNameEl.textContent = "ไม่พบข้อมูล";
-      farmNameEl.textContent = "-";
-    } else if (profile) {
-      farmerNameEl.textContent = profile.full_name || "ไม่ระบุ";
-      farmNameEl.textContent = profile.farm_name || "-";
-    }
-
-    // 4) (ตัวอย่าง) ลองหา batch ปัจจุบันของผู้ใช้
     const batchNameEl = document.getElementById("batch-name");
     const batchStatusEl = document.getElementById("batch-status");
     const instarTextEl = document.getElementById("current-instar-text");
+    const logoutBtn = document.getElementById("logout-btn");
 
-    try {
-      const { data: activeBatch, error: batchError } = await supabase
-        .from("silkworm_batches")
-        .select("id, batch_name, is_active, current_instar, current_day")
-        .eq("user_id", user.id)
-        .eq("is_active", true)
-        .maybeSingle();
-
-      if (batchError) {
-        console.error("โหลดข้อมูลรอบเลี้ยงไหมไม่ได้:", batchError);
-      }
-
-      if (!activeBatch) {
-        batchNameEl.textContent = "ยังไม่ได้เริ่มรอบการเลี้ยง";
-        batchStatusEl.textContent = "กดเริ่มรอบใหม่ในเมนูบันทึกข้อมูล";
-        instarTextEl.textContent = "ยังไม่มีข้อมูลรอบเลี้ยงไหมในระบบ";
-      } else {
-        batchNameEl.textContent = activeBatch.batch_name || "รอบการเลี้ยงปัจจุบัน";
-        batchStatusEl.textContent = `กำลังเลี้ยงไหมวัยที่ ${activeBatch.current_instar || "-"} (วันที่ ${activeBatch.current_day || "-"})`;
-        instarTextEl.textContent = `วันนี้เลี้ยงไหมวัยที่ ${activeBatch.current_instar || "-"} วันที่ ${activeBatch.current_day || "-"} ของรอบนี้`;
-      }
-    } catch (e) {
-      console.error("เกิดข้อผิดพลาดในการประมวลผลข้อมูลรอบเลี้ยง:", e);
+    function showThaiDate() {
+      const today = new Date();
+      const thaiMonths = [
+        "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
+        "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
+      ];
+      const d = today.getDate();
+      const m = thaiMonths[today.getMonth()];
+      const y = today.getFullYear() + 543;
+      todayDateEl.textContent = `วันนี้ ${d} ${m} ${y}`;
     }
 
-    // 5) ปุ่มออกจากระบบ
-    const logoutBtn = document.getElementById("logout-btn");
+    async function loadDashboard() {
+      try {
+        showThaiDate();
+
+        const { user } = await requireAuth();
+        if (!user) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        const { data: profile, error: profileError } = await supabase
+          .from("profiles")
+          .select("full_name, farm_name, username")
+          .eq("user_id", user.id)
+          .maybeSingle();
+
+        if (profileError) {
+          console.error("โหลดโปรไฟล์ไม่ได้:", profileError);
+          farmerNameEl.textContent = "ไม่พบข้อมูล";
+          farmNameEl.textContent = "-";
+        } else if (profile) {
+          farmerNameEl.textContent = profile.full_name || profile.username || "ไม่ระบุ";
+          farmNameEl.textContent = profile.farm_name || "-";
+        } else {
+          farmerNameEl.textContent = "ไม่พบข้อมูล";
+          farmNameEl.textContent = "-";
+        }
+
+        const { data: activeBatch, error: batchError } = await supabase
+          .from("silkworm_batches")
+          .select("id, batch_name, is_active, current_instar, current_day")
+          .eq("user_id", user.id)
+          .eq("is_active", true)
+          .maybeSingle();
+
+        if (batchError) {
+          console.error("โหลดข้อมูลรอบเลี้ยงไหมไม่ได้:", batchError);
+          batchNameEl.textContent = "ยังไม่ได้เริ่มรอบการเลี้ยง";
+          batchStatusEl.textContent = "ยังไม่สามารถโหลดข้อมูลได้";
+          instarTextEl.textContent = "กรุณาตรวจสอบฐานข้อมูลรอบเลี้ยงไหม";
+        } else if (!activeBatch) {
+          batchNameEl.textContent = "ยังไม่ได้เริ่มรอบการเลี้ยง";
+          batchStatusEl.textContent = "กดเริ่มรอบใหม่ในเมนูบันทึกข้อมูล";
+          instarTextEl.textContent = "ยังไม่มีข้อมูลรอบเลี้ยงไหมในระบบ";
+        } else {
+          batchNameEl.textContent = activeBatch.batch_name || "รอบการเลี้ยงปัจจุบัน";
+          batchStatusEl.textContent =
+            `กำลังเลี้ยงไหมวัยที่ ${activeBatch.current_instar ?? "-"} (วันที่ ${activeBatch.current_day ?? "-"})`;
+          instarTextEl.textContent =
+            `วันนี้เลี้ยงไหมวัยที่ ${activeBatch.current_instar ?? "-"} วันที่ ${activeBatch.current_day ?? "-"} ของรอบนี้`;
+        }
+
+      } catch (error) {
+        console.error("เกิดข้อผิดพลาดใน dashboard:", error);
+        farmerNameEl.textContent = "ไม่พบข้อมูล";
+        farmNameEl.textContent = "-";
+      }
+    }
+
     logoutBtn.addEventListener("click", async () => {
-      await supabase.auth.signOut();
+      try {
+        await supabase.auth.signOut();
+      } catch (e) {
+        console.error("ออกจากระบบไม่สำเร็จ:", e);
+      }
       window.location.href = "login.html";
     });
+
+    loadDashboard();
   </script>
 </body>
 </html>
