@@ -270,29 +270,6 @@
     </div>
 
       <div id="statusBox" class="status-box"></div>
-    document.getElementById("uploadImage").addEventListener("change",function(event){
-
-const file = event.target.files[0]
-
-if(!file) return
-
-const reader = new FileReader()
-
-reader.onload = function(e){
-
-latestPhotoData = e.target.result
-
-photoPreview.src = latestPhotoData
-
-photoPreview.style.display="block"
-
-showStatus("อัปโหลดภาพเรียบร้อย", "success")
-
-}
-
-reader.readAsDataURL(file)
-
-})
     <div class="card">
       <h2>ประวัติภาพล่าสุด</h2>
       <div id="historyList" class="history-list"></div>
@@ -430,6 +407,30 @@ reader.readAsDataURL(file)
 
     loadHistory();
     startCamera();
+    document.getElementById("uploadImage").addEventListener("change", function(event){
+
+const file = event.target.files[0]
+
+if(!file) return
+
+const reader = new FileReader()
+
+reader.onload = function(e){
+
+latestPhotoData = e.target.result
+
+photoPreview.src = latestPhotoData
+
+photoPreview.style.display = "block"
+
+showStatus("อัปโหลดภาพเรียบร้อย", "success")
+
+}
+
+reader.readAsDataURL(file)
+
+})
   </script>
 </body>
 </html>
+
