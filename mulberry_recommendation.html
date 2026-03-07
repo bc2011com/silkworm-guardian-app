@@ -693,5 +693,29 @@
       );
     });
   </script>
+  document.addEventListener("DOMContentLoaded", function(){
+
+  const savedBatch = localStorage.getItem("active_batch");
+
+  if(savedBatch){
+    const batch = JSON.parse(savedBatch);
+
+    if(batch.egg_sheets){
+      document.querySelector("#eggSheets").value = batch.egg_sheets;
+    }
+
+    if(batch.current_instar){
+      const instar = batch.current_instar;
+      const select = document.querySelector("#instarDay");
+
+      if(instar == 1) select.value = "1-1";
+      if(instar == 2) select.value = "2-1";
+      if(instar == 3) select.value = "3-1";
+      if(instar == 4) select.value = "4-1";
+      if(instar == 5) select.value = "5-1";
+    }
+  }
+
+});
 </body>
 </html>
