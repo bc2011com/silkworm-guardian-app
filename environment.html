@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>อุณหภูมิ-ความชื้น | Silkworm Guardian App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Sarabun', system-ui, sans-serif;
+      background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);
+      color: #1b5e20;
+      min-height: 100vh;
+      padding: 16px;
+    }
+    .container {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 22px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      padding: 18px 16px 24px;
+    }
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 14px;
+      text-decoration: none;
+      color: #6a1b9a;
+      font-weight: 700;
+      font-size: 20px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 30px;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #558b2f;
+      font-size: 18px;
+      margin-bottom: 18px;
+    }
+    .card {
+      background: #f9fff5;
+      border: 1px solid #c5e1a5;
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .card h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #2e7d32;
+    }
+    label {
+      display: block;
+      font-size: 19px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #33691e;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #c5e1a5;
+      border-radius: 12px;
+      font-size: 18px;
+      font-family: inherit;
+      margin-bottom: 12px;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 22px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #689f38, #33691e);
+      color: #fff;
+      box-shadow: 0 6px 15px rgba(56,142,60,0.35);
+    }
+    .status-box {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 17px;
+      display: none;
+    }
+    .show {
+      display: block;
+      background: #e8f5e9;
+      border: 1px solid #a5d6a7;
+    }
+    .advice {
+      font-size: 18px;
+      line-height: 1.8;
+    }
+    .history-item {
+      padding: 12px;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid #dcedc8;
+      margin-bottom: 10px;
+      font-size: 17px;
+      line-height: 1.7;
+    }
+    @media (max-width: 640px) {
+      h1 { font-size: 24px; }
+      .subtitle, label, input, select, textarea, button, .advice { font-size: 16px; }
+      .row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="dashboard.html" class="back-btn">← กลับสู่หน้าหลัก</a>
+
+    <h1>อุณหภูมิ-ความชื้น</h1>
+    <div class="subtitle">บันทึกค่าและดูคำแนะนำสภาพโรงเลี้ยงที่เหมาะสม</div>
+
+    <div class="card">
+      <h2>กรอกค่าปัจจุบัน</h2>
+
+      <label for="envDate">วันที่</label>
+      <input type="date" id="envDate">
+
+      <div class="row">
+        <div>
+          <label for="temperature">อุณหภูมิ (°C)</label>
+          <input type="number" id="temperature" step="0.1" placeholder="เช่น 27.5">
+        </div>
+        <div>
+          <label for="humidity">ความชื้น (%)</label>
+          <input type="number" id="humidity" step="0.1" placeholder="เช่น 78">
+        </div>
+      </div>
+
+      <label for="instar">วัยของไหม</label>
+      <select id="instar">
+        <option value="1">วัยที่ 1</option>
+        <option value="2">วัยที่ 2</option>
+        <option value="3">วัยที่ 3</option>
+        <option value="4">วัยที่ 4</option>
+        <option value="5">วัยที่ 5</option>
+      </select>
+
+      <label for="envNote">หมายเหตุ</label>
+      <textarea id="envNote" placeholder="เช่น อากาศร้อนตอนบ่าย เปิดพัดลมเพิ่ม"></textarea>
+
+      <div class="btn-row">
+        <button class="btn-primary" onclick="analyzeEnvironment()">วิเคราะห์และบันทึก</button>
+      </div>
+
+      <div id="statusBox" class="status-box"></div>
+    </div>
+
+    <div class="card">
+      <h2>คำแนะนำ</h2>
+      <div id="adviceBox" class="advice">กรอกค่าอุณหภูมิและความชื้น แล้วกดวิเคราะห์</div>
+    </div>
+
+    <div class="card">
+      <h2>ประวัติล่าสุด</h2>
+      <div id="historyList"></div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "silkworm_environment_logs";
+
+    const standardByInstar = {
+      1: { tempMin: 27, tempMax: 29, humidMin: 85, humidMax: 90 },
+      2: { tempMin: 26, tempMax: 28, humidMin: 80, humidMax: 85 },
+      3: { tempMin: 25, tempMax: 27, humidMin: 75, humidMax: 80 },
+      4: { tempMin: 24, tempMax: 26, humidMin: 70, humidMax: 75 },
+      5: { tempMin: 23, tempMax: 25, humidMin: 65, humidMax: 70 }
+    };
+
+    function todayISO() {
+      const d = new Date();
+      return d.toISOString().split("T")[0];
+    }
+
+    function analyzeEnvironment() {
+      const date = document.getElementById("envDate").value;
+      const temperature = parseFloat(document.getElementById("temperature").value);
+      const humidity = parseFloat(document.getElementById("humidity").value);
+      const instar = document.getElementById("instar").value;
+      const note = document.getElementById("envNote").value.trim();
+      const statusBox = document.getElementById("statusBox");
+      const adviceBox = document.getElementById("adviceBox");
+
+      if (!date || isNaN(temperature) || isNaN(humidity)) {
+        alert("กรุณากรอกวันที่ อุณหภูมิ และความชื้นให้ครบ");
+        return;
+      }
+
+      const std = standardByInstar[instar];
+      const advice = [];
+
+      if (temperature < std.tempMin) {
+        advice.push(`อุณหภูมิต่ำกว่าช่วงเหมาะสม (${std.tempMin}-${std.tempMax}°C) ควรเพิ่มความอบอุ่นหรือลดลมเย็น`);
+      } else if (temperature > std.tempMax) {
+        advice.push(`อุณหภูมิสูงกว่าช่วงเหมาะสม (${std.tempMin}-${std.tempMax}°C) ควรเพิ่มการระบายอากาศ ลดความร้อน`);
+      } else {
+        advice.push(`อุณหภูมิอยู่ในเกณฑ์เหมาะสมสำหรับไหมวัยที่ ${instar}`);
+      }
+
+      if (humidity < std.humidMin) {
+        advice.push(`ความชื้นต่ำกว่าช่วงเหมาะสม (${std.humidMin}-${std.humidMax}%) ควรเพิ่มความชื้นอย่างระมัดระวัง`);
+      } else if (humidity > std.humidMax) {
+        advice.push(`ความชื้นสูงกว่าช่วงเหมาะสม (${std.humidMin}-${std.humidMax}%) ควรลดความอับชื้น เปิดระบายอากาศ`);
+      } else {
+        advice.push(`ความชื้นอยู่ในเกณฑ์เหมาะสมสำหรับไหมวัยที่ ${instar}`);
+      }
+
+      adviceBox.innerHTML = advice.map(item => `• ${item}`).join("<br><br>");
+
+      const logs = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      logs.push({
+        date, temperature, humidity, instar, note,
+        advice, createdAt: new Date().toISOString()
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+
+      statusBox.className = "status-box show";
+      statusBox.textContent = "วิเคราะห์และบันทึกข้อมูลเรียบร้อยแล้ว";
+
+      loadEnvironmentHistory();
+    }
+
+    function loadEnvironmentHistory() {
+      const historyList = document.getElementById("historyList");
+      const logs = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+
+      if (!logs.length) {
+        historyList.innerHTML = '<div style="color:#757575;">ยังไม่มีประวัติอุณหภูมิ-ความชื้น</div>';
+        return;
+      }
+
+      historyList.innerHTML = logs.slice().reverse().map(item => `
+        <div class="history-item">
+          <strong>วันที่ ${item.date}</strong><br>
+          ไหมวัยที่ ${item.instar}<br>
+          อุณหภูมิ: ${item.temperature} °C<br>
+          ความชื้น: ${item.humidity} %<br>
+          หมายเหตุ: ${item.note || "-"}
+        </div>
+      `).join("");
+    }
+
+    document.getElementById("envDate").value = todayISO();
+    loadEnvironmentHistory();
+  </script>
+</body>
+</html>
