@@ -1,98 +1,435 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ถ่ายภาพหนอนไหม</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ถ่ายภาพหนอนไหม | Silkworm Guardian App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
+    body {
+      font-family: 'Sarabun', system-ui, sans-serif;
+      background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);
+      color: #1b5e20;
+      min-height: 100vh;
+      padding: 16px;
+    }
 
-<style>
+    .container {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 24px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      padding: 18px 16px 24px;
+    }
 
-body{
-font-family:Sarabun;
-background:linear-gradient(135deg,#e8f5e8,#f1f8e9);
-padding:20px;
-}
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 14px;
+      text-decoration: none;
+      color: #6a1b9a;
+      font-weight: 700;
+      font-size: 20px;
+    }
 
-.container{
-max-width:700px;
-margin:auto;
-background:white;
-padding:25px;
-border-radius:20px;
-box-shadow:0 10px 25px rgba(0,0,0,0.08);
-}
+    h1 {
+      text-align: center;
+      font-size: 32px;
+      color: #1b5e20;
+      margin-bottom: 6px;
+    }
 
-h1{
-text-align:center;
-color:#1b5e20;
-}
+    .subtitle {
+      text-align: center;
+      color: #558b2f;
+      font-size: 18px;
+      margin-bottom: 18px;
+    }
 
-video,canvas,img{
-width:100%;
-border-radius:12px;
-margin-top:10px;
-}
+    .card {
+      background: #f9fff5;
+      border: 1px solid #c5e1a5;
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
 
-button{
-margin-top:15px;
-padding:12px 20px;
-border:none;
-border-radius:25px;
-font-size:18px;
-background:#2e7d32;
-color:white;
-cursor:pointer;
-}
+    .card h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #2e7d32;
+    }
 
-</style>
+    .camera-wrap {
+      overflow: hidden;
+      border-radius: 18px;
+      background: #edf7e8;
+      border: 1px solid #dcedc8;
+    }
+
+    video, canvas, img {
+      width: 100%;
+      display: block;
+      border-radius: 16px;
+      background: #e8f5e9;
+    }
+
+    #canvas {
+      display: none;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 14px;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 22px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #689f38, #33691e);
+      color: #fff;
+      box-shadow: 0 6px 15px rgba(56,142,60,0.35);
+    }
+
+    .btn-secondary {
+      background: #eceff1;
+      color: #37474f;
+    }
+
+    .btn-danger {
+      background: #ef5350;
+      color: #fff;
+    }
+
+    .field-group {
+      margin-top: 12px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #33691e;
+    }
+
+    textarea, input[type="text"] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #c5e1a5;
+      border-radius: 12px;
+      font-size: 17px;
+      font-family: inherit;
+      background: #fff;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .status-box {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 17px;
+      line-height: 1.6;
+    }
+
+    .show-success {
+      display: block;
+      background: #e8f5e9;
+      border: 1px solid #a5d6a7;
+      color: #1b5e20;
+    }
+
+    .show-error {
+      display: block;
+      background: #ffebee;
+      border: 1px solid #ef9a9a;
+      color: #b71c1c;
+    }
+
+    .hint {
+      font-size: 15px;
+      color: #757575;
+      margin-top: 8px;
+      line-height: 1.6;
+    }
+
+    .preview-box {
+      margin-top: 14px;
+    }
+
+    .preview-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #2e7d32;
+      margin-bottom: 10px;
+    }
+
+    .history-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .history-item {
+      background: #fff;
+      border: 1px solid #dcedc8;
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .history-item img {
+      border-radius: 12px;
+      margin-bottom: 10px;
+      max-height: 280px;
+      object-fit: cover;
+    }
+
+    .history-meta {
+      font-size: 16px;
+      line-height: 1.7;
+      color: #355e2f;
+    }
+
+    .empty {
+      color: #757575;
+      font-size: 17px;
+    }
+
+    @media (max-width: 640px) {
+      h1 { font-size: 26px; }
+      .subtitle, label, textarea, input, button, .history-meta { font-size: 16px; }
+      .card h2 { font-size: 21px; }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="container">
+    <a href="dashboard.html" class="back-btn">← กลับสู่หน้าหลัก</a>
 
-<div class="container">
+    <h1>ถ่ายภาพหนอนไหม</h1>
+    <div class="subtitle">ใช้ถ่ายภาพหนอนไหม ใบหม่อน หรือสภาพโรงเลี้ยง เพื่อเก็บบันทึกไว้ดูย้อนหลัง</div>
 
-<a href="dashboard.html">← กลับสู่หน้าหลัก</a>
+    <div class="card">
+      <h2>กล้องถ่ายภาพ</h2>
 
-<h1>ถ่ายภาพหนอนไหม</h1>
+      <div class="camera-wrap">
+        <video id="video" autoplay playsinline muted></video>
+        <canvas id="canvas"></canvas>
+      </div>
 
-<video id="video" autoplay></video>
+      <div class="btn-row">
+        <button class="btn-primary" type="button" onclick="startCamera()">เปิดกล้อง</button>
+        <button class="btn-primary" type="button" onclick="takePhoto()">📸 ถ่ายภาพ</button>
+        <button class="btn-secondary" type="button" onclick="retakePhoto()">ถ่ายใหม่</button>
+      </div>
 
-<button onclick="takePhoto()">📸 ถ่ายภาพ</button>
+      <input type="file" id="uploadImage" accept="image/*">
+      
+      <div class="hint">
+        ถ้าเปิดผ่านมือถือ กล้องจะพร้อมถ่ายภาพได้ทันทีเมื่อกดอนุญาตการใช้งานกล้อง
+      </div>
 
-<canvas id="canvas" style="display:none;"></canvas>
+      <div class="preview-box">
+        <div class="preview-title">ภาพล่าสุด</div>
+        <img id="photoPreview" alt="ภาพที่ถ่ายล่าสุด" style="display:none;">
+      </div>
 
-<img id="photo">
+      <div class="field-group">
+        <label for="photoTitle">ชื่อภาพ/หัวข้อ</label>
+        <input type="text" id="photoTitle" placeholder="เช่น หนอนไหมวัย 1 ตอนเช้า / ใบหม่อนวันนี้">
+      </div>
 
-</div>
+      <div class="field-group">
+        <label for="photoNote">หมายเหตุ</label>
+        <textarea id="photoNote" placeholder="เช่น หนอนไหมกินดี สีลำตัวปกติ ใบหม่อนสด โรงเลี้ยงระบายอากาศดี"></textarea>
+      </div>
 
-<script>
+      <div class="btn-row">
+        <button class="btn-primary" type="button" onclick="savePhoto()">บันทึกภาพ</button>
+        <button class="btn-danger" type="button" onclick="clearSavedPhotos()">ล้างประวัติภาพทั้งหมด</button>
+      </div>
 
-const video=document.getElementById('video')
+    </div>
 
-navigator.mediaDevices.getUserMedia({video:true})
-.then(stream=>{
-video.srcObject=stream
-})
+      <div id="statusBox" class="status-box"></div>
+    document.getElementById("uploadImage").addEventListener("change",function(event){
 
-function takePhoto(){
+const file = event.target.files[0]
 
-const canvas=document.getElementById('canvas')
-const photo=document.getElementById('photo')
+if(!file) return
 
-canvas.width=video.videoWidth
-canvas.height=video.videoHeight
+const reader = new FileReader()
 
-canvas.getContext('2d').drawImage(video,0,0)
+reader.onload = function(e){
 
-photo.src=canvas.toDataURL("image/png")
+latestPhotoData = e.target.result
 
-localStorage.setItem("silkworm_photo",photo.src)
+photoPreview.src = latestPhotoData
+
+photoPreview.style.display="block"
+
+showStatus("อัปโหลดภาพเรียบร้อย", "success")
 
 }
 
-</script>
+reader.readAsDataURL(file)
 
+})
+    <div class="card">
+      <h2>ประวัติภาพล่าสุด</h2>
+      <div id="historyList" class="history-list"></div>
+    </div>
+  </div>
+
+  <script>
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("canvas");
+    const photoPreview = document.getElementById("photoPreview");
+    const statusBox = document.getElementById("statusBox");
+    const historyList = document.getElementById("historyList");
+    const STORAGE_KEY = "silkworm_camera_history";
+
+    let streamRef = null;
+    let latestPhotoData = "";
+
+    async function startCamera() {
+      try {
+        if (streamRef) {
+          streamRef.getTracks().forEach(track => track.stop());
+        }
+
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: "environment"
+          },
+          audio: false
+        });
+
+        streamRef = stream;
+        video.srcObject = stream;
+
+        showStatus("เปิดกล้องเรียบร้อยแล้ว", "success");
+      } catch (error) {
+        console.error(error);
+        showStatus("เปิดกล้องไม่สำเร็จ กรุณาอนุญาตการใช้กล้อง หรือทดลองใช้ผ่านมือถือ/เบราว์เซอร์ที่รองรับ", "error");
+      }
+    }
+
+    function takePhoto() {
+      if (!video.srcObject) {
+        showStatus("กรุณาเปิดกล้องก่อนถ่ายภาพ", "error");
+        return;
+      }
+
+      const width = video.videoWidth;
+      const height = video.videoHeight;
+
+      if (!width || !height) {
+        showStatus("ยังไม่พร้อมถ่ายภาพ กรุณารอสักครู่แล้วลองใหม่", "error");
+        return;
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(video, 0, 0, width, height);
+
+      latestPhotoData = canvas.toDataURL("image/jpeg", 0.9);
+
+      photoPreview.src = latestPhotoData;
+      photoPreview.style.display = "block";
+
+      showStatus("ถ่ายภาพเรียบร้อยแล้ว สามารถกรอกข้อมูลและกดบันทึกได้", "success");
+    }
+
+    function retakePhoto() {
+      latestPhotoData = "";
+      photoPreview.src = "";
+      photoPreview.style.display = "none";
+      document.getElementById("photoTitle").value = "";
+      document.getElementById("photoNote").value = "";
+      showStatus("ล้างภาพล่าสุดแล้ว สามารถถ่ายใหม่ได้", "success");
+    }
+
+    function savePhoto() {
+      if (!latestPhotoData) {
+        showStatus("กรุณาถ่ายภาพก่อนบันทึก", "error");
+        return;
+      }
+
+      const title = document.getElementById("photoTitle").value.trim();
+      const note = document.getElementById("photoNote").value.trim();
+
+      const history = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+
+      history.push({
+        image: latestPhotoData,
+        title: title || "ภาพหนอนไหม",
+        note: note || "-",
+        createdAt: new Date().toLocaleString("th-TH")
+      });
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+      loadHistory();
+
+      showStatus("บันทึกภาพเรียบร้อยแล้ว", "success");
+    }
+
+    function clearSavedPhotos() {
+      const confirmDelete = confirm("ต้องการล้างประวัติภาพทั้งหมดหรือไม่ ?");
+      if (!confirmDelete) return;
+
+      localStorage.removeItem(STORAGE_KEY);
+      loadHistory();
+      showStatus("ล้างประวัติภาพทั้งหมดแล้ว", "success");
+    }
+
+    function loadHistory() {
+      const history = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+
+      if (!history.length) {
+        historyList.innerHTML = '<div class="empty">ยังไม่มีภาพที่บันทึก</div>';
+        return;
+      }
+
+      historyList.innerHTML = history.slice().reverse().map((item, index) => `
+        <div class="history-item">
+          <img src="${item.image}" alt="ภาพที่บันทึกไว้">
+          <div class="history-meta">
+            <strong>${item.title}</strong><br>
+            วันเวลา: ${item.createdAt}<br>
+            หมายเหตุ: ${item.note}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function showStatus(message, type) {
+      statusBox.textContent = message;
+      statusBox.className = "status-box " + (type === "success" ? "show-success" : "show-error");
+    }
+
+    loadHistory();
+    startCamera();
+  </script>
 </body>
 </html>
