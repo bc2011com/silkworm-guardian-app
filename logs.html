@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>บันทึกข้อมูล | Silkworm Guardian App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Sarabun', system-ui, sans-serif;
+      background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);
+      color: #1b5e20;
+      min-height: 100vh;
+      padding: 16px;
+    }
+    .container {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 22px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      padding: 18px 16px 24px;
+    }
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 14px;
+      text-decoration: none;
+      color: #6a1b9a;
+      font-weight: 700;
+      font-size: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #1b5e20;
+      font-size: 30px;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #558b2f;
+      font-size: 18px;
+      margin-bottom: 18px;
+    }
+    .card {
+      background: #f9fff5;
+      border: 1px solid #c5e1a5;
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .card h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #2e7d32;
+    }
+    .form-group { margin-bottom: 14px; }
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 6px;
+      font-size: 19px;
+      color: #33691e;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #c5e1a5;
+      border-radius: 12px;
+      font-size: 18px;
+      background: #fff;
+      font-family: inherit;
+    }
+    textarea { min-height: 100px; resize: vertical; }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 22px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #689f38, #33691e);
+      color: #fff;
+      box-shadow: 0 6px 15px rgba(56,142,60,0.35);
+    }
+    .btn-secondary {
+      background: #eceff1;
+      color: #37474f;
+    }
+    .status-box {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 17px;
+      display: none;
+    }
+    .success {
+      display: block;
+      background: #e8f5e9;
+      border: 1px solid #a5d6a7;
+      color: #1b5e20;
+    }
+    .history-item {
+      padding: 12px;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid #dcedc8;
+      margin-bottom: 10px;
+      font-size: 17px;
+      line-height: 1.7;
+    }
+    .empty {
+      color: #757575;
+      font-size: 17px;
+    }
+    @media (max-width: 640px) {
+      h1 { font-size: 24px; }
+      .subtitle, label, input, select, textarea, button { font-size: 16px; }
+      .row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="dashboard.html" class="back-btn">← กลับสู่หน้าหลัก</a>
+
+    <h1>บันทึกข้อมูลการเลี้ยงไหม</h1>
+    <div class="subtitle">จดบันทึกข้อมูลอาหาร ทำความสะอาด และหมายเหตุประจำวัน</div>
+
+    <div class="card">
+      <h2>เพิ่มบันทึกใหม่</h2>
+
+      <div class="form-group">
+        <label for="logDate">วันที่</label>
+        <input type="date" id="logDate">
+      </div>
+
+      <div class="form-group">
+        <label for="logType">ประเภทบันทึก</label>
+        <select id="logType">
+          <option value="ให้อาหาร">ให้อาหาร</option>
+          <option value="ทำความสะอาด">ทำความสะอาด</option>
+          <option value="อุณหภูมิ-ความชื้น">อุณหภูมิ-ความชื้น</option>
+          <option value="เฝ้าระวังโรคไหม">เฝ้าระวังโรคไหม</option>
+          <option value="ทั่วไป">ทั่วไป</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <div class="form-group">
+          <label for="logValue">ค่าหรือปริมาณ</label>
+          <input type="text" id="logValue" placeholder="เช่น 2 กก. / 28°C / ทำแล้ว">
+        </div>
+        <div class="form-group">
+          <label for="logTime">เวลา</label>
+          <input type="time" id="logTime">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="logNote">หมายเหตุ</label>
+        <textarea id="logNote" placeholder="เช่น หนอนไหมกินดี ใบหม่อนสด โรงเลี้ยงสะอาด"></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-primary" onclick="saveLog()">บันทึกข้อมูล</button>
+        <button class="btn-secondary" onclick="clearForm()">ล้างข้อมูล</button>
+      </div>
+
+      <div id="statusBox" class="status-box"></div>
+    </div>
+
+    <div class="card">
+      <h2>ประวัติบันทึกล่าสุด</h2>
+      <div id="historyList"></div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "silkworm_logs";
+
+    function todayISO() {
+      const d = new Date();
+      return d.toISOString().split("T")[0];
+    }
+
+    function loadHistory() {
+      const historyList = document.getElementById("historyList");
+      const logs = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+
+      if (!logs.length) {
+        historyList.innerHTML = '<div class="empty">ยังไม่มีข้อมูลที่บันทึก</div>';
+        return;
+      }
+
+      historyList.innerHTML = logs.slice().reverse().map(item => `
+        <div class="history-item">
+          <strong>${item.type}</strong><br>
+          วันที่: ${item.date} เวลา: ${item.time || "-"}<br>
+          ค่า/ปริมาณ: ${item.value || "-"}<br>
+          หมายเหตุ: ${item.note || "-"}
+        </div>
+      `).join("");
+    }
+
+    function saveLog() {
+      const date = document.getElementById("logDate").value;
+      const type = document.getElementById("logType").value;
+      const value = document.getElementById("logValue").value.trim();
+      const time = document.getElementById("logTime").value;
+      const note = document.getElementById("logNote").value.trim();
+      const statusBox = document.getElementById("statusBox");
+
+      if (!date) {
+        alert("กรุณาเลือกวันที่");
+        return;
+      }
+
+      const logs = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      logs.push({ date, type, value, time, note, createdAt: new Date().toISOString() });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+
+      statusBox.className = "status-box success";
+      statusBox.textContent = "บันทึกข้อมูลเรียบร้อยแล้ว";
+      loadHistory();
+      clearForm(false);
+    }
+
+    function clearForm(resetDate = true) {
+      if (resetDate) document.getElementById("logDate").value = todayISO();
+      document.getElementById("logType").value = "ให้อาหาร";
+      document.getElementById("logValue").value = "";
+      document.getElementById("logTime").value = "";
+      document.getElementById("logNote").value = "";
+    }
+
+    document.getElementById("logDate").value = todayISO();
+    loadHistory();
+  </script>
+</body>
+</html>
