@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>เฝ้าระวังโรคไหม</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Sarabun&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+font-family:Sarabun;
+background:linear-gradient(135deg,#e8f5e8,#f1f8e9);
+padding:20px;
+}
+
+.container{
+max-width:700px;
+margin:auto;
+background:white;
+padding:25px;
+border-radius:20px;
+}
+
+h1{
+text-align:center;
+color:#1b5e20;
+}
+
+select,textarea{
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:10px;
+border:1px solid #ccc;
+font-size:18px;
+}
+
+button{
+margin-top:15px;
+padding:12px 20px;
+border:none;
+border-radius:25px;
+font-size:18px;
+background:#c62828;
+color:white;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<a href="dashboard.html">← กลับ</a>
+
+<h1>เฝ้าระวังโรคไหม</h1>
+
+<label>อาการที่พบ</label>
+
+<select id="symptom">
+
+<option>ปกติ</option>
+<option>ไหมไม่กินอาหาร</option>
+<option>ตัวนิ่ม</option>
+<option>ตัวดำ</option>
+<option>ตัวแข็ง</option>
+<option>ตายจำนวนมาก</option>
+
+</select>
+
+<label>รายละเอียด</label>
+
+<textarea id="note"></textarea>
+
+<button onclick="saveDisease()">บันทึก</button>
+
+<p id="result"></p>
+
+</div>
+
+<script>
+
+function saveDisease(){
+
+const symptom=document.getElementById("symptom").value
+
+const note=document.getElementById("note").value
+
+localStorage.setItem("silkworm_disease",JSON.stringify({symptom,note}))
+
+document.getElementById("result").innerText="บันทึกเรียบร้อย"
+
+}
+
+</script>
+
+</body>
+</html>
